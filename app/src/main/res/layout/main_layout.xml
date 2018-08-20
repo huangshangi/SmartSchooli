@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--主界面：菜单栏与底部三个按钮-->
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/drawlayout"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+
+    >
+
+    <LinearLayout
+
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+
+            android:id="@+id/framelayout"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"/>
+
+
+        <RadioGroup
+            android:background="@color/colorPrimary"
+            android:id="@+id/radioGroup"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="50dp">
+
+            <RadioButton
+                android:gravity="center_horizontal|center_vertical"
+                android:button="@null"
+                android:id="@+id/button_jiaoyi"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="交易" />
+
+
+            <RadioButton
+                android:gravity="center_horizontal|center_vertical"
+                android:textColor="#000"
+                android:button="@null"
+                android:id="@+id/button_class"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="课堂" />
+
+
+            <RadioButton
+
+                android:gravity="center_horizontal|center_vertical"
+                android:id="@+id/button_repair"
+                android:button="@null"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="维修" />
+
+        </RadioGroup>
+    </LinearLayout>
+
+    <!--菜单栏-->
+
+    <RelativeLayout
+        android:layout_gravity="start"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--<android.support.design.widget.NavigationView-->
+        <!--android:background="#fff"-->
+        <!--android:layout_gravity="start"-->
+        <!--android:id="@+id/navigationView"-->
+        <!--app:menu="@menu/navigat_menu"-->
+        <!--app:headerLayout="@layout/header_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+        <ListView
+            android:background="#fff"
+            android:id="@+id/navigationView"
+            android:divider="@null"
+            android:paddingTop="0dp"
+
+            android:clipToPadding="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <Button
+            android:layout_alignParentBottom="true"
+            android:id="@+id/unsign_Button"
+            android:text="退出登录"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+
+
+
+</android.support.v4.widget.DrawerLayout>
