@@ -1,6 +1,7 @@
 package adapter;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -46,9 +47,12 @@ public class Fragment_class_listView_adapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         TextView textView=new TextView(context);
-        textView.setText(list.get(i));
+
         textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
-        int width=getDismension();
+        textView.setGravity(Gravity.CENTER);
+        textView.setLayerType(View.LAYER_TYPE_SOFTWARE,null);
+        textView.setText(list.get(i));
+        int width=getDismension()/8;
         textView.setWidth(width);
         textView.setHeight(width);
         return textView;

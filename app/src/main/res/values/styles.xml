@@ -21,4 +21,17 @@
         <item name="android:windowEnterAnimation">@anim/popupwindow_in</item>
         <item name="android:windowExitAnimation">@anim/popupwindow_out</item>
     </style>
+
+
+    <!--fragment_class_style-->
+
+    <style name="Fragment_class_Linear_style">
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:width">0dp</item>
+        <item name="android:background">R.drawable.fragment_class_tv_bg</item>
+
+    </style>
 </resources>
