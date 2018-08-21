@@ -2,6 +2,8 @@ package adapter;
 
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
+import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,6 +22,8 @@ import utils.MyApplication;
 //用来摆放课程
 public class ScrollAdapter {
 
+    final int DISTANCE=1;
+
     int colors[]=new int[]{R.color.red,R.color.green,R.color.blue,R.color.black};
 
     View view;//包含课程信息的ScrollView
@@ -28,15 +32,40 @@ public class ScrollAdapter {
 
     List<Class_Bean> list;//本周所有课程
 
-    public ScrollAdapter(List<Class_Bean>list,View view){
+    List<TextView>list_text;
+
+    public ScrollAdapter(List<Class_Bean>list,View view,List<TextView>list_text){
         this.list=list;
         this.view=view;
+        this.list_text=list_text;
         init();
     }
 
     private void init(){
         frameLayout=view.findViewById(R.id.fragment_class_framelayout);
         paintClasses(list);
+        paintBack(list_text);
+    }
+
+    private void paintBack(List<TextView>list_text){
+
+        int danWei=getDanWidth();
+        for(int i=1;i<list_text.size()+1;i++){
+            //计算该textView所在的行列
+            int row=(i%7==0)?(i/7):(i/7+1);//行
+            int coloum=(i%7==0?7:i%7);//列
+
+            //计算边距
+            int leftMargin=coloum*danWei;
+            int topMargin=(row-1)*danWei+dp2px((row-1)*DISTANCE);
+
+            //进行摆放
+            FrameLayout.LayoutParams params=new FrameLayout.LayoutParams(danWei,danWei);
+            params.setMargins(leftMargin,topMargin,0,0);
+            list_text.get(i-1).setLayoutParams(params);
+            frameLayout.addView(list_text.get(i-1));
+        }
+
     }
 
     private void  paintClasses(List<Class_Bean> list){
@@ -46,38 +75,39 @@ public class ScrollAdapter {
     }
 
     //摆放课程
-    @TargetApi(21)
+
     private void paintClass(Class_Bean bean){
         TextView textView=new TextView(MyApplication.getContext());
-
+//
         int danWei=getDanWidth();//TextView单位宽度
         int height=(bean.getTo()-bean.getFrom()+1)*danWei;//TextView实际高度
-        textView.setHeight(height);
-        textView.setWidth(danWei);
+
         textView.setGravity(Gravity.CENTER);
 
         //偏移计算
-        int leftMargin = (bean.getDay() - 1) * getDanWidth();
+        int leftMargin = (bean.getDay()) * getDanWidth()+dp2px(3);
 
-        int topMargin=(bean.getFrom()-1)*getDanWidth();
+        int topMargin=(bean.getFrom()-1)*getDanWidth()+dp2px((bean.getFrom()-1)* DISTANCE)+dp2px(3);
+        Log.d("课程",bean.getName()+bean.getFrom()+"("+bean.getDay());
 
         //设置偏移
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(danWei,height);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(danWei-dp2px(6),height-dp2px(6));
         params.setMargins(leftMargin,topMargin,0,0);
+
         textView.setLayoutParams(params);
 
-        textView.setElevation(30.0f);
 
         //设置文字
         textView.setText(bean.getName()+"@"+bean.getAddress());
-        //textView.setBackgroundColor(colors[(int)(new Random().nextInt(4))]);
+
 
         textView.setBackgroundResource(R.drawable.fragment_class_back1);
 
-       // textView.setShadowLayer(5,10,10,R.color.red);
+
         //
         frameLayout.addView(textView);
-        Log.d("######","课程已添加");
+
+        Log.d("######","课程已添加"+leftMargin+"#"+topMargin);
     }
 
 
@@ -89,5 +119,16 @@ public class ScrollAdapter {
     //一个TExtView的单位宽高
     private int getDanWidth(){
         return getDisMetrice()/8;
+    }
+
+    private int px2dp(float pxValue) {
+        final float scale =  MyApplication.getContext().getResources().getDisplayMetrics().density;
+        return (int) (pxValue / scale + 0.5f);
+    }
+
+
+    private int dp2px(float dpValue){
+        float scale=MyApplication.getContext().getResources().getDisplayMetrics().density;
+        return (int)(dpValue*scale+0.5f);
     }
 }
