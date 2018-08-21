@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+
 import com.smartschool.smartschooli.R;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class Fragment_class extends Fragment {
         initViews();
         ListView listView=(ListView)view.findViewById(R.id.fragment_class_listView);
         listView.setAdapter(new Fragment_class_listView_adapter(getActivity()));
-        listView.setLayerType(View.LAYER_TYPE_SOFTWARE,null);
+
         refreshData();
 
         return view;
@@ -47,11 +48,16 @@ public class Fragment_class extends Fragment {
 
     //组装7*12个TextView,将其传递到ScrollAdapter
     private List<TextView> getTextViews(){
+        int width=getDisplayMetris()/8;
         list_textView=new ArrayList<TextView>();
         for(int i=0;i<7*12;i++){
             TextView textView=new TextView(MyApplication.getContext());
+            textView.setBackgroundResource(R.drawable.fragment_class_tv_bg);
+            textView.setWidth(width);
+            textView.setHeight(width);
+            list_textView.add(textView);
         }
-        return null;
+        return list_textView;
     }
 
     private void  refreshData(){
@@ -77,5 +83,9 @@ public class Fragment_class extends Fragment {
 //        for()
     }
 
+    //获取屏幕宽度
+    private int getDisplayMetris(){
+        return getResources().getDisplayMetrics().widthPixels;
+    }
 
 }
