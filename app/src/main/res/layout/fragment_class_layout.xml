@@ -29,6 +29,7 @@
             android:layout_height="wrap_content" />
 
         <ImageView
+            android:id="@+id/fragment_class_change_image"
             android:src="@drawable/fragment_class_down"
             android:layout_toRightOf="@id/fragment_class_week"
             android:layout_width="wrap_content"
@@ -45,6 +46,36 @@
     </RelativeLayout>
 
 
+    <!--隐藏布局-->
+    <LinearLayout
+        android:id="@+id/fragment_class_inVisbile_layout"
+
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/fragment_class_inVisbile_button"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="修改当前列"
+            android:background="@color/gray"
+            android:drawableTop="@drawable/fragment_class_setting"
+            android:button="@null"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content" />
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fragment_class_inVisbile_recyclerView"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+
+    <!--滑动布局-->
     <LinearLayout
         android:background="@drawable/fragment_class_bg"
         android:orientation="vertical"

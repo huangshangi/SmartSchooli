@@ -3,11 +3,17 @@ package fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 
@@ -22,17 +28,33 @@ import adapter.ScrollAdapter;
 import bean.Class_Bean;
 import utils.MyApplication;
 
+import static android.view.View.GONE;
+
 //课堂界面
 //scrollView与listView滑动冲突暂未处理
 public class Fragment_class extends Fragment {
 
+    View popupView;//弹出框控件
+
     View view;
 
-    String week;//课程周数
+    String allWeek;//学期总周数
+
+    String currentWeek;//当前课程周数
+
+    String week;//当前所显示的课程周数
 
     List<Class_Bean> list;
 
     List<TextView>list_textView;
+
+    LinearLayout linearlayout;//隐藏布局
+
+    Button button_changeWeek;//修改当前周数的按钮
+
+    RecyclerView recyclerView;
+
+    ImageView imageView;//点击显示隐藏布局
 
     @Nullable
     @Override
@@ -43,9 +65,39 @@ public class Fragment_class extends Fragment {
         ListView listView=(ListView)view.findViewById(R.id.fragment_class_listView);
         listView.setAdapter(new Fragment_class_listView_adapter(getActivity()));
         listView.setEnabled(false);
+        initListeners();
         refreshData();
 
         return view;
+    }
+
+    //监听器
+    private void initListeners(){
+
+        //点击显示或收起隐藏布局
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //检查当前隐藏布局显示状态
+                if(linearlayout.getVisibility()==View.VISIBLE){
+                    linearlayout.setVisibility(GONE);
+                    //将当前周数改为当前周
+
+                }else if(linearlayout.getVisibility()==GONE){
+                    linearlayout.setVisibility(View.VISIBLE);
+
+                    //获取数据并更新隐藏布局
+
+                    //获取数据暂未实现，应当得到一个map<String,list<Class_Bean>>
+
+                }
+
+            }
+        });
+
+
+
     }
 
     //组装7*12个TextView,将其传递到ScrollAdapter
@@ -58,9 +110,33 @@ public class Fragment_class extends Fragment {
             textView.setWidth(width);
             textView.setHeight(width);
             list_textView.add(textView);
+            addTextViewListener(textView);
         }
         return list_textView;
     }
+
+
+    //为7*12个textView设置监听事件
+    private void addTextViewListener(final TextView textView){
+
+        textView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                //使屏幕变暗
+                lightOff();
+                //弹出添加课程按钮
+                PopupWindow popupWindow=new PopupWindow(popupView,ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                popupWindow.showAsDropDown(textView);
+                int[]array=new int[2];
+                textView.getLocationInWindow(array);
+                Log.d("textView的位置:","宽度"+array[0]+"高度"+array[1]);
+                popupWindow.setAnimationStyle(R.style.PopupAnimation);
+                return false;
+            }
+        });
+    }
+
 
     private void  refreshData(){
         //模拟从数据库获取数据
@@ -114,15 +190,40 @@ public class Fragment_class extends Fragment {
     }
 
     private void initViews(){
+
+        popupView=LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.fragment_class_popup_addclass,null);
+
         list=new ArrayList<>();
 
+        button_changeWeek=(Button)view.findViewById(R.id.fragment_class_inVisbile_button);
 
+        recyclerView=(RecyclerView)view.findViewById(R.id.fragment_class_inVisbile_recyclerView);
+
+        linearlayout=(LinearLayout)view.findViewById(R.id.fragment_class_inVisbile_layout);
+
+        imageView=(ImageView)view.findViewById(R.id.fragment_class_change_image);
 
     }
 
     //获取屏幕宽度
     private int getDisplayMetris(){
         return getResources().getDisplayMetrics().widthPixels;
+    }
+
+    //使屏幕变亮
+    private void lightOn(){
+        WindowManager.LayoutParams params=getActivity().getWindow().getAttributes();
+        params.alpha=1.0f;
+        getActivity().getWindow().setAttributes(params);
+    }
+
+
+    //使屏幕变暗
+    private void lightOff(){
+        WindowManager.LayoutParams params=getActivity().getWindow().getAttributes();
+        params.alpha=0.3f;
+        getActivity().getWindow().setAttributes(params);
+
     }
 
 }
