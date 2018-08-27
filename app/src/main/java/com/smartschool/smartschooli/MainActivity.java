@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity{
         initViews();
         initEvents();
         addListener();//添加监听器
-        switchFragment(0);
+        switchFragment(1);
     }
 
 

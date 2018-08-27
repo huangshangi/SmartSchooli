@@ -1,8 +1,11 @@
 package fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.smartschool.smartschooli.R;
@@ -23,10 +27,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import adapter.Fragment_class_RecyclerView_adapter;
 import adapter.Fragment_class_listView_adapter;
 import adapter.ScrollAdapter;
 import bean.Class_Bean;
+import listener.Fragment_class_Change_Listener;
+import listener.Fragment_class_Listener;
 import utils.MyApplication;
+import utils.NetworkLoader;
+import utils.Util;
 
 import static android.view.View.GONE;
 
@@ -38,11 +47,11 @@ public class Fragment_class extends Fragment {
 
     View view;
 
-    String allWeek;//学期总周数
+    int allWeek=25;//学期总周数
 
-    String currentWeek;//当前课程周数
+    int currentWeek=1;//当前课程周数
 
-    String week;//当前所显示的课程周数
+    int  week=1;//当前所显示的课程周数
 
     List<Class_Bean> list;
 
@@ -54,7 +63,13 @@ public class Fragment_class extends Fragment {
 
     RecyclerView recyclerView;
 
-    ImageView imageView;//点击显示隐藏布局
+    Button button_current;//显示当前周数
+
+    Fragment_class_RecyclerView_adapter adapter;
+
+    ListView listView;
+
+    Handler handler;
 
     @Nullable
     @Override
@@ -62,39 +77,73 @@ public class Fragment_class extends Fragment {
         view=inflater.inflate(R.layout.fragment_class_layout,container,false);
 
         initViews();
-        ListView listView=(ListView)view.findViewById(R.id.fragment_class_listView);
-        listView.setAdapter(new Fragment_class_listView_adapter(getActivity()));
-        listView.setEnabled(false);
+
         initListeners();
-        refreshData();
+        initEvents();
+        refreshData(week);
 
         return view;
+    }
+
+    private void initEvents(){
+        listView.setAdapter(new Fragment_class_listView_adapter(getActivity()));
+        listView.setEnabled(false);
+
+        list=NetworkLoader.getInstance().getList();
+        NetworkLoader.getInstance().setFragment_class_listener(new Fragment_class_Listener() {
+            @Override
+            public void getClassDown(List<Class_Bean> list) {
+
+                    Fragment_class.this.list=list;
+                    //   获取数据并更新隐藏布局
+                    Log.d("数据初始化",list.size()+"");
+                    // 获取数据暂未实现，应当得到一个list<Class_Bean>
+                    adapter = new Fragment_class_RecyclerView_adapter(list, week, allWeek);
+                    adapter.setListener(new Fragment_class_Change_Listener() {
+                        @Override
+                        public void changeClass(int week) {
+                            Fragment_class.this.week=week;
+                            refreshData(week);
+                        }
+                     });
+                    handler.sendEmptyMessage(0);
+
+
+                }
+
+
+
+
+        });
+
+
     }
 
     //监听器
     private void initListeners(){
 
         //点击显示或收起隐藏布局
-        imageView.setOnClickListener(new View.OnClickListener() {
+        button_current.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //检查当前隐藏布局显示状态
+               // 检查当前隐藏布局显示状态
                 if(linearlayout.getVisibility()==View.VISIBLE){
                     linearlayout.setVisibility(GONE);
-                    //将当前周数改为当前周
+                    //将当前周数改为当前周并显示当前周课表
+                    week=currentWeek;
 
-                }else if(linearlayout.getVisibility()==GONE){
+                    //显示某一周课表
+
+
+                }else{
+                     NetworkLoader.getInstance().getList();
                     linearlayout.setVisibility(View.VISIBLE);
-
-                    //获取数据并更新隐藏布局
-
-                    //获取数据暂未实现，应当得到一个map<String,list<Class_Bean>>
-
                 }
 
             }
         });
+
 
 
 
@@ -110,82 +159,16 @@ public class Fragment_class extends Fragment {
             textView.setWidth(width);
             textView.setHeight(width);
             list_textView.add(textView);
-            addTextViewListener(textView);
         }
         return list_textView;
     }
 
 
-    //为7*12个textView设置监听事件
-    private void addTextViewListener(final TextView textView){
-
-        textView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-
-                //使屏幕变暗
-                lightOff();
-                //弹出添加课程按钮
-                PopupWindow popupWindow=new PopupWindow(popupView,ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                popupWindow.showAsDropDown(textView);
-                int[]array=new int[2];
-                textView.getLocationInWindow(array);
-                Log.d("textView的位置:","宽度"+array[0]+"高度"+array[1]);
-                popupWindow.setAnimationStyle(R.style.PopupAnimation);
-                return false;
-            }
-        });
-    }
 
 
-    private void  refreshData(){
+    private void  refreshData(int week){
         //模拟从数据库获取数据
-        Class_Bean bean=new Class_Bean();
-        bean.setAddress("3区402");
-        bean.setDay(1);
-        bean.setFrom(1);
-        bean.setTo(2);
-        bean.setName("大计基");
-        bean.setTeacher("程登峰");
-        bean.setType("no");
-        bean.setWeekfrom(1);
-        bean.setWeekto(12);
-        list.add(bean);
-
-        Class_Bean bean1=new Class_Bean();
-        bean1.setAddress("5区402");
-        bean1.setDay(1);
-        bean1.setFrom(3);
-        bean1.setTo(4);
-        bean1.setName("计算方面的可视化");
-        bean1.setTeacher("程登峰");
-        bean1.setType("no");
-        bean1.setWeekfrom(1);
-        bean1.setWeekto(12);
-        list.add(bean1);
-        Class_Bean bean2=new Class_Bean();
-        bean2.setAddress("5区402");
-        bean2.setDay(1);
-        bean2.setFrom(5);
-        bean2.setTo(6);
-        bean2.setName("计算方面的可视化");
-        bean2.setTeacher("程登峰");
-        bean2.setType("no");
-        bean2.setWeekfrom(1);
-        bean2.setWeekto(12);
-        list.add(bean2);
-        Class_Bean bean3=new Class_Bean();
-        bean3.setAddress("5区402");
-        bean3.setDay(1);
-        bean3.setFrom(11);
-        bean3.setTo(12);
-        bean3.setName("计算方面的可视化");
-        bean3.setTeacher("程登峰");
-        bean3.setType("no");
-        bean3.setWeekfrom(1);
-        bean3.setWeekto(12);
-        list.add(bean3);
-        Log.d("个数大大大",list.size()+"$");
+        list= Util.getInstance().getRealList(NetworkLoader.getInstance().getList(),week);
         new ScrollAdapter(list,view,getTextViews());
     }
 
@@ -195,13 +178,26 @@ public class Fragment_class extends Fragment {
 
         list=new ArrayList<>();
 
+        listView=(ListView)view.findViewById(R.id.fragment_class_listView);
+
         button_changeWeek=(Button)view.findViewById(R.id.fragment_class_inVisbile_button);
 
         recyclerView=(RecyclerView)view.findViewById(R.id.fragment_class_inVisbile_recyclerView);
 
         linearlayout=(LinearLayout)view.findViewById(R.id.fragment_class_inVisbile_layout);
 
-        imageView=(ImageView)view.findViewById(R.id.fragment_class_change_image);
+        button_current=(Button)view.findViewById(R.id.fragment_class_currentweek);
+
+        handler=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(linearLayoutManager);
+
+            }
+        };
 
     }
 

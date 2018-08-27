@@ -89,8 +89,25 @@ public class Class_Bean {
         this.weekfrom = weekfrom;
     }
 
+    @Override
+    public String toString() {
+        return "Class_Bean{" +
+                "name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", from=" + from +
+                ", to=" + to +
+                ", weekfrom=" + weekfrom +
+                ", weekto=" + weekto +
+                ", type='" + type + '\'' +
+                ", teacher='" + teacher + '\'' +
+                ", day=" + day +
+                '}';
+    }
+
     public void setWeekto(int weekto) {
         this.weekto = weekto;
     }
+
+
 }
 

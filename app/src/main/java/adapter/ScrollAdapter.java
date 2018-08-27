@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.smartschool.smartschooli.R;
@@ -34,6 +35,8 @@ public class ScrollAdapter {
 
     List<TextView>list_text;
 
+    ListView listView;
+
     public ScrollAdapter(List<Class_Bean>list,View view,List<TextView>list_text){
         this.list=list;
         this.view=view;
@@ -43,8 +46,10 @@ public class ScrollAdapter {
 
     private void init(){
         frameLayout=view.findViewById(R.id.fragment_class_framelayout);
+
+        listView=(ListView)view.findViewById(R.id.fragment_class_listView);
         paintClasses(list);
-        paintBack(list_text);
+       // paintBack(list_text);
     }
 
     private void paintBack(List<TextView>list_text){
@@ -69,6 +74,8 @@ public class ScrollAdapter {
     }
 
     private void  paintClasses(List<Class_Bean> list){
+        frameLayout.removeAllViews();
+        frameLayout.addView(listView);
         for(Class_Bean bean:list){
             paintClass(bean);
         }

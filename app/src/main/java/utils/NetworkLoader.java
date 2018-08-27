@@ -19,22 +19,43 @@ import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.webkit.HttpAuthHandler;
 import android.widget.Toast;
 
 
 import com.smartschool.smartschooli.MainActivity;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
 
+import bean.Class_Bean;
 import bean.Person_Bean;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
+
+import listener.Fragment_class_Listener;
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
+import okhttp3.FormBody;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static android.content.Context.TELEPHONY_SERVICE;
 
@@ -58,6 +79,7 @@ public class NetworkLoader {
 
     static NetworkLoader networkLoader;
 
+    private List<Class_Bean>list_bean;//盛放一周课程信息
 
 
     private ExecutorService mThreadPool;//线程池
@@ -66,14 +88,25 @@ public class NetworkLoader {
 
     private Handler mUiHandler;//UI更新handler
 
+
     private Handler mTaskHandler;//负责通知线程池有新任务加入
 
     private Thread thread;//后台轮询线程
+
+    private Semaphore semaphore_getList;//判断是否成功获取课程信息
 
     private Semaphore semaphore;//每执行完一个任务时会释放一个信号
 
     private Semaphore s;//该信号量标记mHandlerPool初始化完毕
 
+    private static Map<Integer,List<Class_Bean>>hashMap;//储存课程信息 单例
+
+    Fragment_class_Listener fragment_class_listener;
+
+
+    public void setFragment_class_listener(Fragment_class_Listener fragment_class_listener){
+        this.fragment_class_listener=fragment_class_listener;
+    }
 
     public static NetworkLoader getInstance(){
         if(networkLoader==null){
@@ -97,6 +130,8 @@ public class NetworkLoader {
 
 
         semaphore=new Semaphore(THREAD_COUNT);
+
+        semaphore_getList=new Semaphore(0);
 
         s=new Semaphore(0);
 
@@ -248,6 +283,10 @@ public class NetworkLoader {
     }
 
 
+
+    public Semaphore getSemaphore_getList(){
+        return semaphore_getList;
+    }
     /*从本地获取个人信息,返回一个list
         list[0]->id
         list[1]->image
@@ -268,4 +307,207 @@ public class NetworkLoader {
         return list;
     }
 
+
+    public  Map<Integer,List<Class_Bean>> getHashMap(){
+        if(hashMap==null){
+            synchronized (NetworkLoader.class){
+                if (hashMap==null){
+                    getClassesMessage();
+                }
+            }
+        }
+        return hashMap;
+    }
+
+    public List<Class_Bean>getList(){
+        if(list_bean==null){
+            synchronized (NetworkLoader.class){
+                if(list_bean==null){
+                    getClassesMessage();
+                }
+            }
+        }else{
+            if(fragment_class_listener!=null){
+                fragment_class_listener.getClassDown(list_bean);
+            }
+        }
+        return list_bean;
+    }
+
+    public void Class_init(){
+        if(list_bean==null){
+            synchronized (NetworkLoader.class){
+                if(list_bean==null){
+                    getClassesMessage();
+                }
+            }
+        }
+    }
+
+    //爬取课表信息
+    public  void getClassesMessage(){
+
+        addTask(new Runnable() {
+            @Override
+            public void run() {
+
+                String login_url="http://bkjws.sdu.edu.cn/b/ajaxLogin";//教务系统登录界面
+
+                String main_url="http://bkjws.sdu.edu.cn/f/xk/xs/bxqkb";//课程表界面
+                String username="201700301242";
+                String password="143699";
+
+                final Map<String,List<Cookie>> hashMap=new HashMap<>();
+
+                OkHttpClient client=new OkHttpClient.Builder().cookieJar(new CookieJar() {
+                    @Override
+                    public void saveFromResponse(HttpUrl httpUrl, List<Cookie> list) {
+                        hashMap.put(httpUrl.host(),list);
+                    }
+
+                    @Override
+                    public List<Cookie> loadForRequest(HttpUrl httpUrl) {
+                        List<Cookie>list=hashMap.get(httpUrl.host());
+
+                        return list==null?new ArrayList<Cookie>():list;
+                    }
+                }).build();
+                try {
+                    RequestBody requestBody = new FormBody.Builder().add("j_username", username).add("j_password", Util.getMD5Str(password)).build();
+
+                    Request request = new Request.Builder().url(login_url).post(requestBody).build();
+                    Response response = client.newCall(request).execute();
+
+                    if (response.code() == 200) {
+
+                        Request request1=new Request.Builder().url(main_url).build();
+                        Response response1=client.newCall(request1).execute();
+                        String html=response1.body().string();
+
+                        //使用jsoup解析获得的数据
+                        parseHtml(html);
+                    }
+                }catch (Exception e){
+                    Log.d("error","爬取网页时出现异常"+e);
+                }
+
+                semaphore_getList.release();
+                semaphore.release();
+            }
+        });
+
+    }
+
+
+    //返回一个hashmap<String,List<Class_Bean>> String代表周几，list内部储存当天课程信息
+    private  void parseHtml(String html){
+
+        list_bean=new ArrayList<>();//储存自己组装的Class_Bean
+
+        List<String>list=new ArrayList<>();//储存原生课表，示例如下1$sd01511480$孙子兵法与三十六计(国学)$601$2$任选$材料学院$耿贵立$1-16周上$5$5$中心理综楼609d$
+
+        Document document= Jsoup.parse(html);
+
+        Elements div=document.select("#ysjddDataTableId");
+
+        Elements trs=div.select("tr");
+
+        Log.d("shujudangqian","html个数"+trs.size());
+
+        for(int i=1;i<trs.size();i++) {
+            String data="";//每一条数据
+
+            Elements tds = trs.get(i).select("td");
+            for (Element element : tds) {
+                data += element.getElementsByTag("td").text() + "!";
+            }
+            Log.d("shujudangqian",data);
+            list.add(data);
+
+        }
+
+        //将原生list转化为需要的list
+        for(int i=0;i<list.size();i++) {
+            Class_Bean bean=getClass_bean(list.get(i));
+            list_bean.add(bean);
+        }
+
+        //将list<Class_Bean>组装成map<Integer,List<Class_bean>
+        Map<Integer,List<Class_Bean>> map=getClass_Map(list_bean);
+
+
+
+    }
+    //将list<Class_Bean>组装成map<Integer,List<Class_bean>
+    private  Map<Integer, List<Class_Bean>> getClass_Map(List<Class_Bean>list){
+        hashMap=new HashMap<Integer,List<Class_Bean>>();
+        for(Class_Bean bean:list){
+            if(hashMap.keySet().contains(bean.getDay())){
+                hashMap.get(bean.getDay()).add(bean);
+            }else{
+                List<Class_Bean>list1=new ArrayList<>();
+                list1.add(bean);
+                hashMap.put(bean.getDay(),list1);
+            }
+
+        }
+        Log.d("fangfa","准备回调");
+        if(fragment_class_listener!=null){
+            fragment_class_listener.getClassDown(list);
+            Log.d("fangfa","回调成功");
+
+        }
+        return hashMap;
+    }
+
+
+    //将‘3$sd03020250$概率与统计$0$3$任选$软件学院$王薇4$1-12周上$2$3$软件园5区208d$’组装成Class_bean对象
+    private Class_Bean getClass_bean(String string){
+        List<String> list_result = Arrays.asList(string.split("!"));
+
+        Class_Bean bean=new Class_Bean();
+        bean.setName(list_result.get(2));
+        bean.setTeacher(list_result.get(7));
+        if(list_result.size()>11)
+            bean.setAddress(list_result.get(11));
+        //设置上课周数
+        String week=list_result.get(8);
+
+        if(week.contains("-")){
+            Log.d("week","jinlaile");
+            bean.setWeekfrom(Integer.parseInt(week.split("-")[0]));
+
+            String[] weekTos=week.split("-")[1].split("");
+            Log.d("week",weekTos[0]+"!!!!!!!!!!!!!!!!"+weekTos[1]);
+            String weekTo="";
+            label:for(int a=0;a<weekTos.length;a++){
+                if(weekTos[a].equals("周")){
+                    break label;
+                }else{
+                    weekTo+=weekTos[a];
+                }
+            }
+
+            bean.setWeekto(Integer.parseInt(weekTo));
+
+            bean.setType("no");
+
+        }else if(week.contains(",")){
+            String[] weekTos=week.split(",");
+            weekTos[weekTos.length-1]=(weekTos[weekTos.length-1]).length()==4?weekTos[weekTos.length-1].substring(0,2):weekTos[weekTos.length-1].substring(0,1);
+            bean.setWeekfrom(Integer.parseInt(weekTos[0]));
+            bean.setWeekto(Integer.parseInt(weekTos[weekTos.length-1]));
+
+            //判断单双周课程
+            bean.setType(bean.getWeekfrom()%2!=0?"dan":"shuang");
+        }
+
+        //设置上课日期
+        bean.setDay(Integer.parseInt(list_result.get(9)));
+        Log.d("error","!!!!!!"+list_result.get(10));
+        bean.setFrom(Integer.parseInt(list_result.get(10))*2-1);
+        bean.setTo(Integer.parseInt(list_result.get(10))*2);
+
+        return bean;
+    }
 }

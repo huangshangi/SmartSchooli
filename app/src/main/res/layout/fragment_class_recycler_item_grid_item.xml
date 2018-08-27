@@ -5,10 +5,24 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <View
-        android:id="@+id/frag_class_dot"
-        android:background="@drawable/fragment_class_gray_dot"
-        android:layout_width="10dp"
-        android:layout_height="10dp"/>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/fragment_class_view_gray"
+            android:background="@drawable/fragment_class_gray_dot"
+            android:layout_width="5dp"
+            android:layout_height="5dp"/>
+
+        <View
+            android:id="@+id/frag_class_view_yellow"
+            android:background="@drawable/fragment_class_yello_dot"
+            android:layout_width="5dp"
+            android:layout_height="5dp"/>
+
+
+    </FrameLayout>
+
 
 </LinearLayout>
