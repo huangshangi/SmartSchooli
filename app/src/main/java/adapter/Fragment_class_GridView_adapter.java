@@ -32,7 +32,7 @@ public class Fragment_class_GridView_adapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 35;
+        return 25;
     }
 
     @Override
@@ -61,8 +61,8 @@ public class Fragment_class_GridView_adapter extends BaseAdapter {
         viewHolder.view_yellow.setVisibility(View.GONE);
         viewHolder.view_gray.setVisibility(View.GONE);
         //得到这个点的具体位置
-        int row=position/7+1;
-        int coloum=position%7+1;
+        int row=position/5+1;
+        int coloum=position%5+1;
 
         Log.d("fangfa","!!!!!!!!!!!!!!"+position);
 

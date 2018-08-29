@@ -1,17 +1,27 @@
 package fragments;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.VolumeAutomation;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,9 +43,11 @@ import adapter.ScrollAdapter;
 import bean.Class_Bean;
 import listener.Fragment_class_Change_Listener;
 import listener.Fragment_class_Listener;
+import listener.Wheel_listener;
 import utils.MyApplication;
 import utils.NetworkLoader;
 import utils.Util;
+import view.WheelView;
 
 import static android.view.View.GONE;
 
@@ -43,9 +55,17 @@ import static android.view.View.GONE;
 //scrollView与listView滑动冲突暂未处理
 public class Fragment_class extends Fragment {
 
+    Util util;
+
     View popupView;//弹出框控件
 
     View view;
+
+    int midWeek;
+
+    PopupWindow popupWindow_week;
+
+    WheelView wheelView;
 
     int allWeek=25;//学期总周数
 
@@ -55,11 +75,27 @@ public class Fragment_class extends Fragment {
 
     List<Class_Bean> list;
 
-    List<TextView>list_textView;
+    List<String>list_popup;
 
     LinearLayout linearlayout;//隐藏布局
 
+    PopupWindow popupWindow;
+
+
+
+    int linearlayout_MaxHeight;//隐藏布局的显示完毕后高度 px
+
+    int linearlayout_CurrentHeight;//隐藏布局的当前高
+
+    boolean flag_anim;//判断是否正在进行动画
+
     Button button_changeWeek;//修改当前周数的按钮
+
+    TextView alert_text;
+
+    Button alert_button_cancel;
+
+    Button alert_button_sure;
 
     RecyclerView recyclerView;
 
@@ -70,6 +106,8 @@ public class Fragment_class extends Fragment {
     ListView listView;
 
     Handler handler;
+
+    boolean flag_adapter=true;
 
     @Nullable
     @Override
@@ -89,6 +127,24 @@ public class Fragment_class extends Fragment {
         listView.setAdapter(new Fragment_class_listView_adapter(getActivity()));
         listView.setEnabled(false);
 
+        wheelView.setPAGE_COUNT(5);
+
+        for(int i=0;i<allWeek;i++){
+            list_popup.add("第"+(i+1)+"周");
+        }
+        wheelView.setList(list_popup);
+
+        wheelView.setWheel_listener(new Wheel_listener() {
+            @Override
+            public void onSelected(int position) {
+                midWeek=position-1;
+                Log.d("!!!!!!!!!!",position+"!!!!!!");
+                alert_text.setText(list_popup.get(position));
+
+            }
+        });
+
+
         list=NetworkLoader.getInstance().getList();
         NetworkLoader.getInstance().setFragment_class_listener(new Fragment_class_Listener() {
             @Override
@@ -96,17 +152,28 @@ public class Fragment_class extends Fragment {
 
                     Fragment_class.this.list=list;
                     //   获取数据并更新隐藏布局
-                    Log.d("数据初始化",list.size()+"");
+
                     // 获取数据暂未实现，应当得到一个list<Class_Bean>
-                    adapter = new Fragment_class_RecyclerView_adapter(list, week, allWeek);
-                    adapter.setListener(new Fragment_class_Change_Listener() {
-                        @Override
-                        public void changeClass(int week) {
-                            Fragment_class.this.week=week;
-                            refreshData(week);
-                        }
-                     });
-                    handler.sendEmptyMessage(0);
+                    if(flag_adapter) {
+                        adapter = new Fragment_class_RecyclerView_adapter(list, week, allWeek);
+                        adapter.setListener(new Fragment_class_Change_Listener() {
+                            @Override
+                            public void changeClass(int week) {
+                                Fragment_class.this.week=week;
+                                button_current.setText("第"+week+"周");
+                                recyclerView.smoothScrollToPosition(week-1);
+
+                                refreshData(week);
+                            }
+                        });
+                        flag_adapter=false;
+                        handler.sendEmptyMessage(0);
+                    }else{
+//                        adapter.setMessage(list, week, allWeek);
+                    }
+
+
+
 
 
                 }
@@ -127,56 +194,144 @@ public class Fragment_class extends Fragment {
             @Override
             public void onClick(View v) {
 
+
                // 检查当前隐藏布局显示状态
-                if(linearlayout.getVisibility()==View.VISIBLE){
-                    linearlayout.setVisibility(GONE);
+                if(linearlayout_CurrentHeight!=0){
+                    //隐藏布局当前处于显示状态
+                    linearlayoutAnim(linearlayout_MaxHeight,0);
+
                     //将当前周数改为当前周并显示当前周课表
-                    week=currentWeek;
+
 
                     //显示某一周课表
 
 
                 }else{
-                     NetworkLoader.getInstance().getList();
-                    linearlayout.setVisibility(View.VISIBLE);
+                    //当前布局处于隐藏状态
+
+
+                     linearlayoutAnim(0,linearlayout_MaxHeight);
                 }
 
             }
         });
 
 
+        button_changeWeek.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                wheelView.setSelection(week-1);
+                alert_text.setText("第"+week+"周");
+
+                showAlertDialog();
+
+                showPopupWindow();
+
+            }
+        });
+
+        alert_button_sure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                week=midWeek;
+                button_current.setText("第"+week+"周");
+                popupWindow.dismiss();
+                popupWindow_week.dismiss();
+                refreshData(week);
+                synchronized (this) {
+                    recyclerView.scrollToPosition(week - 1);
+
+                    linearlayoutAnim(linearlayout_MaxHeight, 0);
+                }
+            }
+        });
+
+        alert_button_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                popupWindow_week.dismiss();
+            }
+        });
+    }
+
+    private void showAlertDialog(){
+        popupWindow_week.setTouchable(true);
+        popupWindow_week.setOutsideTouchable(false);
+        popupWindow_week.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+        popupWindow_week.showAtLocation(view.findViewById(R.id.fragment_class_layout), Gravity.CENTER,0,0);
+    }
+
+    private void showPopupWindow(){
+
+        popupWindow.setAnimationStyle(R.style.PopupAnimation);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+        popupWindow.showAtLocation(view.findViewById(R.id.fragment_class_layout), Gravity.BOTTOM,0,0);
 
     }
 
-    //组装7*12个TextView,将其传递到ScrollAdapter
-    private List<TextView> getTextViews(){
-        int width=getDisplayMetris()/8;
-        list_textView=new ArrayList<TextView>();
-        for(int i=0;i<7*12;i++){
-            TextView textView=new TextView(MyApplication.getContext());
-            textView.setBackgroundResource(R.drawable.fragment_class_tv_bg);
-            textView.setWidth(width);
-            textView.setHeight(width);
-            list_textView.add(textView);
-        }
-        return list_textView;
+    //隐藏布局的动画  start end 分别代表隐藏布局动画结束前后高度
+    private void linearlayoutAnim(int start, final int end){
+        final ViewGroup.LayoutParams params=linearlayout.getLayoutParams();
+
+        ValueAnimator valueAnimator=ValueAnimator.ofInt(start,end);
+        valueAnimator.setDuration(300);
+        valueAnimator.start();
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+                linearlayout_CurrentHeight=(int)animation.getAnimatedValue();
+
+                if(flag_anim) {
+                    params.height = linearlayout_CurrentHeight;
+                    linearlayout.setLayoutParams(params);
+                }
+                if(linearlayout_CurrentHeight==end){
+                    flag_anim=false;
+                    adapter.PopupWindowSelected(week);
+                }else{
+                    flag_anim=true;
+                }
+            }
+        });
+
     }
-
-
 
 
     private void  refreshData(int week){
         //模拟从数据库获取数据
         list= Util.getInstance().getRealList(NetworkLoader.getInstance().getList(),week);
-        new ScrollAdapter(list,view,getTextViews());
+        new ScrollAdapter(list,view);
     }
 
     private void initViews(){
 
-        popupView=LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.fragment_class_popup_addclass,null);
+        LinearLayout linearLayout2=(LinearLayout)LayoutInflater.from(getActivity()).inflate(R.layout.fragment_class_alertdialog,null);
+
+
+        popupWindow_week=new PopupWindow(linearLayout2);
+
+        popupWindow_week.setWidth(getDisplayMetris()-Util.getInstance().dp2px(100));
+        popupWindow_week.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout linearLayout=(LinearLayout) LayoutInflater.from(getActivity()).inflate(R.layout.fragment_class_popup,null);
+        wheelView=(WheelView)linearLayout.findViewById(R.id.fragment_class_WheelView) ;
+
+        popupWindow=new PopupWindow(linearLayout,ViewGroup.LayoutParams.MATCH_PARENT
+                ,ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        alert_text=(TextView)linearLayout2.findViewById(R.id.fragment_class_alert_week);
+
+        alert_button_cancel=(Button)linearLayout2.findViewById(R.id.fragment_class_alert_buttonCancel);
+
+        alert_button_sure=(Button)linearLayout2.findViewById(R.id.fragment_class_alert_buttonSure);
 
         list=new ArrayList<>();
+
+        list_popup=new ArrayList<>();
 
         listView=(ListView)view.findViewById(R.id.fragment_class_listView);
 
@@ -185,6 +340,12 @@ public class Fragment_class extends Fragment {
         recyclerView=(RecyclerView)view.findViewById(R.id.fragment_class_inVisbile_recyclerView);
 
         linearlayout=(LinearLayout)view.findViewById(R.id.fragment_class_inVisbile_layout);
+
+
+
+        util=Util.getInstance();
+
+        linearlayout_MaxHeight=util.dp2px(100);
 
         button_current=(Button)view.findViewById(R.id.fragment_class_currentweek);
 
@@ -221,5 +382,7 @@ public class Fragment_class extends Fragment {
         getActivity().getWindow().setAttributes(params);
 
     }
+
+
 
 }

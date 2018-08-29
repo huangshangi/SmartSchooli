@@ -1,6 +1,8 @@
 package utils;
 
+import android.app.Activity;
 import android.util.Log;
+import android.view.WindowManager;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -87,5 +89,31 @@ public class Util {
         }
         Log.d("result_list",result_list.size()+")))");
         return result_list;
+    }
+
+
+    //将dp转化为px
+    public int  dp2px(int dp){
+        final float scale = MyApplication.getContext().getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
+    }
+
+
+    //将px转化为dp
+    public int  px2dp(int px){
+        final float scale = MyApplication.getContext().getResources().getDisplayMetrics().density;
+        return (int) (px / scale + 0.5f);
+    }
+
+    public void lightOn(Activity activity){
+        WindowManager.LayoutParams params=activity.getWindow().getAttributes();
+        params.alpha=1.0f;
+        activity.getWindow().setAttributes(params);
+    }
+
+    public void lightOff(Activity activity){
+        WindowManager.LayoutParams params=activity.getWindow().getAttributes();
+        params.alpha=0.3f;
+        activity.getWindow().setAttributes(params);
     }
 }

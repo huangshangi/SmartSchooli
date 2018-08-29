@@ -327,6 +327,7 @@ public class NetworkLoader {
                 }
             }
         }else{
+            semaphore_getList.release();
             if(fragment_class_listener!=null){
                 fragment_class_listener.getClassDown(list_bean);
             }

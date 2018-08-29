@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.smartschool.smartschooli.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,9 @@ import utils.MyApplication;
 
 public class Fragment_class_RecyclerView_adapter extends RecyclerView.Adapter{
 
+    TextView textView_selected;//当前被选择的TextView
 
+    Map<String,TextView>map=new HashMap<>();;//一个专门储存TextView的list
     static class ViewHolder extends RecyclerView.ViewHolder{
         View view;
 
@@ -45,6 +48,9 @@ public class Fragment_class_RecyclerView_adapter extends RecyclerView.Adapter{
 
         ViewHolder viewHolder=new ViewHolder(view);
 
+
+
+
         return viewHolder;
     }
 
@@ -52,13 +58,17 @@ public class Fragment_class_RecyclerView_adapter extends RecyclerView.Adapter{
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final ViewHolder viewHolder=(ViewHolder)holder;
         viewHolder.textView.setText(""+(position+1));
+        map.put(position+1+"",viewHolder.textView);
         if(position+1==week){
+
             viewHolder.textView.setTextColor(MyApplication.getContext().getResources().getColor(R.color.white));
             viewHolder.textView.setBackgroundResource(R.drawable.fragment_class_red_dot);
+            textView_selected=viewHolder.textView;
         }else{
             viewHolder.textView.setTextColor(MyApplication.getContext().getResources().getColor(R.color.gray));
             viewHolder.textView.setBackgroundResource(R.color.white);
         }
+
 
         //为gridView设置适配器
         viewHolder.gridView.setAdapter(new Fragment_class_GridView_adapter(list,position+1));
@@ -70,6 +80,12 @@ public class Fragment_class_RecyclerView_adapter extends RecyclerView.Adapter{
                 int position=viewHolder.getAdapterPosition();
 
                 week=position+1;
+                textView_selected.setTextColor(MyApplication.getContext().getResources().getColor(R.color.gray));
+                textView_selected.setBackgroundResource(R.color.white);
+
+                textView_selected=viewHolder.textView;
+                viewHolder.textView.setTextColor(MyApplication.getContext().getResources().getColor(R.color.white));
+                viewHolder.textView.setBackgroundResource(R.drawable.fragment_class_red_dot);
 
                 //回调改变课程信息
                 if(listener!=null){
@@ -78,6 +94,15 @@ public class Fragment_class_RecyclerView_adapter extends RecyclerView.Adapter{
                 Toast.makeText(MyApplication.getContext(),"当前周"+week+"{"+position,Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void PopupWindowSelected(int position){
+
+        textView_selected.setTextColor(MyApplication.getContext().getResources().getColor(R.color.gray));
+        textView_selected.setBackgroundResource(R.color.white);
+        textView_selected=map.get(position+"");
+        textView_selected.setTextColor(MyApplication.getContext().getResources().getColor(R.color.white));
+        textView_selected.setBackgroundResource(R.drawable.fragment_class_red_dot);
     }
 
     int week;//当前所处周数
@@ -91,6 +116,14 @@ public class Fragment_class_RecyclerView_adapter extends RecyclerView.Adapter{
     Fragment_class_Change_Listener listener;
 
     public Fragment_class_RecyclerView_adapter(List<Class_Bean>list,int week,int allWeek){
+        this.list=list;
+        Log.d("fangfa",list.size()+"!!!!!!!!!@@@@@@@@@"+week);
+        this.week=week;
+        this.allWeek=allWeek;
+    }
+
+
+    public void setMessage(List<Class_Bean>list,int week,int allWeek){
         this.list=list;
         Log.d("fangfa",list.size()+"!!!!!!!!!@@@@@@@@@"+week);
         this.week=week;

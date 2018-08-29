@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_margin="10dp"
-    android:layout_width="100dp"
+    android:layout_width="50dp"
+    android:background="@color/white"
     android:layout_height="wrap_content">
 
     <TextView
@@ -11,19 +12,20 @@
         android:gravity="center"
         android:textColor="@color/gray"
         android:layout_gravity="center"
+
         android:text="11"
         android:layout_width="30dp"
         android:layout_height="30dp" />
 
 
     <GridView
-        android:horizontalSpacing="1dp"
-        android:verticalSpacing="1dp"
-        android:id="@+id/fragment_class_recyclerView_item_grid"
-        android:numColumns="7"
+        android:layout_marginTop="10dp"
 
+        android:id="@+id/fragment_class_recyclerView_item_grid"
+        android:numColumns="5"
+        android:verticalSpacing="1dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="50dp"/>
 
 
 </LinearLayout>

@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import java.util.Random;
 
 import bean.Class_Bean;
 import utils.MyApplication;
+import utils.Util;
 
 //用来摆放课程
 public class ScrollAdapter {
@@ -33,14 +35,14 @@ public class ScrollAdapter {
 
     List<Class_Bean> list;//本周所有课程
 
-    List<TextView>list_text;
+
 
     ListView listView;
 
-    public ScrollAdapter(List<Class_Bean>list,View view,List<TextView>list_text){
+    public ScrollAdapter(List<Class_Bean>list,View view){
         this.list=list;
         this.view=view;
-        this.list_text=list_text;
+
         init();
     }
 
@@ -89,7 +91,9 @@ public class ScrollAdapter {
         int danWei=getDanWidth();//TextView单位宽度
         int height=(bean.getTo()-bean.getFrom()+1)*danWei;//TextView实际高度
 
-        textView.setGravity(Gravity.CENTER);
+
+
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,13);
 
         //偏移计算
         int leftMargin = (bean.getDay()) * getDanWidth()+dp2px(3);
@@ -103,11 +107,26 @@ public class ScrollAdapter {
 
         textView.setLayoutParams(params);
 
+        String name=bean.getName();
 
+        String address=bean.getAddress();
+
+        if(address==null){
+            address="未知";
+        }
+
+        //去括号
+        if(name.contains("(")){
+            int index=bean.getName().indexOf("(");
+            int lastIndex=bean.getName().lastIndexOf(")");
+           name=bean.getName().substring(0,index)+bean.getName().substring(lastIndex+1);
+        }
         //设置文字
-        textView.setText(bean.getName()+"@"+bean.getAddress());
-
-
+        if(name.length()>4){
+            textView.setText(name.substring(0, 3) + "..." + "\n@" + address);
+        }else{
+            textView.setText(name + "@" + address);
+        }
         textView.setBackgroundResource(R.drawable.fragment_class_back1);
 
 
