@@ -1,103 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragment_class_layout"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
     <!--课程表头布局-->
     <RelativeLayout
-        android:background="@color/gray"
         android:id="@+id/fragment_class_header_layout"
-
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="40dp"
+        >
 
         <ImageView
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/more"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/more" />
 
 
         <Button
-            android:background="@color/gray"
-            android:text="第25周"
             android:id="@+id/fragment_class_currentweek"
-            android:textSize="15sp"
-            android:layout_centerInParent="true"
-            android:drawableRight="@drawable/fragment_class_down"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
-
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="@null"
+            android:drawableRight="@drawable/fragment_class_down"
+            android:text="第25周"
+            android:textSize="15sp" />
 
 
         <ImageView
+
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:paddingRight="10dp"
-            android:src="@drawable/more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:src="@drawable/fragment_class_add" />
 
     </RelativeLayout>
 
 
     <!--隐藏布局-->
     <LinearLayout
-        android:animateLayoutChanges="true"
         android:id="@+id/fragment_class_inVisbile_layout"
-
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
+
         android:layout_height="0dp"
-        >
+        android:animateLayoutChanges="true"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/fragment_class_inVisbile_button"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="修改当前列"
-            android:background="@color/gray"
-            android:drawableTop="@drawable/fragment_class_setting"
-            android:button="@null"
-            android:layout_gravity="center"
-            android:gravity="center"
             android:layout_width="50dp"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@color/beige"
+            android:button="@null"
+            android:drawableTop="@drawable/fragment_class_setting"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="修改当前列" />
 
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/fragment_class_inVisbile_recyclerView"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="100dp"/>
+            android:layout_weight="1" />
 
     </LinearLayout>
 
 
     <!--滑动布局-->
     <LinearLayout
-        android:background="@drawable/fragment_class_bg"
-        android:orientation="vertical"
+
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <!--周1，周2...-->
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <!--空格子-->
 
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
 
@@ -108,133 +108,132 @@
 
             <!--周一-->
             <LinearLayout
+                style="@style/Fragment_class_Linear_style"
                 android:layout_width="0dp"
-                android:background="@drawable/fragment_class_tv_bg"
-                 style="@style/Fragment_class_Linear_style"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@drawable/fragment_class_tv_bg">
 
                 <TextView
-                    android:text="周一"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="周一" />
 
                 <TextView
                     android:id="@+id/fragment_class_date1"
-                    android:text="08-20"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="08-20" />
             </LinearLayout>
 
             <!--周二-->
             <LinearLayout
-                android:layout_width="0dp"
-                android:background="@drawable/fragment_class_tv_bg"
                 style="@style/Fragment_class_Linear_style"
-                android:layout_height="wrap_content">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/fragment_class_tv_bg">
 
                 <TextView
-                    android:text="周二"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="周二" />
 
                 <TextView
                     android:id="@+id/fragment_class_date2"
-                    android:text="08-21"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="08-21" />
             </LinearLayout>
 
             <!--周三-->
             <LinearLayout
-                android:layout_width="0dp"
-                android:background="@drawable/fragment_class_tv_bg"
                 style="@style/Fragment_class_Linear_style"
-                android:layout_height="wrap_content">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/fragment_class_tv_bg">
 
                 <TextView
-                    android:text="周三"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="周三" />
 
                 <TextView
-                    android:text="08-22"
                     android:id="@+id/fragment_class_date3"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="08-22" />
             </LinearLayout>
             <!--周四-->
             <LinearLayout
-                android:layout_width="0dp"
-                android:background="@drawable/fragment_class_tv_bg"
                 style="@style/Fragment_class_Linear_style"
-                android:layout_height="wrap_content">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/fragment_class_tv_bg">
 
                 <TextView
-                    android:text="周四"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="周四" />
 
                 <TextView
-                    android:text="08-23"
                     android:id="@+id/fragment_class_date4"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="08-23" />
             </LinearLayout>
             <!--周五-->
             <LinearLayout
-                android:layout_width="0dp"
-                android:background="@drawable/fragment_class_tv_bg"
                 style="@style/Fragment_class_Linear_style"
-                android:layout_height="wrap_content">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/fragment_class_tv_bg">
 
                 <TextView
-                    android:text="周五"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="周五" />
 
                 <TextView
-                    android:text="08-24"
                     android:id="@+id/fragment_class_date5"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="08-24" />
             </LinearLayout>
             <!--周六-->
             <LinearLayout
-                android:layout_width="0dp"
-                android:background="@drawable/fragment_class_tv_bg"
                 style="@style/Fragment_class_Linear_style"
-                android:layout_height="wrap_content">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/fragment_class_tv_bg">
 
                 <TextView
-                    android:text="周六"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="周六" />
 
                 <TextView
-                    android:text="08-25"
                     android:id="@+id/fragment_class_date6"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="08-25" />
             </LinearLayout>
             <!--周日-->
             <LinearLayout
-                android:background="@drawable/fragment_class_tv_bg"
-                android:layout_width="0dp"
                 style="@style/Fragment_class_Linear_style"
-                android:layout_height="wrap_content">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/fragment_class_tv_bg">
 
                 <TextView
-                    android:text="周日"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="周日" />
 
                 <TextView
-                    android:text="08-26"
                     android:id="@+id/fragment_class_date7"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="08-26" />
             </LinearLayout>
-
 
 
         </LinearLayout>
@@ -242,25 +241,24 @@
 
         <ScrollView
 
-            android:scrollbars="none"
-            android:fillViewport="true"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:scrollbars="none">
 
-                    <FrameLayout
-                        android:id="@+id/fragment_class_framelayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+            <FrameLayout
+                android:id="@+id/fragment_class_framelayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                        <view.Fragment_class_listView
-                            android:id="@+id/fragment_class_listView"
-                            android:dividerHeight="1dp"
+                <view.Fragment_class_listView
+                    android:id="@+id/fragment_class_listView"
+                    android:layout_width="wrap_content"
 
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:dividerHeight="1dp" />
 
-                    </FrameLayout>
-
+            </FrameLayout>
 
 
         </ScrollView>

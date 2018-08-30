@@ -77,6 +77,8 @@ public class Fragment_class extends Fragment {
 
     List<String>list_popup;
 
+    List<TextView>list_date;//储存显示日期的textView
+
     LinearLayout linearlayout;//隐藏布局
 
     PopupWindow popupWindow;
@@ -127,6 +129,8 @@ public class Fragment_class extends Fragment {
         listView.setAdapter(new Fragment_class_listView_adapter(getActivity()));
         listView.setEnabled(false);
 
+        button_current.setText("第"+week+"周");
+
         wheelView.setPAGE_COUNT(5);
 
         for(int i=0;i<allWeek;i++){
@@ -146,37 +150,46 @@ public class Fragment_class extends Fragment {
 
 
         list=NetworkLoader.getInstance().getList();
+
+        list_date.add((TextView)view.findViewById(R.id.fragment_class_date1));
+        list_date.add((TextView)view.findViewById(R.id.fragment_class_date2));
+        list_date.add((TextView)view.findViewById(R.id.fragment_class_date3));
+        list_date.add((TextView)view.findViewById(R.id.fragment_class_date4));
+        list_date.add((TextView)view.findViewById(R.id.fragment_class_date5));
+        list_date.add((TextView)view.findViewById(R.id.fragment_class_date6));
+        list_date.add((TextView)view.findViewById(R.id.fragment_class_date7));
+
         NetworkLoader.getInstance().setFragment_class_listener(new Fragment_class_Listener() {
             @Override
             public void getClassDown(List<Class_Bean> list) {
 
-                    Fragment_class.this.list=list;
-                    //   获取数据并更新隐藏布局
+                Fragment_class.this.list=list;
+                //   获取数据并更新隐藏布局
 
-                    // 获取数据暂未实现，应当得到一个list<Class_Bean>
-                    if(flag_adapter) {
-                        adapter = new Fragment_class_RecyclerView_adapter(list, week, allWeek);
-                        adapter.setListener(new Fragment_class_Change_Listener() {
-                            @Override
-                            public void changeClass(int week) {
-                                Fragment_class.this.week=week;
-                                button_current.setText("第"+week+"周");
-                                recyclerView.smoothScrollToPosition(week-1);
+                // 获取数据暂未实现，应当得到一个list<Class_Bean>
+                if(flag_adapter) {
+                    adapter = new Fragment_class_RecyclerView_adapter(list, week, allWeek);
+                    adapter.setListener(new Fragment_class_Change_Listener() {
+                        @Override
+                        public void changeClass(int week) {
+                            Fragment_class.this.week=week;
+                            button_current.setText("第"+week+"周");
+                            recyclerView.smoothScrollToPosition(week-1);
 
-                                refreshData(week);
-                            }
-                        });
-                        flag_adapter=false;
-                        handler.sendEmptyMessage(0);
-                    }else{
+                            refreshData(week);
+                        }
+                    });
+                    flag_adapter=false;
+                    handler.sendEmptyMessage(0);
+                }else{
 //                        adapter.setMessage(list, week, allWeek);
-                    }
-
-
-
-
-
                 }
+
+
+
+
+
+            }
 
 
 
@@ -184,6 +197,18 @@ public class Fragment_class extends Fragment {
         });
 
 
+    }
+
+
+    private void updateDate(int week){
+
+        for(int i=1;i<8;i++){
+            if(i==7){
+                list_date.get(i-1).setText(Util.getInstance().getCurrentDay(2018,week+1,1));
+            }else {
+                list_date.get(i - 1).setText(Util.getInstance().getCurrentDay(2018, week, i+1));
+            }
+        }
     }
 
     //监听器
@@ -195,7 +220,7 @@ public class Fragment_class extends Fragment {
             public void onClick(View v) {
 
 
-               // 检查当前隐藏布局显示状态
+                // 检查当前隐藏布局显示状态
                 if(linearlayout_CurrentHeight!=0){
                     //隐藏布局当前处于显示状态
                     linearlayoutAnim(linearlayout_MaxHeight,0);
@@ -210,7 +235,7 @@ public class Fragment_class extends Fragment {
                     //当前布局处于隐藏状态
 
 
-                     linearlayoutAnim(0,linearlayout_MaxHeight);
+                    linearlayoutAnim(0,linearlayout_MaxHeight);
                 }
 
             }
@@ -224,10 +249,12 @@ public class Fragment_class extends Fragment {
                 wheelView.setSelection(week-1);
                 alert_text.setText("第"+week+"周");
 
-                showAlertDialog();
+                synchronized (this) {
+                    showAlertDialog();
 
-                showPopupWindow();
-
+                    showPopupWindow();
+                }
+                Util.getInstance().lightOff(getActivity());
             }
         });
 
@@ -244,14 +271,17 @@ public class Fragment_class extends Fragment {
 
                     linearlayoutAnim(linearlayout_MaxHeight, 0);
                 }
+                Util.getInstance().lightOn(getActivity());
             }
         });
 
         alert_button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 popupWindow.dismiss();
                 popupWindow_week.dismiss();
+                Util.getInstance().lightOn(getActivity());
             }
         });
     }
@@ -305,6 +335,7 @@ public class Fragment_class extends Fragment {
     private void  refreshData(int week){
         //模拟从数据库获取数据
         list= Util.getInstance().getRealList(NetworkLoader.getInstance().getList(),week);
+        updateDate(week);
         new ScrollAdapter(list,view);
     }
 
@@ -333,6 +364,8 @@ public class Fragment_class extends Fragment {
 
         list_popup=new ArrayList<>();
 
+        list_date=new ArrayList<>();
+
         listView=(ListView)view.findViewById(R.id.fragment_class_listView);
 
         button_changeWeek=(Button)view.findViewById(R.id.fragment_class_inVisbile_button);
@@ -341,7 +374,9 @@ public class Fragment_class extends Fragment {
 
         linearlayout=(LinearLayout)view.findViewById(R.id.fragment_class_inVisbile_layout);
 
+        currentWeek=Util.getInstance().getCurrentWeek();
 
+        week=currentWeek;
 
         util=Util.getInstance();
 

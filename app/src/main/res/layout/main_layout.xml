@@ -23,8 +23,12 @@
             android:layout_height="0dp"/>
 
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#4000"/>
         <RadioGroup
-            android:background="@color/colorPrimary"
+
             android:id="@+id/radioGroup"
             android:gravity="center_vertical"
             android:layout_width="match_parent"
