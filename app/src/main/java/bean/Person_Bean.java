@@ -12,6 +12,16 @@ public class Person_Bean extends BmobUser{
 
     String kind;//人员种类
 
+    String pass;
+
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+
     public void setImage(String image) {
         this.image = image;
     }

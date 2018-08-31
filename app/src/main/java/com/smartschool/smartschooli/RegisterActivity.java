@@ -46,7 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         text_pass2=(EditText)findViewById(R.id.register_pass2);
 
-        button_register=(Button)findViewById(R.id.button_register);
+        button_register=(Button)findViewById(R.id.register_button);
 
         checkBox_repair=(CheckBox)findViewById(R.id.kind_repairer);
 

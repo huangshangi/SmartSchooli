@@ -40,10 +40,8 @@
         </activity>
         <activity android:name=".PhotoSelector" />
         <activity android:name=".Z_MainActivity" />
-        <activity android:name=".CeshiActivity">
-
-
-        </activity>
+        <activity android:name=".CeshiActivity"></activity>
+        <activity android:name=".FcTeacherActivity"></activity>
     </application>
 
 </manifest>

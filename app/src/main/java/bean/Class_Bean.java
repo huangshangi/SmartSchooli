@@ -1,7 +1,13 @@
 package bean;
 
+import java.io.Serializable;
+
 //课程信息
-public class Class_Bean {
+public class Class_Bean implements Serializable{
+
+    String cNO;//课程号
+
+    String courseNumber;//课序号
 
     String name;//课程名称
 
@@ -20,6 +26,23 @@ public class Class_Bean {
     String teacher;//教师
 
     int day;//该课程属于周几的课程
+
+
+    public String getcNO() {
+        return cNO;
+    }
+
+    public String getCourseNumber() {
+        return courseNumber;
+    }
+
+    public void setcNO(String cNO) {
+        this.cNO = cNO;
+    }
+
+    public void setCourseNumber(String courseNumber) {
+        this.courseNumber = courseNumber;
+    }
 
     public int getDay() {
         return day;

@@ -70,9 +70,9 @@ public class Util {
 
     //将原生list<Class_Bean>转化为每周专属的list
     //list->原生list  week->当前要显示的周数
-    public List<Class_Bean> getRealList(List<Class_Bean>list,int week){
+    public ArrayList<Class_Bean> getRealList(List<Class_Bean>list,int week){
 
-        List<Class_Bean> result_list=new ArrayList<>();
+        ArrayList<Class_Bean> result_list=new ArrayList<>();
 
         for(Class_Bean bean:list){
 
@@ -138,6 +138,17 @@ public class Util {
         return currentWeek;
     }
 
+    //得到今天是周几   周日 ->7
+    public int getCurrentDay(){
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(new Date());
+        int result=calendar.get(Calendar.DAY_OF_WEEK)-1;
+        if(result==0){
+            return 7;
+        }else{
+            return result;
+        }
+    }
     //得到某个日期所处周数
     private int getWeek(int year,int month,int day){
         Calendar calendar1=Calendar.getInstance();
@@ -183,4 +194,104 @@ public class Util {
         return date;
     }
 
+
+    /*得到当前处于第几节课
+    *   假设上课时间
+    *   1-2  08:00-09:50
+    *   3-4  10:00-11:50
+    *   5-6  13:00-14:50
+    *   7-8  15:00-16:50
+    *   9-10 18:00-19:50
+     */
+    public int getClassNumber(){
+
+        Calendar calendar=Calendar.getInstance();
+
+        calendar.setTime(new Date());
+
+        int hour=calendar.get(Calendar.HOUR_OF_DAY);
+
+        int minute=calendar.get(Calendar.MINUTE);
+
+        int second=calendar.get(Calendar.SECOND);
+
+        if(hour<8||hour>=20){
+            return 0;
+        }else if(hour>=8&&hour<10){
+            if(hour==9&&minute>50){
+                return 0;
+            }else if(hour==8) {
+                return 1;
+            }else{
+                return 2;
+            }
+        }else if(hour>=10&&hour<12){
+            if(hour==11&&minute>50){
+                return 0;
+            }else if(hour==10) {
+                return 3;
+            }else{
+                return 4;
+            }
+        }else if(hour>=13&&hour<15){
+            if(hour==14&&minute>50){
+                return 0;
+            }else if(hour==13) {
+                return 5;
+            }else{
+                return 6;
+            }
+        }else if(hour>=15&&hour<17){
+            if(hour==16&&minute>50){
+                return 0;
+            }else if(hour==15) {
+                return 7;
+            }else{
+                return 8;
+            }
+        }else if(hour>=18&&hour<20){
+            if(hour==19&&minute>50){
+                return 0;
+            }else if(hour==18) {
+                return 9;
+            }else{
+                return 10;
+            }
+        }
+
+        return 0;
+    }
+
+    //得到当前时间  返回格式 08:00:00
+    public String getCurrentTime(){
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(new Date());
+
+        String result="";
+        int hour=calendar.get(Calendar.HOUR_OF_DAY);
+
+        int minute=calendar.get(Calendar.MINUTE);
+
+        int second=calendar.get(Calendar.SECOND);
+
+        if(hour/10==0){
+            result+="0"+hour+":";
+        }else{
+            result+=hour+":";
+        }
+
+        if(minute/10==0){
+            result+="0"+minute+":";
+        }else{
+            result+=minute+":";
+        }
+
+        if(second/10==0){
+            result+="0"+second;
+        }else{
+            result+=second;
+        }
+
+        return result;
+    }
 }

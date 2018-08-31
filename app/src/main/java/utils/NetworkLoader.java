@@ -23,8 +23,11 @@ import android.webkit.HttpAuthHandler;
 import android.widget.Toast;
 
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.smartschool.smartschooli.MainActivity;
 
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -79,7 +82,7 @@ public class NetworkLoader {
 
     static NetworkLoader networkLoader;
 
-    private List<Class_Bean>list_bean;//盛放一周课程信息
+    private ArrayList<Class_Bean>list_bean;//盛放一周课程信息
 
 
     private ExecutorService mThreadPool;//线程池
@@ -231,7 +234,16 @@ public class NetworkLoader {
                             editor.putString("image",person_bean.getImage());
                             editor.putString("nickname",person_bean.getNickname());
                             editor.putString("kind",person_bean.getKind());
+                            editor.putString("pass",person_bean.getPass());
+
                             editor.apply();
+
+                            NetworkLoader.getInstance().getList();
+                            try {
+                                NetworkLoader.getInstance().getSemaphore_getList().acquire();
+                            }catch (Exception e1){
+                                Log.d("error",e1.getMessage());
+                            }
 
                             //登陆成功，进入主界面
                            Intent intent=new Intent(activity, MainActivity.class);
@@ -265,19 +277,49 @@ public class NetworkLoader {
                 bean.setUsername(id);
                 bean.setPassword(pass);
                 bean.setKind(type);
-                bean.signUp(new SaveListener<Person_Bean>() {
-                    @Override
-                    public void done(Person_Bean o, BmobException e) {
-                        if(e==null){
-                            //注册成功
-                            activity.finish();
-                        }else{
-                            Toast.makeText(activity,"注册失败,"+s,Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                bean.setPass(Util.getMD5Str(pass));
+
+                //进行注册账号检查
+                verfiyZhanghao(bean,pass,activity);
+
 
                 semaphore.release();
+            }
+        });
+    }
+
+    //验证账号有效性
+    private void verfiyZhanghao(final Person_Bean bean,final String pass,final Activity activity){
+        final String id=bean.getUsername();
+
+        addTask(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client=new OkHttpClient();
+                RequestBody requestBody=new FormBody.Builder().add("j_username",id).add("j_password",Util.getMD5Str(pass)).build();
+                Request request=new Request.Builder().post(requestBody).url("http://bkjws.sdu.edu.cn/b/ajaxLogin").build();
+                try {
+                    Response response = client.newCall(request).execute();
+                    if(response.code()==200){
+                        bean.signUp(new SaveListener<Person_Bean>() {
+                            @Override
+                            public void done(Person_Bean o, BmobException e) {
+                                if(e==null){
+                                    //注册成功
+                                    activity.finish();
+                                }else{
+                                    Toast.makeText(activity,"注册失败,"+s,Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }else{
+                        //账号无效
+                        Toast.makeText(MyApplication.getContext(),"账号或密码无效",Toast.LENGTH_SHORT).show();
+                    }
+                }catch (Exception e){
+
+                }
+               semaphore.release();
             }
         });
     }
@@ -292,6 +334,8 @@ public class NetworkLoader {
         list[1]->image
         list[2]->nickname
         list[3]->kind
+        list[4]->pass(已加密)
+        list[5]->学生姓名
     */
     public List<String> getPersonMessage(){
         List<String> list=new ArrayList();
@@ -300,10 +344,14 @@ public class NetworkLoader {
         String image=sharedPreferences.getString("image","");
         String nickname=sharedPreferences.getString("nickname","");
         String kind=sharedPreferences.getString("kind","");
+        String pass=sharedPreferences.getString("pass","");
+        String name=sharedPreferences.getString("studentName","");
         list.add(id);
         list.add(image);
         list.add(nickname);
         list.add(kind);
+        list.add(pass);
+        list.add(name);
         return list;
     }
 
@@ -319,7 +367,7 @@ public class NetworkLoader {
         return hashMap;
     }
 
-    public List<Class_Bean>getList(){
+    public ArrayList<Class_Bean>getList(){
         if(list_bean==null){
             synchronized (NetworkLoader.class){
                 if(list_bean==null){
@@ -352,11 +400,14 @@ public class NetworkLoader {
             @Override
             public void run() {
 
+                List<String>list=getPersonMessage();
                 String login_url="http://bkjws.sdu.edu.cn/b/ajaxLogin";//教务系统登录界面
 
                 String main_url="http://bkjws.sdu.edu.cn/f/xk/xs/bxqkb";//课程表界面
-                String username="201700301242";
-                String password="143699";
+
+                String detail_url="http://bkjws.sdu.edu.cn/b/grxx/xs/xjxx/detail";//详细信息界面
+                String username=list.get(0);
+                String password=list.get(4);
 
                 final Map<String,List<Cookie>> hashMap=new HashMap<>();
 
@@ -374,17 +425,31 @@ public class NetworkLoader {
                     }
                 }).build();
                 try {
-                    RequestBody requestBody = new FormBody.Builder().add("j_username", username).add("j_password", Util.getMD5Str(password)).build();
+                    RequestBody requestBody = new FormBody.Builder().add("j_username", username).add("j_password",password).build();
 
                     Request request = new Request.Builder().url(login_url).post(requestBody).build();
                     Response response = client.newCall(request).execute();
+                    Log.d("jinrule",response.body().string()+password+"@"+username);
+
 
                     if (response.code() == 200) {
+
+                        //获取姓名
+                        Request request2=new Request.Builder().url(detail_url).build();
+                        Response response2=client.newCall(request2).execute();
+                        String result=response2.body().string();
+                        JSONObject jsonObject=new JSONObject(result);
+                        JSONObject jsonObject2=(JSONObject) jsonObject.get("object");
+
+                        String name=(String) jsonObject2.get("xm");
+                        SharedPreferences.Editor editor=MyApplication.getContext().getSharedPreferences("Person_Data", Context.MODE_PRIVATE).edit();
+                        editor.putString("studentName",name);
+                        editor.apply();
 
                         Request request1=new Request.Builder().url(main_url).build();
                         Response response1=client.newCall(request1).execute();
                         String html=response1.body().string();
-
+                        Log.d("jinrule","ddddd"+name);
                         //使用jsoup解析获得的数据
                         parseHtml(html);
                     }
@@ -440,7 +505,7 @@ public class NetworkLoader {
 
     }
     //将list<Class_Bean>组装成map<Integer,List<Class_bean>
-    private  Map<Integer, List<Class_Bean>> getClass_Map(List<Class_Bean>list){
+    private  Map<Integer, List<Class_Bean>> getClass_Map(ArrayList<Class_Bean>list){
         hashMap=new HashMap<Integer,List<Class_Bean>>();
         for(Class_Bean bean:list){
             if(hashMap.keySet().contains(bean.getDay())){
@@ -467,6 +532,8 @@ public class NetworkLoader {
         List<String> list_result = Arrays.asList(string.split("!"));
 
         Class_Bean bean=new Class_Bean();
+        bean.setcNO(list_result.get(1));
+        bean.setCourseNumber(list_result.get(3));
         bean.setName(list_result.get(2));
         bean.setTeacher(list_result.get(7));
         if(list_result.size()>11)
@@ -479,7 +546,7 @@ public class NetworkLoader {
             bean.setWeekfrom(Integer.parseInt(week.split("-")[0]));
 
             String[] weekTos=week.split("-")[1].split("");
-            Log.d("week",weekTos[0]+"!!!!!!!!!!!!!!!!"+weekTos[1]);
+
             String weekTo="";
             label:for(int a=0;a<weekTos.length;a++){
                 if(weekTos[a].equals("周")){

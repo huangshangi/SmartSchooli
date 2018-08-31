@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/fragment_class_teacher_item_xuhao"
+        android:gravity="center"
+
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/fragment_class_teacher_item_xuehao"
+
+        android:gravity="center"
+
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/fragment_class_teacher_item_name"
+        android:gravity="center"
+
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/fragment_class_teacher_item_time"
+        android:gravity="center"
+
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        />
+</LinearLayout>

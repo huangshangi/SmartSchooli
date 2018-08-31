@@ -2,12 +2,14 @@ package fragments;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.VolumeAutomation;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -31,7 +33,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.smartschool.smartschooli.FcTeacherActivity;
 import com.smartschool.smartschooli.R;
+import com.xys.libzxing.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,11 +53,16 @@ import utils.NetworkLoader;
 import utils.Util;
 import view.WheelView;
 
+import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
 
 //课堂界面
 //scrollView与listView滑动冲突暂未处理
 public class Fragment_class extends Fragment {
+
+    final static int CAPTURE_QR=0x10;
+
+    String type="teacher";
 
     Util util;
 
@@ -65,6 +74,10 @@ public class Fragment_class extends Fragment {
 
     PopupWindow popupWindow_week;
 
+    PopupWindow popupWindow_student;
+
+    PopupWindow popupWindow_teacher;
+
     WheelView wheelView;
 
     int allWeek=25;//学期总周数
@@ -73,7 +86,7 @@ public class Fragment_class extends Fragment {
 
     int  week=1;//当前所显示的课程周数
 
-    List<Class_Bean> list;
+    ArrayList<Class_Bean> list;
 
     List<String>list_popup;
 
@@ -104,6 +117,12 @@ public class Fragment_class extends Fragment {
     Button button_current;//显示当前周数
 
     Fragment_class_RecyclerView_adapter adapter;
+
+    TextView textView_Student_scan;
+
+    TextView textView_Teacher_QR;
+
+    ImageView imageView_add;
 
     ListView listView;
 
@@ -161,7 +180,7 @@ public class Fragment_class extends Fragment {
 
         NetworkLoader.getInstance().setFragment_class_listener(new Fragment_class_Listener() {
             @Override
-            public void getClassDown(List<Class_Bean> list) {
+            public void getClassDown(ArrayList<Class_Bean> list) {
 
                 Fragment_class.this.list=list;
                 //   获取数据并更新隐藏布局
@@ -213,6 +232,35 @@ public class Fragment_class extends Fragment {
 
     //监听器
     private void initListeners(){
+
+        imageView_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(type.equals("teacher")){
+                    popupWindow_teacher.showAsDropDown(imageView_add);
+                }else {
+                    popupWindow_student.showAsDropDown(imageView_add);
+                }
+            }
+        });
+
+        textView_Teacher_QR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getActivity(), FcTeacherActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("list",list);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        textView_Student_scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().startActivityForResult(new Intent(getActivity(), CaptureActivity.class),CAPTURE_QR);
+            }
+        });
 
         //点击显示或收起隐藏布局
         button_current.setOnClickListener(new View.OnClickListener() {
@@ -339,6 +387,17 @@ public class Fragment_class extends Fragment {
         new ScrollAdapter(list,view);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode){
+            case CAPTURE_QR:
+                if(resultCode==RESULT_OK){
+
+                }
+        }
+    }
+
     private void initViews(){
 
         LinearLayout linearLayout2=(LinearLayout)LayoutInflater.from(getActivity()).inflate(R.layout.fragment_class_alertdialog,null);
@@ -353,6 +412,16 @@ public class Fragment_class extends Fragment {
 
         popupWindow=new PopupWindow(linearLayout,ViewGroup.LayoutParams.MATCH_PARENT
                 ,ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        LinearLayout linearLayoutStud=(LinearLayout)LayoutInflater.from(getActivity()).inflate(R.layout.fragment_class_add_pop_student,null);
+        popupWindow_student=new PopupWindow(linearLayoutStud,ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        textView_Student_scan=(TextView)linearLayoutStud.findViewById(R.id.fragment_class_popStud_scan);
+
+        LinearLayout linearLayout3=(LinearLayout) LayoutInflater.from(getActivity()).inflate(R.layout.fragment_class_add_pop_teacher,null);
+        popupWindow_teacher=new PopupWindow(linearLayout3,ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        textView_Teacher_QR=(TextView)linearLayout3.findViewById(R.id.fragment_class_popTeacher);
+
 
         alert_text=(TextView)linearLayout2.findViewById(R.id.fragment_class_alert_week);
 
@@ -373,6 +442,8 @@ public class Fragment_class extends Fragment {
         recyclerView=(RecyclerView)view.findViewById(R.id.fragment_class_inVisbile_recyclerView);
 
         linearlayout=(LinearLayout)view.findViewById(R.id.fragment_class_inVisbile_layout);
+
+        imageView_add=(ImageView)view.findViewById(R.id.fragment_class_imageView_add);
 
         currentWeek=Util.getInstance().getCurrentWeek();
 
