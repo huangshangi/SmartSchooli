@@ -62,7 +62,7 @@ public class Fragment_class extends Fragment {
 
     final static int CAPTURE_QR=0x10;
 
-    String type="teacher";
+    String type="student";
 
     Util util;
 
@@ -236,10 +236,14 @@ public class Fragment_class extends Fragment {
         imageView_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(type.equals("teacher")){
-                    popupWindow_teacher.showAsDropDown(imageView_add);
-                }else {
-                    popupWindow_student.showAsDropDown(imageView_add);
+                if (type.equals("teacher")) {
+                    if (!popupWindow_teacher.isShowing()) {
+                        showTeacherPopupWindow();
+                    }
+                } else {
+                    if (!popupWindow_student.isShowing()) {
+                        showStudentPopupWindow();
+                    }
                 }
             }
         });
@@ -252,6 +256,9 @@ public class Fragment_class extends Fragment {
                 bundle.putSerializable("list",list);
                 intent.putExtras(bundle);
                 startActivity(intent);
+                if(popupWindow_teacher.isShowing()){
+                    popupWindow_teacher.dismiss();
+                }
             }
         });
 
@@ -259,6 +266,10 @@ public class Fragment_class extends Fragment {
             @Override
             public void onClick(View v) {
                 getActivity().startActivityForResult(new Intent(getActivity(), CaptureActivity.class),CAPTURE_QR);
+                Log.d("student","scan方法执行");
+                if(popupWindow_student.isShowing()){
+                    popupWindow_student.dismiss();
+                }
             }
         });
 
@@ -334,6 +345,21 @@ public class Fragment_class extends Fragment {
         });
     }
 
+    private void showTeacherPopupWindow(){
+        popupWindow_teacher.setTouchable(true);
+        popupWindow_teacher.setOutsideTouchable(true);
+        popupWindow_teacher.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+        popupWindow_teacher.showAsDropDown(imageView_add);
+    }
+
+    private void showStudentPopupWindow(){
+        popupWindow_student.setTouchable(true);
+        popupWindow_student.setOutsideTouchable(true);
+        popupWindow_student.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+        popupWindow_student.showAsDropDown(imageView_add);
+    }
+
+
     private void showAlertDialog(){
         popupWindow_week.setTouchable(true);
         popupWindow_week.setOutsideTouchable(false);
@@ -389,13 +415,37 @@ public class Fragment_class extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d("student","onActivity方法之心血管");
         switch(requestCode){
             case CAPTURE_QR:
                 if(resultCode==RESULT_OK){
+                    Log.d("student","((("+(String)data.getExtras().get("result"));
+                    String message=(String)data.getExtras().get("result");//二维码中包含信息
+
+                    //判断是否为特定二维码
+                    if(message.contains("!")){
+                        Toast.makeText(getActivity(),"签到失败,请检查二维码",Toast.LENGTH_SHORT).show();
+                    }else{
+                        //扫描成功,将签到信息上传
+                        String[]array=message.split("!");
+                        String cNQ=array[0];
+                        String courseName=array[1];
+                        String week=array[2];
+                        String day=array[3];
+                        String jieshu=array[3];
+
+                        List<String>list=NetworkLoader.getInstance().getPersonMessage();
+                        String name=list.get(5);
+                        String xuehao=list.get(0);
+
+                        NetworkLoader.getInstance().UpQiandao(cNQ,courseName,week,day,jieshu,name,xuehao);
+                    }
+
 
                 }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void initViews(){

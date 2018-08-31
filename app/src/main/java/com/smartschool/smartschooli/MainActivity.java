@@ -162,6 +162,13 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //fragment_class 相应onActivityResult
+        fragment_class.onActivityResult(requestCode,resultCode,data);
+    }
 
     public void initEvents(){
         list.add(fragment_hall);
@@ -174,6 +181,8 @@ public class MainActivity extends AppCompatActivity{
         textView_name.setText(person_list.get(2));
         navigationView.setAdapter(new NavigationView_Adapter());
         navigationView.addHeaderView(header);
+
+
     }
 
 

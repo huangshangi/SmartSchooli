@@ -47,10 +47,14 @@ import java.util.concurrent.Semaphore;
 
 import bean.Class_Bean;
 import bean.Person_Bean;
+import bean.Qiandao_Bean;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 
 import listener.Fragment_class_Listener;
+import listener.Fragment_class_getQiandao_listener;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.FormBody;
@@ -106,6 +110,11 @@ public class NetworkLoader {
 
     Fragment_class_Listener fragment_class_listener;
 
+    Fragment_class_getQiandao_listener fragment_class_getQiandao_listener;
+
+    public void setFragment_class_getQiandao_listener(Fragment_class_getQiandao_listener fragment_class_getQiandao_listener) {
+        this.fragment_class_getQiandao_listener = fragment_class_getQiandao_listener;
+    }
 
     public void setFragment_class_listener(Fragment_class_Listener fragment_class_listener){
         this.fragment_class_listener=fragment_class_listener;
@@ -391,6 +400,67 @@ public class NetworkLoader {
                 }
             }
         }
+    }
+
+    //获取某一节课签到信息
+    public void getQiandao(final String CNQ, final String courseName, final String week, final String day, final String jieshu){
+        addTask(new Runnable() {
+            @Override
+            public void run() {
+
+                BmobQuery<Qiandao_Bean>beanBmobQuery=new BmobQuery<>();
+
+                beanBmobQuery.addWhereEqualTo("cNQ",CNQ);
+                beanBmobQuery.addWhereEqualTo("courseNumber",courseName);
+                beanBmobQuery.addWhereEqualTo("week",week);
+                beanBmobQuery.addWhereEqualTo("day",day);
+                beanBmobQuery.addWhereEqualTo("jieshu",jieshu);
+
+                beanBmobQuery.findObjects(new FindListener<Qiandao_Bean>() {
+                    @Override
+                    public void done(List<Qiandao_Bean> list, BmobException e) {
+                        if(e==null){
+                            //回调方法
+
+                        }else{
+                            Toast.makeText(MyApplication.getContext(),"签到信息获取失败"+s,Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                semaphore.release();
+            }
+        });
+
+    }
+
+    //上传签到信息
+    public void UpQiandao(final String cNQ, final String courseName, final String week, final String day,final String jieshu,final String name, final String xuehao){
+
+        addTask(new Runnable() {
+            @Override
+            public void run() {
+                Qiandao_Bean bean=new Qiandao_Bean();
+                bean.setcNO(cNQ);
+                bean.setCourseNumber(courseName);
+                bean.setDay(day);
+                bean.setWeek(week);
+                bean.setJieshu(jieshu);
+                bean.setName(name);
+                bean.setXuehao(xuehao);
+                bean.save(new SaveListener<String>() {
+                    @Override
+                    public void done(String s, BmobException e) {
+                        if(e==null){
+                            Toast.makeText(MyApplication.getContext(),"签到成功",Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(MyApplication.getContext(),"签到失败"+s,Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                semaphore.release();
+            }
+        });
+
     }
 
     //爬取课表信息

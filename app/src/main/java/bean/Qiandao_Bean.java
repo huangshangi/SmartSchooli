@@ -16,6 +16,16 @@ public class Qiandao_Bean extends BmobObject{
 
     String day;//签到的是哪一天的课程
 
+    String jieshu;//哪一节课程
+
+    public String getJieshu() {
+        return jieshu;
+    }
+
+    public void setJieshu(String jieshu) {
+        this.jieshu = jieshu;
+    }
+
     public void setCourseNumber(String courseNumber) {
         this.courseNumber = courseNumber;
     }

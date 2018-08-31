@@ -13,71 +13,108 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-
-    <ImageView
-        android:scaleType="centerCrop"
-        android:id="@+id/fragment_class_teacher_layout_imageView"
-        android:src="@drawable/nopicture"
-        android:layout_gravity="center"
-        android:layout_width="150dp"
-        android:layout_height="150dp" />
-
-    <TextView
-        android:layout_marginTop="20dp"
-        android:id="@+id/fragment_class_teacher_layout_textView"
-
-        android:text="二维码内包含课程信息"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-
-    <LinearLayout
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/fragment_class_teacher_swipeLayout"
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp">
 
-        <TextView
-            android:text="序号"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:layout_width="0dp"
+        <LinearLayout
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            />
-
-        <TextView
-            android:text="学号"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            />
-
-        <TextView
-            android:text="姓名"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            />
-
-        <TextView
-            android:text="时间"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            />
-    </LinearLayout>
-
-        <ListView
-            android:id="@+id/fragment_class_teacher_layout_listView"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="0dp">
+            <ImageView
+                android:scaleType="centerCrop"
+                android:id="@+id/fragment_class_teacher_layout_imageView"
+                android:src="@drawable/nopicture"
+                android:layout_gravity="center"
+                android:layout_width="150dp"
+                android:layout_height="150dp" />
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:id="@+id/fragment_class_teacher_layout_textView"
+
+                android:text="二维码内包含课程信息"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:id="@+id/linearlayout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:gravity="center"
+                    android:text="当前签到信息"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+                <LinearLayout
+
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="序号"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        />
+
+                    <TextView
+                        android:text="学号"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        />
+
+                    <TextView
+                        android:text="姓名"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        />
+
+                    <TextView
+                        android:text="时间"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        />
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/fragment_class_teacher_layout_listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
 
 
 

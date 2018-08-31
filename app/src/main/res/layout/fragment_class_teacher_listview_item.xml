@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:gravity="center"
+        android:id="@+id/fragment_class_listView_text1"
+        android:text="测试序号"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:gravity="center"
+        android:id="@+id/fragment_class_listView_text2"
+        android:text="测试学号"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:gravity="center"
+        android:id="@+id/fragment_class_listView_text3"
+        android:text="测试姓名"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:gravity="center"
+        android:id="@+id/fragment_class_listView_text4"
+        android:text="测试时间"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content" />
+</LinearLayout>
