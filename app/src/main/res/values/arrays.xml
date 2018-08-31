@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string-array name="register">
+
+        <item>学生</item>
+
+        <item>教师</item>
+
+        <item>主管</item>
+    </string-array>
+
+</resources>

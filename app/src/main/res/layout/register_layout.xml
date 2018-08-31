@@ -43,29 +43,25 @@
 
 
     <LinearLayout
+        android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <CheckBox
-            android:text="教师.学生"
-            android:id="@+id/kind_stud"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <CheckBox
-            android:text="维修人员"
-            android:id="@+id/kind_repairer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
+     <Spinner
+         android:id="@+id/register_spinner"
+         android:layout_width="match_parent"
+         android:layout_height="40dp"
+         android:entries="@array/register"
+         />
 
     </LinearLayout>
 
     <Button
+
         android:id="@+id/register_button"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:background="@color/colorAccent"
         android:textColor="@color/white"
         android:textSize="15sp"

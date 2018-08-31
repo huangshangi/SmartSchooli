@@ -1,5 +1,6 @@
 package com.smartschool.smartschooli;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import utils.NetworkLoader;
+import utils.Util;
 
 //登录界面
 public class LoginActivity extends AppCompatActivity {
@@ -42,9 +44,17 @@ public class LoginActivity extends AppCompatActivity {
 
         initViews();//初始化控件
 
+        initEvents();//进行权限的申请
+
         initListeners();//初始化点击事件
     }
 
+
+    private void initEvents(){
+        Util.getInstance().requestPremission(this, Manifest.permission.READ_PHONE_STATE,2);
+        Util.getInstance().requestPremission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE,3);
+        Util.getInstance().requestPremission(this,Manifest.permission.CAMERA,4);
+    }
 
     private void initViews(){
 
@@ -55,7 +65,9 @@ public class LoginActivity extends AppCompatActivity {
         button_login=(Button)findViewById(R.id.button_login);
 
         button_register=(Button)findViewById(R.id.button_register);
-    }
+
+        }
+
 
     private void initListeners(){
 

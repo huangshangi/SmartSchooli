@@ -10,7 +10,7 @@
         android:padding="10dp"
         android:textColor="@color/black"
         android:textSize="20sp"
-        android:background="@color/green"
+        android:background="@drawable/fragment_class_popup_student"
         android:gravity="center"
         android:text="生成签到二维码"
         android:layout_width="wrap_content"

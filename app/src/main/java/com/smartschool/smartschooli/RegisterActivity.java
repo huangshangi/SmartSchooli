@@ -3,9 +3,11 @@ package com.smartschool.smartschooli;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import utils.NetworkLoader;
@@ -22,9 +24,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     Button button_register;
 
-    CheckBox checkBox_stud;
-
-    CheckBox checkBox_repair;
+    Spinner spinner;
 
     String type;//人员类型
 
@@ -48,9 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         button_register=(Button)findViewById(R.id.register_button);
 
-        checkBox_repair=(CheckBox)findViewById(R.id.kind_repairer);
-
-        checkBox_stud=(CheckBox)findViewById(R.id.kind_stud);
+        spinner=(Spinner)findViewById(R.id.register_spinner);
     }
 
     //为控件添加监听事件
@@ -74,24 +72,21 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-
-        checkBox_repair.setOnClickListener(new View.OnClickListener() {
+        spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                if(checkBox_repair.isChecked()){
-                    type=checkBox_repair.getText().toString();
-                }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               if(position==0){
+                   type="学生";
+               }else if(position==1){
+                   type="教师";
+               }else if(position==2){
+                   type="主管";
+               }
             }
         });
 
-        checkBox_stud.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(checkBox_stud.isChecked()){
-                    type=checkBox_stud.getText().toString();
-                }
-            }
-        });
+
+
     }
 }
 

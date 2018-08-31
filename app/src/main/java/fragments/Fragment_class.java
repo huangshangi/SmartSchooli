@@ -62,7 +62,7 @@ public class Fragment_class extends Fragment {
 
     final static int CAPTURE_QR=0x10;
 
-    String type="student";
+    String type;
 
     Util util;
 
@@ -236,11 +236,11 @@ public class Fragment_class extends Fragment {
         imageView_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (type.equals("teacher")) {
+                if (type.equals("学生")) {
                     if (!popupWindow_teacher.isShowing()) {
                         showTeacherPopupWindow();
                     }
-                } else {
+                } else if(type.equals("教师")){
                     if (!popupWindow_student.isShowing()) {
                         showStudentPopupWindow();
                     }
@@ -282,6 +282,7 @@ public class Fragment_class extends Fragment {
                 // 检查当前隐藏布局显示状态
                 if(linearlayout_CurrentHeight!=0){
                     //隐藏布局当前处于显示状态
+                    button_current.setRight(R.drawable.fragment_class_pull_up);
                     linearlayoutAnim(linearlayout_MaxHeight,0);
 
                     //将当前周数改为当前周并显示当前周课表
@@ -292,7 +293,7 @@ public class Fragment_class extends Fragment {
 
                 }else{
                     //当前布局处于隐藏状态
-
+                    button_current.setRight(R.drawable.fragment_class_pull_down);
 
                     linearlayoutAnim(0,linearlayout_MaxHeight);
                 }

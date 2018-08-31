@@ -289,7 +289,21 @@ public class NetworkLoader {
                 bean.setPass(Util.getMD5Str(pass));
 
                 //进行注册账号检查
-                verfiyZhanghao(bean,pass,activity);
+                if(type.equals("主管")){
+                    bean.signUp(new SaveListener<Person_Bean>() {
+                        @Override
+                        public void done(Person_Bean person_bean, BmobException e) {
+                            if(e==null){
+                                //注册成功
+                                activity.finish();
+                            }else{
+                                Toast.makeText(activity,"注册失败,"+s,Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }else {
+                    verfiyZhanghao(bean, pass, activity);
+                }
 
 
                 semaphore.release();
@@ -478,6 +492,10 @@ public class NetworkLoader {
                 String detail_url="http://bkjws.sdu.edu.cn/b/grxx/xs/xjxx/detail";//详细信息界面
                 String username=list.get(0);
                 String password=list.get(4);
+                if(list.get(3).equals("teacher")){
+                    username="201700301242";
+                }
+
 
                 final Map<String,List<Cookie>> hashMap=new HashMap<>();
 
