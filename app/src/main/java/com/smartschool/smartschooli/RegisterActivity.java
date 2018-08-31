@@ -72,18 +72,24 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               if(position==0){
-                   type="学生";
-               }else if(position==1){
-                   type="教师";
-               }else if(position==2){
-                   type="主管";
-               }
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position==0){
+                    type="学生";
+                }else if(position==1){
+                    type="教师";
+                }else if(position==2){
+                    type="主管";
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                    type="学生";
             }
         });
+           ;
 
 
 

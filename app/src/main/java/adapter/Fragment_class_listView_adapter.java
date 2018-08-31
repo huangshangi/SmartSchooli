@@ -55,7 +55,7 @@ public class Fragment_class_listView_adapter extends BaseAdapter {
 
         textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
         textView.setGravity(Gravity.CENTER);
-        textView.setBackgroundResource(R.drawable.fragment_class_tv_bg);
+
         textView.setText(list.get(i));
 
         int width=getDismension()/8;

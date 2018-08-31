@@ -88,6 +88,10 @@ public class MainActivity extends AppCompatActivity{
     DrawerLayout drawerLayout;
     ListView navigationView;
 
+
+    public DrawerLayout getDrawerLayout(){
+        return drawerLayout;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -86,7 +86,9 @@ public class FcTeacherActivity extends AppCompatActivity {
     private void refreshData(){
         bean=checkFlag();
         updateEvent();
-        NetworkLoader.getInstance().getQiandao(bean.getcNO(),bean.getCourseNumber(),""+currentWeek,""+currentDay,""+currentClass);
+        if(bean!=null) {
+            NetworkLoader.getInstance().getQiandao(bean.getcNO(), bean.getCourseNumber(), "" + currentWeek, "" + currentDay, "" + currentClass);
+        }
     }
 
 
@@ -96,7 +98,11 @@ public class FcTeacherActivity extends AppCompatActivity {
         NetworkLoader.getInstance().setFragment_class_getQiandao_listener(new Fragment_class_getQiandao_listener() {
             @Override
             public void getDown(List<Qiandao_Bean> list) {
-                updateAdapter(list);
+                bean=checkFlag();
+                if(bean!=null) {
+                    updateAdapter(list);
+                }
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -105,7 +111,12 @@ public class FcTeacherActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshData();
+                bean=checkFlag();
+                if(bean==null){
+                    swipeRefreshLayout.setRefreshing(false);
+                }else {
+                    refreshData();
+                }
             }
         });
     }
@@ -113,7 +124,7 @@ public class FcTeacherActivity extends AppCompatActivity {
     private void updateEvent(){
         if(bean==null){
             textView.setText("当前没有正在进行的课程");
-            imageView.setImageBitmap(createCeshiQR());
+
             linearLayout.setVisibility(View.GONE);
         }else{
             Bitmap bitmap=createQR();

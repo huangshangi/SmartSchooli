@@ -244,7 +244,7 @@ public class NetworkLoader {
                             editor.putString("nickname",person_bean.getNickname());
                             editor.putString("kind",person_bean.getKind());
                             editor.putString("pass",person_bean.getPass());
-
+                            Log.d("kind测试",person_bean.getKind());
                             editor.apply();
 
                             NetworkLoader.getInstance().getList();
@@ -492,7 +492,9 @@ public class NetworkLoader {
                 String detail_url="http://bkjws.sdu.edu.cn/b/grxx/xs/xjxx/detail";//详细信息界面
                 String username=list.get(0);
                 String password=list.get(4);
-                if(list.get(3).equals("teacher")){
+                if(list.get(3).equals("教师")){
+                    username="201700301242";
+                }else if(list.get(3).equals("学生")&&list.get(0).equals("S1")){
                     username="201700301242";
                 }
 

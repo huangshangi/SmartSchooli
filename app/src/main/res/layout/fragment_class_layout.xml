@@ -15,10 +15,12 @@
         >
 
         <ImageView
+            android:id="@+id/fragment_class_imageView_menu"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/more" />
+            android:src="@drawable/fragment_class_menu" />
 
 
         <Button
@@ -42,8 +44,14 @@
             android:paddingRight="10dp"
             android:src="@drawable/fragment_class_add" />
 
+
     </RelativeLayout>
 
+    <View
+        android:background="@color/black"
+        android:layout_width="match_parent"
+
+        android:layout_height="0.5dp"/>
 
     <!--隐藏布局-->
     <LinearLayout
@@ -59,13 +67,14 @@
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:background="@color/beige"
+            android:background="@color/white"
             android:button="@null"
             android:drawableTop="@drawable/fragment_class_setting"
             android:gravity="center"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
             android:text="修改当前列" />
+
 
 
         <android.support.v7.widget.RecyclerView

@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.VolumeAutomation;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 
 
 import com.smartschool.smartschooli.FcTeacherActivity;
+import com.smartschool.smartschooli.MainActivity;
 import com.smartschool.smartschooli.R;
 import com.xys.libzxing.zxing.activity.CaptureActivity;
 
@@ -123,6 +125,8 @@ public class Fragment_class extends Fragment {
     TextView textView_Teacher_QR;
 
     ImageView imageView_add;
+
+    ImageView imageView_menu;
 
     ListView listView;
 
@@ -237,12 +241,13 @@ public class Fragment_class extends Fragment {
             @Override
             public void onClick(View v) {
                 if (type.equals("学生")) {
-                    if (!popupWindow_teacher.isShowing()) {
-                        showTeacherPopupWindow();
-                    }
-                } else if(type.equals("教师")){
                     if (!popupWindow_student.isShowing()) {
                         showStudentPopupWindow();
+                    }
+                } else if(type.equals("教师")){
+
+                    if (!popupWindow_teacher.isShowing()) {
+                        showTeacherPopupWindow();
                     }
                 }
             }
@@ -273,6 +278,14 @@ public class Fragment_class extends Fragment {
             }
         });
 
+
+        //弹出抽屉栏
+        imageView_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).getDrawerLayout().openDrawer(Gravity.START);
+            }
+        });
         //点击显示或收起隐藏布局
         button_current.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -282,7 +295,11 @@ public class Fragment_class extends Fragment {
                 // 检查当前隐藏布局显示状态
                 if(linearlayout_CurrentHeight!=0){
                     //隐藏布局当前处于显示状态
-                    button_current.setRight(R.drawable.fragment_class_pull_up);
+                    Drawable drawable = getActivity().getResources().getDrawable(R.drawable.fragment_class_pull_up);
+                    // 这一步必须要做,否则不会显示.
+
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    button_current.setCompoundDrawables(null, null, drawable, null);
                     linearlayoutAnim(linearlayout_MaxHeight,0);
 
                     //将当前周数改为当前周并显示当前周课表
@@ -293,7 +310,11 @@ public class Fragment_class extends Fragment {
 
                 }else{
                     //当前布局处于隐藏状态
-                    button_current.setRight(R.drawable.fragment_class_pull_down);
+                    Drawable drawable = getActivity().getResources().getDrawable(R.drawable.fragment_class_pull_down);
+                    // 这一步必须要做,否则不会显示.
+
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    button_current.setCompoundDrawables(null, null, drawable, null);
 
                     linearlayoutAnim(0,linearlayout_MaxHeight);
                 }
@@ -496,6 +517,8 @@ public class Fragment_class extends Fragment {
 
         imageView_add=(ImageView)view.findViewById(R.id.fragment_class_imageView_add);
 
+        imageView_menu=(ImageView)view.findViewById(R.id.fragment_class_imageView_menu);
+
         currentWeek=Util.getInstance().getCurrentWeek();
 
         week=currentWeek;
@@ -516,7 +539,7 @@ public class Fragment_class extends Fragment {
 
             }
         };
-
+        type=NetworkLoader.getInstance().getPersonMessage().get(3);
     }
 
     //获取屏幕宽度
