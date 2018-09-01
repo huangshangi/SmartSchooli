@@ -316,9 +316,11 @@ public class Util {
                 list_reject.add(list_require.get(i));
             }
         }
-        String []array=new String[list_reject.size()];
-        list_reject.toArray(array);
-        //申请权限
-        ActivityCompat.requestPermissions(activity,array,code);
+        if(list_reject.size()!=0) {
+            String[] array = new String[list_reject.size()];
+            list_reject.toArray(array);
+            //申请权限
+            ActivityCompat.requestPermissions(activity, array, code);
+        }
     }
 }

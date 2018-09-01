@@ -133,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(LoginActivity.this,"我被点击",Toast.LENGTH_SHORT).show();
+
                 //询问是否可登陆
                 NetworkLoader.getInstance().login(id,password,LoginActivity.this);
 

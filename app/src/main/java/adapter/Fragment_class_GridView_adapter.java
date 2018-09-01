@@ -22,7 +22,7 @@ public class Fragment_class_GridView_adapter extends BaseAdapter {
     int week;
 
     public Fragment_class_GridView_adapter(List<Class_Bean> list,int week){
-        Log.d("fangfa",list.size()+"@@@@@@@@@"+week);
+
         this.week=week;
         this.list= Util.getInstance().getRealList(list,week);
 

@@ -91,7 +91,7 @@ public class Fragment_class_RecyclerView_adapter extends RecyclerView.Adapter{
                 if(listener!=null){
                     listener.changeClass(week);
                 }
-                Toast.makeText(MyApplication.getContext(),"当前周"+week+"{"+position,Toast.LENGTH_SHORT).show();
+
             }
         });
     }

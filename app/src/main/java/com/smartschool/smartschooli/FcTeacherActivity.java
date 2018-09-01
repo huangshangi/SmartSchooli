@@ -88,8 +88,7 @@ public class FcTeacherActivity extends AppCompatActivity {
         linearLayout=(LinearLayout)findViewById(R.id.linearlayout);
 
         toolbar=findViewById(R.id.fragment_class_teacher_layout_toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar=getSupportActionBar();
+        toolbar.setTitle("");
     }
 
     private void refreshData(){
@@ -133,7 +132,7 @@ public class FcTeacherActivity extends AppCompatActivity {
     private void updateEvent(){
         if(bean==null){
             textView.setText("当前没有正在进行的课程");
-
+//            imageView.setImageBitmap(createCeshiQR());
             linearLayout.setVisibility(View.GONE);
         }else{
             Bitmap bitmap=createQR();
@@ -144,7 +143,8 @@ public class FcTeacherActivity extends AppCompatActivity {
     }
 
     private Bitmap createCeshiQR(){
-        return EncodingUtils.createQRCode("测试信息",Util.getInstance().dp2px(width), Util.getInstance().dp2px(height),null);
+        String message="sd03020250!3!12!2!3";
+        return EncodingUtils.createQRCode(message,Util.getInstance().dp2px(width), Util.getInstance().dp2px(height),null);
     }
 
     private Bitmap createQR(){

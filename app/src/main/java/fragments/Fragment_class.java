@@ -84,9 +84,9 @@ public class Fragment_class extends Fragment {
 
     int allWeek=25;//学期总周数
 
-    int currentWeek=1;//当前课程周数
+    int currentWeek=Util.getInstance().getCurrentWeek();//当前课程周数
 
-    int  week=1;//当前所显示的课程周数
+    int  week=Util.getInstance().getCurrentWeek();//当前所显示的课程周数
 
     ArrayList<Class_Bean> list;
 
@@ -446,7 +446,7 @@ public class Fragment_class extends Fragment {
                     String message=(String)data.getExtras().get("result");//二维码中包含信息
 
                     //判断是否为特定二维码
-                    if(message.contains("!")){
+                    if(!message.contains("!")){
                         Toast.makeText(getActivity(),"签到失败,请检查二维码",Toast.LENGTH_SHORT).show();
                     }else{
                         //扫描成功,将签到信息上传
