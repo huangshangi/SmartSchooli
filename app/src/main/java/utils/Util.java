@@ -307,4 +307,18 @@ public class Util {
         }
         return false;
     }
+
+    public void requestPremissions(Activity activity,List<String>list_require,int code){
+
+        List<String>list_reject=new ArrayList<String>();//储存被拒绝的权限
+        for(int i=0;i<list_require.size();i++){
+            if(ContextCompat.checkSelfPermission(activity,list_require.get(i))!= PackageManager.PERMISSION_GRANTED){
+                list_reject.add(list_require.get(i));
+            }
+        }
+        String []array=new String[list_reject.size()];
+        list_reject.toArray(array);
+        //申请权限
+        ActivityCompat.requestPermissions(activity,array,code);
+    }
 }

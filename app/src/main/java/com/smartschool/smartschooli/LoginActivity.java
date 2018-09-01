@@ -13,6 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.security.Permission;
+import java.util.ArrayList;
+import java.util.List;
+
 import utils.NetworkLoader;
 import utils.Util;
 
@@ -51,7 +55,14 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void initEvents(){
+
+        List<String>list_permission=new ArrayList<>();
+        list_permission.add(Manifest.permission.READ_PHONE_STATE);
+        list_permission.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        list_permission.add(Manifest.permission.CAMERA);
+        Util.getInstance().requestPremissions(this,list_permission,1);
         Util.getInstance().requestPremission(this, Manifest.permission.READ_PHONE_STATE,2);
+
         Util.getInstance().requestPremission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE,3);
         Util.getInstance().requestPremission(this,Manifest.permission.CAMERA,4);
     }
@@ -63,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         text_pass=(EditText)findViewById(R.id.login_pass);
 
         button_login=(Button)findViewById(R.id.button_login);
+
 
         button_register=(Button)findViewById(R.id.button_register);
 

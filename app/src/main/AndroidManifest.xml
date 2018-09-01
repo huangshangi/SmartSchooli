@@ -41,7 +41,7 @@
         <activity android:name=".PhotoSelector" />
         <activity android:name=".Z_MainActivity" />
         <activity android:name=".CeshiActivity"></activity>
-        <activity android:name=".FcTeacherActivity"></activity>
+        <activity android:name=".FcTeacherActivity" android:label="签到界面"></activity>
     </application>
 
 </manifest>

@@ -2,8 +2,10 @@ package com.smartschool.smartschooli;
 
 import android.graphics.Bitmap;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
 
 import com.xys.libzxing.zxing.encoding.EncodingUtils;
 
@@ -32,6 +35,8 @@ public class FcTeacherActivity extends AppCompatActivity {
     int height=150;//生成二维码的高 dp
 
     int width=150;//生成二维码的宽  dp
+
+    Toolbar toolbar;
 
     ArrayList<Class_Bean> list;//储存本周课程
 
@@ -81,6 +86,10 @@ public class FcTeacherActivity extends AppCompatActivity {
         swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.fragment_class_teacher_swipeLayout);
 
         linearLayout=(LinearLayout)findViewById(R.id.linearlayout);
+
+        toolbar=findViewById(R.id.fragment_class_teacher_layout_toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar=getSupportActionBar();
     }
 
     private void refreshData(){

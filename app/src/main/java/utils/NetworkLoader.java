@@ -496,6 +496,9 @@ public class NetworkLoader {
                     username="201700301242";
                 }else if(list.get(3).equals("学生")&&list.get(0).equals("S1")){
                     username="201700301242";
+                }else if(list.get(3).equals("主管")){
+                    semaphore.release();
+                    return;
                 }
 
 
