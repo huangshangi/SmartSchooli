@@ -40,6 +40,7 @@ import cn.bmob.v3.BmobUser;
 import de.hdodenhof.circleimageview.CircleImageView;
 import fragments.Fragment_class;
 import fragments.Fragment_hall;
+
 import fragments.Fragment_repair;
 import utils.ImageLoader;
 import utils.MyApplication;
@@ -71,6 +72,10 @@ public class MainActivity extends AppCompatActivity{
 
     CircleImageView header_image;
 
+    DrawerLayout drawerLayout;
+
+    ListView listView;//侧滑菜单
+
     TextView textView_name;
 
     List<String>person_list;//储存个人信息的list
@@ -85,7 +90,7 @@ public class MainActivity extends AppCompatActivity{
     Button button_unsign;
 
     //滑动界面
-    DrawerLayout drawerLayout;
+
     ListView navigationView;
 
 
@@ -138,6 +143,25 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        //侧滑控件
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        //点击了用户头像
+                        Intent intent=new Intent(MainActivity.this,PhotoSelector.class);
+                        intent.putExtra("isOne",true);
+                        startActivityForResult(intent,0x997);
+                        break;
+                    case 1:
+
+                        break;
+                    case 5:
+                        startActivity(new Intent(MainActivity.this,Chat_List_Activity.class));
+                }
+            }
+        });
 
 
     }
@@ -156,6 +180,8 @@ public class MainActivity extends AppCompatActivity{
         button_unsign=(Button)findViewById(R.id.unsign_Button);
         drawerLayout=(DrawerLayout)findViewById(R.id.drawlayout);
         navigationView=(ListView) findViewById(R.id.navigationView);
+
+        listView=(ListView)findViewById(R.id.navigationView);
 
         header=LayoutInflater.from(this).inflate(R.layout.header_layout,null);
 

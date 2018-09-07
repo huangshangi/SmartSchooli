@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="#fff"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:background="#fa7829"
+        android:layout_width="match_parent"
+        android:layout_height="2.25dp"/>
+
+    <TextView
+        android:id="@+id/popwindow_takephoto"
+        android:text="拍摄"
+        style="@style/popupWindow_text"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
+    <View
+        android:background="@color/gray"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+
+    <TextView
+        android:id="@+id/popwindow_alubm"
+        android:text="从相册中选取"
+        style="@style/popupWindow_text"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
+    <View
+        android:background="@color/gray"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+
+    <TextView
+        android:id="@+id/popwindow_cancel"
+        android:text="取消"
+        style="@style/popupWindow_text"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
+
+
+</LinearLayout>

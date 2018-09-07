@@ -23,6 +23,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
         <activity
             android:name=".MainActivity"
             android:hardwareAccelerated="false" />
@@ -40,8 +50,13 @@
         </activity>
         <activity android:name=".PhotoSelector" />
         <activity android:name=".Z_MainActivity" />
-        <activity android:name=".CeshiActivity"></activity>
-        <activity android:name=".FcTeacherActivity" android:label="签到界面"></activity>
+        <activity android:name=".CeshiActivity" />
+        <activity
+            android:name=".FcTeacherActivity"
+            android:label="签到界面" />
+        <activity android:name=".Submit_RepairActivity" />
+        <activity android:name=".PublishActivity" />
+        <activity android:name=".Chat_List_Activity"></activity>
     </application>
 
 </manifest>

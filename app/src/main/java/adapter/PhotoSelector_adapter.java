@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 
 import com.smartschool.smartschooli.R;
+import com.smartschool.smartschooli.Submit_RepairActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +39,7 @@ public class PhotoSelector_adapter extends BaseAdapter {
         this.list=list;
         this.dir=dir;
         this.isOne=isOne;
-        list_selected=new ArrayList<>();
+        list_selected= Submit_RepairActivity.list_all;
         hashMap=new HashMap<String,CheckBox>();
     }
 
@@ -82,6 +83,13 @@ public class PhotoSelector_adapter extends BaseAdapter {
         viewHolder.imageView.setMaxWidth(displayMetrics.widthPixels / 3);
         ImageLoader.getInstance().loadImage((String) list.get(i), viewHolder.imageView);
 
+        //判断已被选择的图片
+        viewHolder.button.setChecked(false);
+        if(!isOne){
+            if(Submit_RepairActivity.list_all.contains(list.get(i))){
+                viewHolder.button.setChecked(true);
+            }
+        }
 
 
         addListeners(viewHolder,list.get(i));

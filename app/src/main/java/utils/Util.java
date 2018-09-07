@@ -77,18 +77,20 @@ public class Util {
 
         ArrayList<Class_Bean> result_list=new ArrayList<>();
 
-        for(Class_Bean bean:list){
+        if(list!=null) {
+            for (Class_Bean bean : list) {
 
-            //判断课程是否在规定时间内
-            Log.d("getRealList","当前周"+week+"}"+bean.getWeekfrom()+")"+bean.getWeekto());
-            if(bean.getWeekfrom()<=week&&bean.getWeekto()>=week){
-                //单双周课程判断
-                if(bean.getType().equals("dan")&&week%2!=0){
-                    result_list.add(bean);
-                }else if(bean.getType().equals("shuang")&&week%2==0){
-                    result_list.add(bean);
-                }else {
-                    result_list.add(bean);
+                //判断课程是否在规定时间内
+                Log.d("getRealList", "当前周" + week + "}" + bean.getWeekfrom() + ")" + bean.getWeekto());
+                if (bean.getWeekfrom() <= week && bean.getWeekto() >= week) {
+                    //单双周课程判断
+                    if (bean.getType().equals("dan") && week % 2 != 0) {
+                        result_list.add(bean);
+                    } else if (bean.getType().equals("shuang") && week % 2 == 0) {
+                        result_list.add(bean);
+                    } else {
+                        result_list.add(bean);
+                    }
                 }
             }
         }
