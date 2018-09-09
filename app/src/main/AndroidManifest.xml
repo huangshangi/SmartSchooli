@@ -23,7 +23,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.fileprovider"
@@ -33,6 +32,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <activity
             android:name=".MainActivity"
             android:hardwareAccelerated="false" />
@@ -56,7 +56,10 @@
             android:label="签到界面" />
         <activity android:name=".Submit_RepairActivity" />
         <activity android:name=".PublishActivity" />
-        <activity android:name=".Chat_List_Activity"></activity>
+        <activity android:name=".Chat_List_Activity" />
+        <activity android:name=".PersonActivity" />
+        <activity android:name=".RepairDetailsActivity" />
+        <activity android:name=".RepairDetailActivity"></activity>
     </application>
 
 </manifest>

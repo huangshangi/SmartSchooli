@@ -20,6 +20,7 @@ import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.LruCache;
 import android.webkit.HttpAuthHandler;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -70,6 +71,7 @@ import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 import listener.Fragment_class_Listener;
 import listener.Fragment_class_getQiandao_listener;
+import listener.LoadingOwnRepairListener;
 import listener.LoadingRepairListener;
 import listener.UpRepairListener;
 import listener.UpdateMessageListener;
@@ -98,6 +100,7 @@ import static android.content.Context.TELEPHONY_SERVICE;
 public class NetworkLoader {
 
     int count=0;
+
 
 
     private String phone_id;//手机唯一码
@@ -138,9 +141,15 @@ public class NetworkLoader {
 
     private LoadingRepairListener loadingRepairListener;
 
+    private LoadingOwnRepairListener loadingOwnRepairListener;
+
     private UpdateMessageListener updateMessageListener;
 
     private List<String>list_urls;
+
+    public void setLoadingOwnRepairListener(LoadingOwnRepairListener loadingOwnRepairListener) {
+        this.loadingOwnRepairListener = loadingOwnRepairListener;
+    }
 
     public void setUpdateMessageListener(UpdateMessageListener updateMessageListener) {
         this.updateMessageListener = updateMessageListener;
@@ -175,6 +184,10 @@ public class NetworkLoader {
 
     //构造方法，进行控件的初始化
     private NetworkLoader(){
+
+        //初始化缓冲池
+        int memory=(int)Runtime.getRuntime().maxMemory();
+        int cachememory=memory/6;
 
 
         mThreadPool= Executors.newFixedThreadPool(THREAD_COUNT);
@@ -448,15 +461,57 @@ public class NetworkLoader {
         return list_bean;
     }
 
-    public void Class_init(){
-        if(list_bean==null){
-            synchronized (NetworkLoader.class){
-                if(list_bean==null){
-                    getClassesMessage();
+    //更新用户头像
+    public void updateImage(final String address){
+
+        addTask(new Runnable() {
+            @Override
+            public void run() {
+                count=0;
+                upFile(address,1);
+                try {
+                    semaphore_fileUp.acquire();
+                }catch (Exception e){
+
                 }
+                SharedPreferences.Editor editor=MyApplication.getContext().getSharedPreferences("Person_Data", Context.MODE_PRIVATE).edit();
+                editor.putString("image",list_urls.get(0));
+                editor.apply();
+                update_Image2(list_urls.get(0));
+                list_urls.clear();
+                semaphore.release();
             }
-        }
+        });
+
     }
+
+    //在user表中更新个人头像
+    private void update_Image2(final String url){
+        addTask(new Runnable() {
+            @Override
+            public void run() {
+                BmobQuery<Person_Bean>bmobQuery=new BmobQuery<>();
+                bmobQuery.addWhereEqualTo("username",getPersonMessage().get(0));
+                bmobQuery.findObjects(new FindListener<Person_Bean>() {
+                    @Override
+                    public void done(List<Person_Bean> list, BmobException e) {
+                        if(e==null&&list.size()!=0){
+                            Person_Bean bean=list.get(0);
+                            bean.setImage(url);
+                            bean.update(bean.getObjectId(), new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if(e!=null)
+                                        Toast.makeText(MyApplication.getContext(),"更新用户头像失败",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
+
 
     //获取某一节课签到信息
     public void getQiandao(final String CNQ, final String courseName, final String week, final String day, final String jieshu){
@@ -715,17 +770,17 @@ public class NetworkLoader {
     }
 
     public void prepareRepairMessage(final String id,final String nickname,final String machine,final String type,final String address,final int bianhao,final String content,final List list,final Context context) {
-        Submit_RepairActivity.list_all.clear();
+
         final Dialog dialog= LoadingProgress.createDialog(context,"加载中...");
         //将图片上传
         list_urls.clear();
-        final List list1 = list;
-        if (list1.get(0) instanceof Integer)
-            list1.remove(0);
+        final List list1 = new ArrayList();
 
-        for(int i=0;i<list1.size();i++) {
-            Log.d("file文件测试", (String) list1.get(i));
-        }
+
+        for(int i=1;i<list.size();i++)
+            list1.add(list.get(i));
+        Log.d("semaphore_fileUp","list"+list.size());
+
         addTask(new Runnable() {
             @Override
             public void run() {
@@ -741,6 +796,8 @@ public class NetworkLoader {
                 bean.setRepairer_id(id);
                 bean.setRepair_machine(machine);
                 bean.setRepairer_name(nickname);
+                bean.setEvluate_content("");
+                bean.setEvluate_status("否");
                 //将返回的url地址组装成String 中间用￥间隔
                 String urls = "";
                 for (int i = 0; i < list_urls.size(); i++) {
@@ -752,6 +809,7 @@ public class NetworkLoader {
                 }
                 bean.setRepair_adress(address);
                 bean.setRepair_urls(urls);
+                Log.d("测试信息！！",urls+"!");
                 bean.setRepair_content(content);
                 bean.setRepair_status("未处理");
                 bean.setRepair_bianhao(bianhao);
@@ -761,6 +819,7 @@ public class NetworkLoader {
                 dialog.dismiss();
             }
         });
+        Submit_RepairActivity.list_all.clear();
 
     }
 
@@ -809,7 +868,30 @@ public class NetworkLoader {
         });
     }
 
+    //获取我提交的维修内容
+    public void getOwnRepairMessage(){
+        addTask(new Runnable() {
+            @Override
+            public void run() {
+                BmobQuery<Repair_Bean>bmobQuery=new BmobQuery<>();
+                bmobQuery.addWhereEqualTo("repairer_id",getPersonMessage().get(0));
+                bmobQuery.order("-createdAt");
+                bmobQuery.findObjects(new FindListener<Repair_Bean>() {
+                    @Override
+                    public void done(List<Repair_Bean> list, BmobException e) {
+                        if(e==null){
+                            //查询成功，回调方法
+                          if(loadingOwnRepairListener!=null){
+                              loadingOwnRepairListener.loadingDown(list);
+                          }
+                        }
+                    }
+                });
 
+                semaphore.release();
+            }
+        });
+    }
 
 
     //上传多个文件
@@ -818,7 +900,6 @@ public class NetworkLoader {
         count=0;
         int count_zong=list.size();
         if(list==null||list.size()==0){
-            Log.d("semaphore_fileUp","list为空时被释放");
             semaphore_fileUp.release();
         }else {
             for (int i = 0; i < count_zong; i++) {
@@ -906,11 +987,11 @@ public class NetworkLoader {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         int o = 25;
-//        while (baos.toByteArray().length / 1024 > 20&&o>10) { // 循环判断如果压缩后图片是否大于10kb,大于继续压缩
-//            baos.reset();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, o, baos);
-        // o -= 10;// 每次都减少10
-//        }
+            while (baos.toByteArray().length / 1024 > 20&&o>10) { // 循环判断如果压缩后图片是否大于10kb,大于继续压缩
+                baos.reset();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, o, baos);
+                 o -= 10;// 每次都减少10
+            }
         ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
         Bitmap bitmap1 = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
         return bitmap1;
@@ -1095,24 +1176,7 @@ public class NetworkLoader {
         });
     }
 
-    public void loadImage(final String url, final ImageView imageView) {
-        imageView.setTag(url);
 
-        if (mUiHandler == null) {
-            mUiHandler = new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    ImageHolder imageHolder = (ImageHolder) msg.obj;
-                    String url = imageHolder.url;
-                    Bitmap bitmap = imageHolder.bitmap;
-                    ImageView imageView1 = imageHolder.imageView;
-                    if (imageView1.getTag().toString().equals(url)) {
-                        imageView1.setImageBitmap(bitmap);
-                    }
-                }
-            };
-        }
-    }
 
     class ImageHolder{
         Bitmap bitmap;

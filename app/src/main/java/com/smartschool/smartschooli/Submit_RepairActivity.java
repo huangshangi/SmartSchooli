@@ -16,6 +16,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,7 +79,7 @@ public class Submit_RepairActivity extends AppCompatActivity {
 
     Uri uri;
 
-    List list2;
+
 
     String type;//故障类型
 
@@ -107,7 +108,7 @@ public class Submit_RepairActivity extends AppCompatActivity {
         button_submit=(Button)findViewById(R.id.submit_repair_button);
         button_select=(Button)findViewById(R.id.submit_repair_style);
         networkLoader=NetworkLoader.getInstance();
-        list2=new ArrayList();
+
         view2=LayoutInflater.from(this).inflate(R.layout.popwindow_photo,null);
         popupWindow=new PopupWindow(view2, ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT,true);
         if(list_all==null){
@@ -118,8 +119,8 @@ public class Submit_RepairActivity extends AppCompatActivity {
 
     public void initEvents(){
        list_all.clear();
-        list2.add(R.drawable.add);
-        refreshDatas(list2);
+        list_all.add(R.drawable.add);
+        refreshDatas(list_all);
         networkLoader.setUpRepairListener(new UpRepairListener() {
             @Override
             public void upDown() {
@@ -154,9 +155,10 @@ public class Submit_RepairActivity extends AppCompatActivity {
 
 
                 if (canUpload()) {
-                    networkLoader.prepareRepairMessage(Person.getId(),Person.getPublisher(),editText_machine.getText().toString(),button_select.getText().toString(),editText_address.getText().toString()
-                            ,RandomFigure(),editText_content.getText().toString(),list2,Submit_RepairActivity.this);
-                    //将信息上传
+                   List<String> list=networkLoader.getPersonMessage();
+                    networkLoader.prepareRepairMessage(list.get(0),list.get(2),editText_machine.getText().toString(),button_select.getText().toString(),editText_address.getText().toString()
+                            ,RandomFigure(),editText_content.getText().toString(),list_all,Submit_RepairActivity.this);
+                   // 将信息上传
 
                 }else{
                     Toast.makeText(Submit_RepairActivity.this,"请填写完整信息",Toast.LENGTH_SHORT).show();
@@ -319,24 +321,25 @@ public class Submit_RepairActivity extends AppCompatActivity {
                     for(int i=0;i< list.size();i++)
                         if(!list_all.contains(list.get(i)))
                             list_all.add((String) list.get(i));
-                    list2=list_all;
-                    if(list2.size()>0)
-                        if(!(list2.get(0) instanceof Integer))
-                            list2.add(0,R.drawable.add);
-                    refreshDatas(list2);
+
+                    if(list_all.size()>0)
+                        if(!(list_all.get(0) instanceof Integer))
+                            list_all.add(0,R.drawable.add);
+                    refreshDatas(list_all);
+
+
+                        Log.d("Tagtag!!",""+list_all.size()+(list_all.get(0) instanceof Integer)+"@");
                 }
 
                 break;
             case TAKE_PHOTO:
                 if(resultCode==RESULT_OK){
                     try{
-                        list2=list_all;
-                        if(list2.size()==0){
-                            list2.add(R.drawable.add);
-                        }
-                        list2.add(file.getAbsolutePath());
+
+                        if(!(list_all.get(0) instanceof Integer))
+                            list_all.add(0,R.drawable.add);
                         list_all.add(file.getAbsolutePath());
-                        refreshDatas(list2);
+                        refreshDatas(list_all);
                     }catch (Exception e){
 
                     }

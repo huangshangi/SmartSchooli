@@ -1,8 +1,10 @@
 package bean;
 
+import java.io.Serializable;
+
 import cn.bmob.v3.BmobObject;
 
-public class Repair_Bean extends BmobObject{
+public class Repair_Bean extends BmobObject implements Serializable{
 
     String repairer_id;//报修者id
 
@@ -20,8 +22,27 @@ public class Repair_Bean extends BmobObject{
 
     String repair_adress;//报修地址
 
-    String repair_type;
+    String repair_type;//故障类型
 
+    String evluate_status;//评价状态
+
+    String evluate_content;//评价内容
+
+    public String getEvluate_content() {
+        return evluate_content;
+    }
+
+    public String getEvluate_status() {
+        return evluate_status;
+    }
+
+    public void setEvluate_content(String evluate_content) {
+        this.evluate_content = evluate_content;
+    }
+
+    public void setEvluate_status(String evluate_status) {
+        this.evluate_status = evluate_status;
+    }
 
     public String getRepair_type() {
         return repair_type;

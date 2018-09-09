@@ -3,6 +3,7 @@ package adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,15 +56,14 @@ public class Publish_gridview_adapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
+
         if(list.get(i) instanceof String) {
             DisplayMetrics displayMetrics = viewHolder.imageView.getResources().getDisplayMetrics();
             viewHolder.imageView.setMaxWidth(displayMetrics.widthPixels / 3);
             viewHolder.imageView.setMaxHeight(100);
-            if(((String) list.get(i)).contains("http")){
-                NetworkLoader.getInstance().loadImage((String)list.get(i),viewHolder.imageView);
-            }else{
+
                 ImageLoader.getInstance().loadImage((String) list.get(i), viewHolder.imageView);
-            }
+
         }else if(list.get(i) instanceof Integer){
             viewHolder.imageView.setImageResource((int)list.get(0));
         }else if(list.get(i) instanceof Bitmap){ viewHolder.imageView.setImageBitmap((Bitmap) list.get(i));

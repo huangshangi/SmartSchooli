@@ -15,6 +15,7 @@ import java.util.List;
 import bean.Person;
 import bean.UpdateMessage_Bean;
 import de.hdodenhof.circleimageview.CircleImageView;
+import utils.ImageLoader;
 import utils.NetworkLoader;
 
 //聊天记录的适配器
@@ -65,7 +66,7 @@ public class FragChat_list_Adapter extends BaseAdapter {
         }
         viewHolder.reddot.setVisibility(View.GONE);
         UpdateMessage_Bean bean=list.get(i);
-        NetworkLoader.getInstance().loadImage(bean.getImageUrl(),viewHolder.circleImageView);
+        ImageLoader.getInstance().loadImage(bean.getImageUrl(),viewHolder.circleImageView);
         viewHolder.circleImageView.setTag(bean.getImageUrl());
 
 

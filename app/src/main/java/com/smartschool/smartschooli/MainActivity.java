@@ -155,8 +155,16 @@ public class MainActivity extends AppCompatActivity{
                         startActivityForResult(intent,0x997);
                         break;
                     case 1:
-
+                        //点击了账号资料
+                        Intent intent2=new Intent(MainActivity.this,PersonActivity.class);
+                        startActivity(intent2);
                         break;
+
+                    case 2:
+                        Intent intent3=new Intent(MainActivity.this,RepairDetailsActivity.class);
+                        startActivity(intent3);
+                        break;
+
                     case 5:
                         startActivity(new Intent(MainActivity.this,Chat_List_Activity.class));
                 }
@@ -196,6 +204,16 @@ public class MainActivity extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        switch (requestCode){
+            case 0x997:
+                if(resultCode==RESULT_OK){
+                    String address=data.getStringArrayListExtra("list").get(0);
+                    ImageLoader.getInstance().loadImage(address,header_image);
+                    //将内容在网络更新
+                    NetworkLoader.getInstance().updateImage(address);
+                }
+                break;
+        }
         //fragment_class 相应onActivityResult
         fragment_class.onActivityResult(requestCode,resultCode,data);
     }

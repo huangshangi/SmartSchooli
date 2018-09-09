@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/fragment_repair_listview_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:background="@drawable/recg_back"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <!--报修人及name-->
+                <LinearLayout
+                    android:id="@+id/linearlayout"
+                    android:visibility="gone"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textSize="15sp"
+                        android:text="报修人:"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/repair_detail_name"
+                        android:textSize="15sp"
+                        android:paddingLeft="5dp"
+                        android:textColor="@color/black"
+                        android:text="ceshiren"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+                <!--故障设备-->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textSize="15sp"
+                        android:text="故障设备:"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/repair_detail_machine"
+                        android:textSize="15sp"
+                        android:paddingLeft="5dp"
+                        android:textColor="@color/black"
+                        android:text="ceshiren"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <!--故障类型-->
+                <LinearLayout
+
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:textSize="15sp"
+                        android:text="选择故障类型:"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+
+                    <TextView
+                        android:textColor="@color/black"
+                        android:paddingLeft="5dp"
+                        android:textSize="15sp"
+                        android:id="@+id/repair_detail_type"
+                        android:text="测试类型"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+                <!--故障地址-->
+                <LinearLayout
+
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textSize="15sp"
+                        android:text="故障地址"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+
+                    <TextView
+                        android:textSize="15sp"
+                        android:textColor="@color/black"
+                        android:maxLines="1"
+                        android:id="@+id/repair_details_address"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <!--故障描述-->
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/recg_back"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:text="故障描述"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:background="@color/black"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+
+                <TextView
+                    android:id="@+id/repair_detail_content"
+                    android:paddingTop="3dp"
+                    android:gravity="start"
+                    android:text="测试文字"
+                    android:background="@null"
+                    style="?android:attr/textViewStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp" />
+
+
+            </LinearLayout>
+
+
+            <!--上传图片-->
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/recg_back"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="上传的图片"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:background="@color/black"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <view.Submit_repair_GridView
+                    android:id="@+id/gridview"
+                    android:numColumns="3"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>
