@@ -173,12 +173,14 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter {
         viewHolder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                list_commit=StringToList(bean.getPublished_commit());
+
                 Toast.makeText(MyApplication.getContext(),bean.getPublished_commit(), Toast.LENGTH_SHORT).show();
                 if(!viewHolder.button.isEnabled()){
                     Toast.makeText(context,"评论内容不能为空",Toast.LENGTH_SHORT).show();
                 }else {
-                    bean.setPublished_commit(bean.getPublished_commit()+"￥"+NetworkLoader.getInstance().getPersonMessage().get(2)+"说:"+viewHolder.editText.getText().toString());
+                    String commit=bean.getPublished_commit()+"￥"+NetworkLoader.getInstance().getPersonMessage().get(2)+"说:"+viewHolder.editText.getText().toString();
+                    bean.setPublished_commit(commit);
+                    list_commit=StringToList(bean.getPublished_commit());
                     if(flag_commit){
                         adapter_commit=new ListAdapter_oneItem(context,StringToList(bean.getPublished_commit()));
                         viewHolder.listView.setAdapter(adapter_commit);

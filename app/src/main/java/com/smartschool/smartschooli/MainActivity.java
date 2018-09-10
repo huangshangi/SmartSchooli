@@ -54,9 +54,6 @@ public class MainActivity extends AppCompatActivity{
     String id;
     String nickname;
     String image;
-
-
-
     View header;
 
     final static int REQUEST_PERMISSIONS=10;
@@ -105,7 +102,7 @@ public class MainActivity extends AppCompatActivity{
         initViews();
         initEvents();
         addListener();//添加监听器
-        switchFragment(0);
+        switchFragment(1);
     }
 
 
@@ -151,8 +148,9 @@ public class MainActivity extends AppCompatActivity{
                     case 0:
                         //点击了用户头像
                         Intent intent=new Intent(MainActivity.this,PhotoSelector.class);
-                        intent.putExtra("isOne",true);
+                        intent.putExtra("isOne","MainActivity");
                         startActivityForResult(intent,0x997);
+
                         break;
                     case 1:
                         //点击了账号资料

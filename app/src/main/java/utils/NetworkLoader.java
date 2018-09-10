@@ -1274,6 +1274,7 @@ public class NetworkLoader {
                             //说说上传成功,回调接口
                             if (publish_shuoshuo_listener != null) {
                                 publish_shuoshuo_listener.Publish_ShuoshuoDown();
+
                             }
                         } else {
 

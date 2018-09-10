@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 
 
+import com.smartschool.smartschooli.PublishActivity;
 import com.smartschool.smartschooli.R;
 import com.smartschool.smartschooli.Submit_RepairActivity;
 
@@ -28,18 +29,25 @@ public class PhotoSelector_adapter extends BaseAdapter {
     Context context;
     String dir;
     List<String> list;//list中包含的是图片的地址
-    boolean isOne;//判断当前图片选择界面被谁调用
+    String parent;//判断当前图片选择界面被谁调用
     Map<String,CheckBox>hashMap;//String 值代表当前项需要设置的url地址
 
     public static ArrayList<String>list_selected;//被选择的图片地址
 
 
-    public PhotoSelector_adapter(Context context, List list,String dir,boolean isOne){
+    public PhotoSelector_adapter(Context context, List list,String dir,String parent){
         this.context=context;
         this.list=list;
         this.dir=dir;
-        this.isOne=isOne;
-        list_selected= Submit_RepairActivity.list_all;
+        this.parent=parent;
+        if(parent.equals("Submit_RepairActivity")) {
+            list_selected = Submit_RepairActivity.list_all;
+        }else if(parent.equals("PublishActivity")){
+            list_selected= PublishActivity.list_all;
+        }else{
+            list_selected=new ArrayList<>();
+        }
+
         hashMap=new HashMap<String,CheckBox>();
     }
 
@@ -85,8 +93,8 @@ public class PhotoSelector_adapter extends BaseAdapter {
 
         //判断已被选择的图片
         viewHolder.button.setChecked(false);
-        if(!isOne){
-            if(Submit_RepairActivity.list_all.contains(list.get(i))){
+        if(parent.equals("Submit_RepairActivity")||parent.equals("PublishActivity")){
+            if(list_selected.contains(list.get(i))){
                 viewHolder.button.setChecked(true);
             }
         }
@@ -104,7 +112,7 @@ public class PhotoSelector_adapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 //发表说说界面可以选择多张图片
-                if(!isOne) {
+                if(parent.equals("PublishActivity")||parent.equals("Submit_RepairActivity")) {
                     if(viewHolder.button.isChecked())
                         list_selected.add(url);
                     else if(!viewHolder.button.isChecked()&&list_selected.contains(url))

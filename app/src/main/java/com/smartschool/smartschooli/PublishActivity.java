@@ -85,7 +85,8 @@ public class PublishActivity extends AppCompatActivity {
             }
         });
 
-
+        if(list_all.size()==0)
+            list_all.add(R.drawable.add);
     }
 
     public void initListeners(){
@@ -118,6 +119,7 @@ public class PublishActivity extends AppCompatActivity {
     public void fromAlubm(){
 
         Intent intent=new Intent(PublishActivity.this,PhotoSelector.class);
+        intent.putExtra("isOne","PublishActivity");
         startActivityForResult(intent,FROM_ALUBM);
     }
 
@@ -215,8 +217,10 @@ public class PublishActivity extends AppCompatActivity {
                 if(resultCode==RESULT_OK){
 
                     List list=data.getStringArrayListExtra("list");
-                    for(int i=0;i<list.size();i++)
-                        list_all.add(list.get(i));
+                    for(int i=0;i<list.size();i++) {
+                        if(!list_all.contains(list.get(i)))
+                            list_all.add(list.get(i));
+                    }
                     refreshDatas(list_all);
                 }
 

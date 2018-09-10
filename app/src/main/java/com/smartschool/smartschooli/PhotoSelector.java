@@ -48,15 +48,14 @@ import view.ListViewPopupWindow;
 /*
     图片选择界面,该类同时被发表说说界面和选择头像界面使用
     用isOne变量来区分当前该类被哪个活动调用
-    if(isOne==true) 则说明被选择头像界面调用，此时应该只返回一张图片的url地址
-    if(isOne==false)  则说明被发表说说界面调用，此时应该返回多张图片的url地址
+
     使用方法：
         Intent intent=new Intent(context,PhotoSelector.class)
         intent.putExtra("isOne",此处参上)
  */
 public class PhotoSelector extends AppCompatActivity implements PopupListener {
 
-    boolean isOne;
+    String parent;
     List<String>select_list;//每次选择的照片
     List<Group_ImageBean> group_list;//储存组名，第一张图片，组中图片张数
     List<String> list;//其中一组的数据
@@ -148,7 +147,7 @@ public class PhotoSelector extends AppCompatActivity implements PopupListener {
         group_list=new ArrayList<>();
         list = new ArrayList();
         select_list=new ArrayList<>();
-        isOne=getIntent().getBooleanExtra("isOne",false);
+        parent=getIntent().getStringExtra("isOne");
         bottom_button=(Button)findViewById(R.id.photoselector_bottom_button);
         bottom_text=(TextView)findViewById(R.id.photoselector_bottom_text);
         //初始化handler对象
@@ -267,7 +266,7 @@ public class PhotoSelector extends AppCompatActivity implements PopupListener {
         }
         if(list!=null) {
 
-            adapter=new PhotoSelector_adapter(PhotoSelector.this,list,new File(group_list.get(position).getGroup_path()).getAbsolutePath(),isOne);
+            adapter=new PhotoSelector_adapter(PhotoSelector.this,list,new File(group_list.get(position).getGroup_path()).getAbsolutePath(),parent);
 
             gridView.setAdapter(adapter);
 

@@ -195,6 +195,7 @@ public class Submit_RepairActivity extends AppCompatActivity {
     public void fromAlubm(){
 
         Intent intent=new Intent(this,PhotoSelector.class);
+        intent.putExtra("isOne","Submit_RepairActivity");
         startActivityForResult(intent,FROM_ALUBM);
 
     }
