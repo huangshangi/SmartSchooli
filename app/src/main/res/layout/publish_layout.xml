@@ -6,24 +6,25 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/fragment_hall_toolbar"
+        android:id="@+id/publish_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/AlertDialog.AppCompat.Light"/>
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/fragment_hall_swipeRefreshLayout"
+    <EditText
+        android:gravity="top"
+        android:hint="说出你此刻的想法..."
+        android:id="@+id/publish_edittext"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="100dp" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/fragment_hall_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
-
+    <GridView
+        android:id="@+id/publish_gridview"
+        android:numColumns="3"
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+    </GridView>
 
 </LinearLayout>

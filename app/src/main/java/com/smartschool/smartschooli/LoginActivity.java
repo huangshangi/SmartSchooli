@@ -1,9 +1,13 @@
 package com.smartschool.smartschooli;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -156,5 +160,12 @@ public class LoginActivity extends AppCompatActivity {
         if(!flag_id&&!flag_pass)
             return true;
         return false;
+    }
+
+    //进行单个权限的申请
+    public static void requestPremission(Activity activity, String premission){
+        if(ContextCompat.checkSelfPermission(activity,premission)!= PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(activity,new String[]{premission},1);
+        }
     }
 }

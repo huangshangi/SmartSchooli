@@ -15,20 +15,18 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.LruCache;
-import android.webkit.HttpAuthHandler;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.smartschool.smartschooli.MainActivity;
+import com.smartschool.smartschooli.PublishActivity;
+import com.smartschool.smartschooli.R;
 import com.smartschool.smartschooli.Submit_RepairActivity;
 
 import org.json.JSONObject;
@@ -42,9 +40,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.sql.Array;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -56,12 +56,14 @@ import java.util.concurrent.Semaphore;
 
 import bean.Class_Bean;
 import bean.Image_Bean;
-import bean.Person;
+import bean.Message_Bean;
 import bean.Person_Bean;
 import bean.Qiandao_Bean;
 import bean.Repair_Bean;
+import bean.Shuoshuo_Bean;
 import bean.UpdateMessage_Bean;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -71,8 +73,12 @@ import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 import listener.Fragment_class_Listener;
 import listener.Fragment_class_getQiandao_listener;
+import listener.LoadingListener;
 import listener.LoadingOwnRepairListener;
 import listener.LoadingRepairListener;
+import listener.Message_Down_Listener;
+import listener.Publish_Shuoshuo_Listener;
+import listener.UpMessage_Listener;
 import listener.UpRepairListener;
 import listener.UpdateMessageListener;
 import okhttp3.Cookie;
@@ -101,7 +107,7 @@ public class NetworkLoader {
 
     int count=0;
 
-
+    private String lastQueryTime;//条件查询聊天记录时上一次查询时间
 
     private String phone_id;//手机唯一码
 
@@ -111,6 +117,7 @@ public class NetworkLoader {
 
     private ArrayList<Class_Bean>list_bean;//盛放一周课程信息
 
+    private MediaPlayer mediaPlayer;
 
     private ExecutorService mThreadPool;//线程池
 
@@ -145,7 +152,47 @@ public class NetworkLoader {
 
     private UpdateMessageListener updateMessageListener;
 
+    private LoadingListener loadingListener;
+
+    private Publish_Shuoshuo_Listener publish_shuoshuo_listener;
+
+    private Message_Down_Listener message_down_listener;
+
+    private UpMessage_Listener upMessage_listener;
+
     private List<String>list_urls;
+
+    public void setUpMessage_listener(UpMessage_Listener upMessage_listener) {
+        this.upMessage_listener = upMessage_listener;
+    }
+
+    public UpMessage_Listener getUpMessage_listener() {
+        return upMessage_listener;
+    }
+
+    public void setMessage_down_listener(Message_Down_Listener message_down_listener) {
+        this.message_down_listener = message_down_listener;
+    }
+
+    public Message_Down_Listener getMessage_down_listener() {
+        return message_down_listener;
+    }
+
+    public void setPublish_shuoshuo_listener(Publish_Shuoshuo_Listener publish_shuoshuo_listener) {
+        this.publish_shuoshuo_listener = publish_shuoshuo_listener;
+    }
+
+    public Publish_Shuoshuo_Listener getPublish_shuoshuo_listener() {
+        return publish_shuoshuo_listener;
+    }
+
+    public void setLoadingListener(LoadingListener loadingListener) {
+        this.loadingListener = loadingListener;
+    }
+
+    public LoadingListener getLoadingListener() {
+        return loadingListener;
+    }
 
     public void setLoadingOwnRepairListener(LoadingOwnRepairListener loadingOwnRepairListener) {
         this.loadingOwnRepairListener = loadingOwnRepairListener;
@@ -255,7 +302,7 @@ public class NetworkLoader {
 
 
     //向队列添加一个任务
-    private synchronized  void addTask(Runnable runnable){
+    public synchronized  void addTask(Runnable runnable){
         linkedList.add(runnable);
 
         //保证在后台轮询线程初始化完毕后再通知
@@ -1130,10 +1177,11 @@ public class NetworkLoader {
         addTask(new Runnable() {
             @Override
             public void run() {
+                List<String>list3=getPersonMessage();
                 BmobQuery<UpdateMessage_Bean>bmobQuery1=new BmobQuery<>();
-                bmobQuery1.addWhereEqualTo("update_senderId",Person.getId());
+                bmobQuery1.addWhereEqualTo("update_senderId",list3.get(0));
                 BmobQuery<UpdateMessage_Bean>bmobQuery2=new BmobQuery<>();
-                bmobQuery2.addWhereEqualTo("update_receiverId", Person.getId());
+                bmobQuery2.addWhereEqualTo("update_receiverId", list3.get(0));
                 List<BmobQuery<UpdateMessage_Bean>>list=new ArrayList<>();
                 list.add(bmobQuery1);
                 list.add(bmobQuery2);
@@ -1176,6 +1224,379 @@ public class NetworkLoader {
         });
     }
 
+
+    //发表说说操作，其中publisher_name，publisher_image从本地获取  commit默认为空
+    public void publish_Shuoshuo(final String content, final List<String>list, final Context context){
+        //启动加载框
+        PublishActivity.list_all.clear();
+        final Dialog dialog=LoadingProgress.createDialog(context,"加载中...");
+        list_urls.clear();
+        upFiles(list);
+
+        addTask(new Runnable() {
+
+            @Override
+            public void run() {
+                //如果文件未上传成功，则一直等待
+                List<String>list=getPersonMessage();
+                try {
+
+                    semaphore_fileUp.acquire();
+                    Toast.makeText(MyApplication.getContext(),"等待完成",Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Log.d("errror occur", e.getMessage());
+                }
+
+                Shuoshuo_Bean bean = new Shuoshuo_Bean();
+                bean.setPublisher_id(list.get(0));
+                bean.setPublished_commit("");
+                bean.setPublished_content(content);
+                bean.setPublisher_name(list.get(2));
+                bean.setPublisher_url(list.get(1));
+
+                //将返回的url地址组装成String 中间用￥间隔
+                String urls = "";
+                for (int i = 0; i < list_urls.size(); i++) {
+                    urls += list_urls.get(i);
+
+                    if (i != list_urls.size() - 1) {
+                        urls += "￥";
+                    }
+                }
+                Log.d("url的地址为：","!!!!!!!!"+urls);
+                bean.setPublished_urls(urls);
+                bean.save(new SaveListener<String>() {
+                    @Override
+                    public void done(String s, BmobException e) {
+
+                        if (e == null) {
+
+                            //说说上传成功,回调接口
+                            if (publish_shuoshuo_listener != null) {
+                                publish_shuoshuo_listener.Publish_ShuoshuoDown();
+                            }
+                        } else {
+
+                            Toast.makeText(MyApplication.getContext(), "说说上传失败，错误原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                semaphore.release();
+                //说说上传完毕，加载框消失
+                dialog.dismiss();
+                getShuoshuo();
+            }
+        });
+
+    }
+
+    //获得说说
+    public void getShuoshuo(){
+        BmobQuery<Shuoshuo_Bean>bmobQuery=new BmobQuery<>();
+        bmobQuery.order("-createdAt");
+        bmobQuery.findObjects(new FindListener<Shuoshuo_Bean>() {
+            @Override
+            public void done(List<Shuoshuo_Bean> list, BmobException e) {
+                if(e==null){
+                    //查询成功，回调方法
+                    if(loadingListener!=null){
+                        loadingListener.loadingDown(list);
+                    }
+                }else{
+                    Toast.makeText(MyApplication.getContext(),"获取说说失败",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    //添加评论
+    public void addCommit(final Shuoshuo_Bean bean){
+        addTask(new Runnable() {
+            @Override
+            public void run() {
+                bean.update(bean.getObjectId(),new UpdateListener() {
+                    @Override
+                    public void done(BmobException e) {
+                        if(e!=null){
+                            Toast.makeText(MyApplication.getContext(),"发表评论失败,"+"失败原因"+e.getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+                        semaphore.release();
+                    }
+                });
+            }
+        });
+    }
+
+
+    //根据发送人，接受者获取消息
+    public void getMessage(final String publisher_id,final String receiver_id,final int i){
+        addTask(new Runnable() {
+            @Override
+            public void run() {
+                String[]array={publisher_id,receiver_id};
+                List list= Arrays.asList(array);
+                BmobQuery<Message_Bean>bmobQuery=new BmobQuery<>();
+                bmobQuery.order("-createdAt");
+                bmobQuery.addWhereContainedIn("sender_id",list);
+                bmobQuery.addWhereContainedIn("receiver_id",list);
+                if(i!=0){
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date date  = null;
+                    try {
+                        date = sdf.parse(lastQueryTime);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    bmobQuery.addWhereLessThanOrEqualTo("createdAt",new BmobDate(date));
+                    Log.d("&&&&","回调方法被执行");
+                }
+                bmobQuery.setLimit(15);
+                bmobQuery.findObjects(new FindListener<Message_Bean>() {
+                    @Override
+                    public void done(List<Message_Bean> list, BmobException e) {
+                        if(e==null){
+                            //查询成功，回调方法
+
+                            if(message_down_listener!=null){
+                                if(list.size()>0)
+                                    lastQueryTime=list.get(list.size()-1).getCreatedAt();
+                                for(int i=0;i<list.size();i++)
+                                    Log.d("&&&&&&&&&&&&&",list.get(i).getContent()+"!!!!!"+list.size());
+
+                                message_down_listener.getMessageDown(list);
+                            }
+                        }else{
+                            Toast.makeText(MyApplication.getContext(),"服务器获取信息失败；"+e.getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                semaphore.release();
+            }
+        });
+
+    }
+
+
+    //播放音乐,type类型用来标记播放那一边的音乐,1代表右边，2代表左边
+    public void playMedia(String address, final View view, final int type){
+
+        try {
+
+            if(mediaPlayer!=null){
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+                mediaPlayer.release();
+            }
+            mediaPlayer=new MediaPlayer();
+            mediaPlayer.setDataSource(MyApplication.getContext(), Uri.parse(address));
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+
+            //正常结束
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    if(type==2)
+                        view.setBackgroundResource(R.drawable.adj_left);
+                    else
+                        view.setBackgroundResource(R.drawable.adj_right);
+                }
+            });
+        }catch (Exception e){
+
+        }
+
+    }
+
+    //发送消息
+    public  void addMessage(final String publisher_id,final String receiver_id,final String imageurl,final String type,final String content){
+        addTask(new Runnable() {
+            @Override
+            public synchronized void run() {
+                Message_Bean bean=new Message_Bean();
+                bean.setContent(content);
+                bean.setImage(imageurl);
+                bean.setReceiver_id(receiver_id);
+                bean.setSender_id(publisher_id);
+                bean.setType(type);
+
+                if(type.equals("SOUND")){
+                    upChatFile(bean,MyApplication.getContext().getExternalCacheDir()+"/ceshisound.amr");
+                }else if(type.equals("MESSAGE")){
+                    bean.save(new SaveListener<String>() {
+                        @Override
+                        public void done(String s, BmobException e) {
+                            if (e == null) {
+                                //发送成功
+                            } else {
+                                Toast.makeText(MyApplication.getContext(), "发送信息失败:" + s, Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    });
+                }else if(type.equals("IMAGE")){
+                    upChatFile(bean,content);
+                }
+                semaphore.release();
+                if(upMessage_listener!=null){
+                    upMessage_listener.MessageDown(bean);
+                }
+                addUpdateMessage(bean);
+            }
+        });
+
+    }
+
+    /*发送最新聊天记录
+          参数Message_Bean代表一条消息记录，其中receiver_id，type,content,publisher_id可以使用
+     */
+    private void addUpdateMessage(final Message_Bean bean){
+
+        addTask(new Runnable() {
+            @Override
+            public void run() {
+
+                //根据id查询昵称，头像地址
+                BmobQuery<Person_Bean> bmobQuery=new BmobQuery<>();
+                bmobQuery.addWhereEqualTo("username",bean.getReceiver_id());
+
+                bmobQuery.findObjects(new FindListener<Person_Bean>() {
+                    @Override
+                    public void done(List<Person_Bean> list, BmobException e) {
+                        if(e==null){
+
+                            //查询昵称，头像地址成功,将信息组装
+                            final Person_Bean bean1=list.get(0);
+
+                            //查询表中是否两用户间存在最新消息记录，if true 更新 else 添加
+                            String[]array={bean.getSender_id(),bean.getReceiver_id()};
+                            List l= Arrays.asList(array);
+                            BmobQuery<UpdateMessage_Bean>bmobQuery1=new BmobQuery<>();
+                            bmobQuery1.addWhereContainedIn("update_senderId",l);
+                            bmobQuery1.addWhereContainedIn("update_receiverId",l);
+
+                            bmobQuery1.findObjects(new FindListener<UpdateMessage_Bean>() {
+                                @Override
+                                public void done(List<UpdateMessage_Bean> list, BmobException e) {
+                                    if(e==null){
+                                        Log.d("执行该信息","查询成功");
+                                        //存在消息记录
+                                        UpdateMessage_Bean updateMessage_bean=list.get(0);
+                                        updateMessage_bean.setImageUrl(bean1.getImage());
+                                        updateMessage_bean.setUpdate_senderId(bean.getSender_id());
+                                        updateMessage_bean.setUpdate_receiverId(bean.getReceiver_id());
+                                        updateMessage_bean.setUpdate_content(bean.getContent());
+                                        updateMessage_bean.setUpdate_type(bean.getType());
+                                        updateMessage_bean.setUpdate_receiver_name(bean1.getNickname());
+                                        updateMessage_bean.setUpdate_sender_name(getPersonMessage().get(2));
+                                        updateMessage_bean.setHasread(false);
+                                        updateMessage_bean.update(updateMessage_bean.getObjectId(), new UpdateListener() {
+                                            @Override
+                                            public void done(BmobException e) {
+                                                if(e!=null){
+                                                    Toast.makeText(MyApplication.getContext(),"更新失败，"+e.getMessage(),Toast.LENGTH_SHORT).show();
+
+                                                }else{
+
+                                                }
+                                            }
+                                        });
+                                    }else{
+                                        Log.d("执行该信息","查询失败");
+                                        UpdateMessage_Bean updateMessage_bean=new UpdateMessage_Bean();
+                                        updateMessage_bean.setImageUrl(bean1.getImage());
+                                        updateMessage_bean.setUpdate_senderId(bean.getSender_id());
+                                        updateMessage_bean.setUpdate_receiverId(bean.getReceiver_id());
+                                        updateMessage_bean.setUpdate_content(bean.getContent());
+                                        updateMessage_bean.setUpdate_type(bean.getType());
+                                        updateMessage_bean.setUpdate_receiver_name(bean1.getNickname());
+                                        updateMessage_bean.setUpdate_sender_name(getPersonMessage().get(2));
+                                        updateMessage_bean.setHasread(false);
+                                        updateMessage_bean.save(new SaveListener<String>() {
+                                            @Override
+                                            public void done(String s, BmobException e) {
+                                                if(e!=null){
+                                                    Toast.makeText(MyApplication.getContext(),"shangchuang失败，"+e.getMessage(),Toast.LENGTH_SHORT).show();
+                                                }else{
+                                                    Log.d("执行该信息","异质该信息5");
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }else{
+
+                        }
+                    }
+                });
+                semaphore.release();
+            }
+
+        });
+
+    }
+
+    //上传聊天文件
+    private void upChatFile(final Message_Bean bean, final String filename){
+
+        if(!filename.endsWith("amr")){
+            count=0;
+            list_urls.clear();
+            checkFileUp(filename,1);
+            try {
+                semaphore_fileUp.acquire();
+            }catch (Exception e){
+                Log.d("上传文件类型","error occur");
+            }
+            Log.d("上传文件类型","上传图像文件");
+            bean.setContent(list_urls.get(0));
+            list_urls.clear();
+            Log.d("上传文件类型",bean.getContent()+"!"+bean.getType());
+            bean.save(new SaveListener<String>() {
+                @Override
+                public void done(String s, BmobException e) {
+                    if (e == null) {
+                        //发送成功
+                    } else {
+                        Toast.makeText(MyApplication.getContext(), "发送信息失败:" + s, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+
+        }else {
+            addTask(new Runnable() {
+                @Override
+                public synchronized void run() {
+                    final BmobFile bmobFile = new BmobFile(new File(filename));
+                    bmobFile.upload(new UploadFileListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                //上传成功
+                                bean.setContent(bmobFile.getFileUrl());
+                                bean.save(new SaveListener<String>() {
+                                    @Override
+                                    public void done(String s, BmobException e) {
+                                        if (e == null) {
+                                            //发送成功
+                                        } else {
+                                            Toast.makeText(MyApplication.getContext(), "发送信息失败:" + s, Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+                                });
+                            }
+                        }
+                    });
+                    semaphore.release();
+                }
+            });
+
+        }
+    }
 
 
     class ImageHolder{

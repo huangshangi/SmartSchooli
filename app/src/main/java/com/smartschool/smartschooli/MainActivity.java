@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity{
         initViews();
         initEvents();
         addListener();//添加监听器
-        switchFragment(1);
+        switchFragment(0);
     }
 
 
@@ -164,9 +164,12 @@ public class MainActivity extends AppCompatActivity{
                         Intent intent3=new Intent(MainActivity.this,RepairDetailsActivity.class);
                         startActivity(intent3);
                         break;
+                    case 3:
 
-                    case 5:
+                        break;
+                    case 4:
                         startActivity(new Intent(MainActivity.this,Chat_List_Activity.class));
+                        break;
                 }
             }
         });
@@ -299,8 +302,7 @@ public class MainActivity extends AppCompatActivity{
             list=new ArrayList<>();
             list.add("账号资料");
             list.add("维修记录");
-            list.add("请假记录");
-            list.add("交易记录");
+            list.add("发表记录");
             list.add("聊天列表");
         }
 

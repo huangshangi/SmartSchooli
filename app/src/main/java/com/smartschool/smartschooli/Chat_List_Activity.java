@@ -15,10 +15,8 @@ import java.util.List;
 
 import adapter.FragChat_list_Adapter;
 
-import bean.Person;
 import bean.UpdateMessage_Bean;
 import listener.UpdateMessageListener;
-import utils.AudioManager;
 import utils.NetworkLoader;
 import utils.VibrateAndBeeManager;
 
@@ -82,10 +80,10 @@ public class Chat_List_Activity extends AppCompatActivity {
                 String target_name=((TextView)view.findViewById(R.id.chat_list_item_name)).getText().toString();
 
                 //该信息已读
-                NetworkLoader.getInstance().messageHasRead(target_id,Person.getId());
-                Intent intent=new Intent(Chat_List_Activity.this,null);
+                NetworkLoader.getInstance().messageHasRead(target_id,NetworkLoader.getInstance().getPersonMessage().get(0));
+                Intent intent=new Intent(Chat_List_Activity.this,ChatActivity.class);
                 intent.putExtra("target_id",target_id);
-                intent.putExtra("own_id", Person.getId());
+                intent.putExtra("own_id", NetworkLoader.getInstance().getPersonMessage().get(0));
                 intent.putExtra("target_name",target_name);
                 startActivity(intent);
             }

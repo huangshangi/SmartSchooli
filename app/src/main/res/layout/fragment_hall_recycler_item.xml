@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:background="@color/gray"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--个人头像-->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginLeft="10dp"
+            android:id="@+id/person_image"
+            android:scaleType="centerCrop"
+            android:src="@drawable/pictures_no"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+
+        <TextView
+            android:textSize="15sp"
+            android:gravity="center"
+            android:text="测试姓名"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/person_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:textSize="10sp"
+            android:text="2018年5月11日"
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <!--说说内容,中英文混杂出问题-->
+    <TextView
+        android:textAllCaps="false"
+        android:text="ceshiwenziddddd"
+        android:id="@+id/shuoshuo_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <view.Shuoshuo_GridView
+        android:numColumns="3"
+        android:id="@+id/shuoshuo_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"/>
+
+
+
+    <view.Commit_ListView
+        android:divider="@null"
+        android:id="@+id/shuoshuo_commit_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        >
+        <EditText
+            android:hint="评论"
+            android:gravity="center_vertical"
+            android:id="@+id/shuoshuo_commit_edittext"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+        <Button
+            android:text="发送"
+            android:id="@+id/shuoshuo_commit_send"
+            android:background="@color/salmon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</LinearLayout>

@@ -41,6 +41,7 @@ import java.util.Set;
 import adapter.PhotoSelector_adapter;
 import bean.Group_ImageBean;
 import listener.PopupListener;
+import utils.NetworkLoader;
 import view.ListViewPopupWindow;
 
 
@@ -203,6 +204,17 @@ public class PhotoSelector extends AppCompatActivity implements PopupListener {
                                 continue;
                             }
                             group_imageBean.setPath(path);
+
+                            if(parentFile.list(new FilenameFilter() {
+                                @Override
+                                public boolean accept(File file, String filename) {
+                                    if (filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".png"))
+                                        return true;
+                                    return false;
+                                }
+                            })==null){
+                                continue;
+                            }
                             int count = parentFile.list(new FilenameFilter() {
                                 @Override
                                 public boolean accept(File file, String filename) {
@@ -219,6 +231,7 @@ public class PhotoSelector extends AppCompatActivity implements PopupListener {
 
                     handler.sendEmptyMessage(LOADING_DOWN);
                 }
+
             }).start();
         }
     }

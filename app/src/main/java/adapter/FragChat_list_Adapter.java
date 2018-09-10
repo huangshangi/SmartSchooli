@@ -12,7 +12,6 @@ import com.smartschool.smartschooli.R;
 
 import java.util.List;
 
-import bean.Person;
 import bean.UpdateMessage_Bean;
 import de.hdodenhof.circleimageview.CircleImageView;
 import utils.ImageLoader;
@@ -79,7 +78,7 @@ public class FragChat_list_Adapter extends BaseAdapter {
         }else if(bean.getUpdate_type().equals("MESSAGE")){
             viewHolder.textView_content.setText(bean.getUpdate_content());
         }
-        if(bean.getUpdate_sender_name().equals(Person.getPublisher())){
+        if(bean.getUpdate_sender_name().equals(NetworkLoader.getInstance().getPersonMessage().get(2))){
             viewHolder.textView_name.setText(bean.getUpdate_receiver_name());
             viewHolder.textView_name.setTag(bean.getUpdate_receiverId());
         }else{
@@ -87,7 +86,7 @@ public class FragChat_list_Adapter extends BaseAdapter {
             viewHolder.textView_name.setTag(bean.getUpdate_senderId());
         }
 
-        if(!bean.getHasread()&&!bean.getUpdate_senderId().equals(Person.getId())){
+        if(!bean.getHasread()&&!bean.getUpdate_senderId().equals(NetworkLoader.getInstance().getPersonMessage().get(0))){
             viewHolder.reddot.setVisibility(View.VISIBLE);
         }
         viewHolder.textView_time.setText(bean.getUpdatedAt());
