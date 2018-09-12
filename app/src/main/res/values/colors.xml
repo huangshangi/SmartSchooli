@@ -51,8 +51,8 @@
     <color name="goldenrod">#daa520</color><!--金麒麟色 -->
     <color name="orchid">#da70d6</color><!--淡紫色 -->
     <color name="thistle">#d8bfd8</color><!--蓟色 -->
-    <color name="lightgray">#d3d3d3</color><!--亮灰色 -->
-    <color name="lightgrey">#d3d3d3</color><!--亮灰色 -->
+    <color name="lightgray">#d8d8d8</color><!--亮灰色 -->
+    <color name="lightgrey">#808080</color><!--亮灰色 -->
     <color name="tan">#d2b48c</color><!--茶色 -->
     <color name="chocolate">#d2691e</color><!--巧可力色 -->
     <color name="peru">#cd853f</color><!--秘鲁色 -->
@@ -110,7 +110,7 @@
     <color name="mediumturquoise">#48d1cc</color><!--中绿宝石 -->
     <color name="darkslateblue">#483d8b</color><!--暗灰蓝色 -->
     <color name="steelblue">#4682b4</color><!--钢兰色 -->
-    <color name="royalblue">#4169e1</color><!--皇家蓝 -->
+    <color name="royalblue">#429FFC</color><!--皇家蓝 -->
     <color name="turquoise">#40e0d0</color><!--青绿色 -->
     <color name="mediumseagreen">#3cb371</color><!--中海蓝 -->
     <color name="limegreen">#32cd32</color><!--橙绿色 -->

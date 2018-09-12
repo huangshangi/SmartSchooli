@@ -525,7 +525,7 @@ public class Fragment_class extends Fragment {
 
         util=Util.getInstance();
 
-        linearlayout_MaxHeight=util.dp2px(100);
+        linearlayout_MaxHeight=util.dp2px(120);
 
         button_current=(Button)view.findViewById(R.id.fragment_class_currentweek);
 

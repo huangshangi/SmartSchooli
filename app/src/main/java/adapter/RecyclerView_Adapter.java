@@ -66,6 +66,7 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter {
         ListView listView;
         EditText editText;
         Button button;
+        View view_line;
         public ViewHolder(View view){
             super(view);
             imageView=(CircleImageView)view.findViewById(R.id.person_image);
@@ -76,7 +77,7 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter {
             listView=(ListView)view.findViewById(R.id.shuoshuo_commit_content);
             button=(Button)view.findViewById(R.id.shuoshuo_commit_send);
             editText=(EditText) view.findViewById(R.id.shuoshuo_commit_edittext);
-
+            view_line=view.findViewById(R.id.view);
         }
         public void addListener(){
             button.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +117,11 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter {
             viewHolder.shuoshuo_content.setText("");
         }else {
             viewHolder.shuoshuo_content.setText(bean.getPublished_content());
+        }
+        if(position==0){
+            viewHolder.view_line.setVisibility(View.GONE);
+        }else{
+            viewHolder.view_line.setVisibility(View.VISIBLE);
         }
 
         //分别将urls commit转化成list
@@ -164,9 +170,13 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter {
                 if(editable.toString().length()!=0){
 
                     viewHolder.button.setEnabled(true);
+                    viewHolder.button.setTextColor(MyApplication.getContext().getResources().getColor(R.color.white));
+                    viewHolder.button.setBackgroundResource(R.drawable.shuoshuo_evluate_yes);
                 }else{
 
                     viewHolder.button.setEnabled(false);
+                    viewHolder.button.setTextColor(MyApplication.getContext().getResources().getColor(R.color.gray));
+                    viewHolder.button.setBackgroundResource(R.drawable.shuoshuo_evluate);
                 }
             }
         });

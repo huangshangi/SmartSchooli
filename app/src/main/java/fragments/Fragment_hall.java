@@ -1,6 +1,7 @@
 package fragments;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -42,23 +44,21 @@ public class Fragment_hall extends Fragment {
     RecyclerView_Adapter adapter;
     SwipeRefreshLayout swipeRefreshLayout;
     boolean flag_init=true;//用来标记是否是第一次加载
+
+    ImageView imageView;//发表说说add按钮
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.fragment_hall_layout,container,false);
         initViews();
-        handleFragActionBar();
+
         addListeners();
         initEvents();
 
         return view;
     }
 
-    public void handleFragActionBar(){
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
-        setHasOptionsMenu(true);
-    }
 
 
     public void initViews(){
@@ -67,7 +67,7 @@ public class Fragment_hall extends Fragment {
         recyclerView=(RecyclerView)view.findViewById(R.id.fragment_hall_recyclerView);
         toolbar=(Toolbar)view.findViewById(R.id.fragment_hall_toolbar);
         networkLoader=NetworkLoader.getInstance();
-
+        imageView=(ImageView)view.findViewById(R.id.image);
     }
 
 
@@ -80,6 +80,8 @@ public class Fragment_hall extends Fragment {
         });
 
         networkLoader.getShuoshuo();
+
+
     }
 
     public void addListeners(){
@@ -91,6 +93,14 @@ public class Fragment_hall extends Fragment {
                 networkLoader.getShuoshuo();
                 Toast.makeText(getContext(),"刷新完成",Toast.LENGTH_SHORT).show();
                 swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getActivity(), PublishActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -110,19 +120,5 @@ public class Fragment_hall extends Fragment {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.send_shuoshuo:
-                Intent intent=new Intent(getActivity(), PublishActivity.class);
-                startActivity(intent);
-                break;
-        }
-        return true;
-    }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_hall_menu,menu);
-    }
 }

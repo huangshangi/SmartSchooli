@@ -65,8 +65,8 @@ public class Fragment_class_RecyclerView_adapter extends RecyclerView.Adapter{
             viewHolder.textView.setBackgroundResource(R.drawable.fragment_class_red_dot);
             textView_selected=viewHolder.textView;
         }else{
-            viewHolder.textView.setTextColor(MyApplication.getContext().getResources().getColor(R.color.gray));
-            viewHolder.textView.setBackgroundResource(R.color.white);
+            viewHolder.textView.setTextColor(MyApplication.getContext().getResources().getColor(R.color.lightgrey));
+            viewHolder.textView.setBackgroundResource(R.drawable.fragment_class_gray_dot);
         }
 
 
@@ -81,7 +81,7 @@ public class Fragment_class_RecyclerView_adapter extends RecyclerView.Adapter{
 
                 week=position+1;
                 textView_selected.setTextColor(MyApplication.getContext().getResources().getColor(R.color.gray));
-                textView_selected.setBackgroundResource(R.color.white);
+                textView_selected.setBackgroundResource(R.drawable.fragment_class_gray_dot);
 
                 textView_selected=viewHolder.textView;
                 viewHolder.textView.setTextColor(MyApplication.getContext().getResources().getColor(R.color.white));

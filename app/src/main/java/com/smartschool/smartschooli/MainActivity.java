@@ -3,6 +3,7 @@ package com.smartschool.smartschooli;
 import android.content.Intent;
 
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 
@@ -159,16 +160,20 @@ public class MainActivity extends AppCompatActivity{
                         break;
 
                     case 2:
+                        //点击了维修记录
                         Intent intent3=new Intent(MainActivity.this,RepairDetailsActivity.class);
                         startActivity(intent3);
                         break;
                     case 3:
-
-                        break;
-                    case 4:
+                        //点击了聊天列表
                         startActivity(new Intent(MainActivity.this,Chat_List_Activity.class));
                         break;
+                    case 4:
+                       //点击了关于我们
+
+                        break;
                 }
+                drawerLayout.closeDrawers();
             }
         });
 
@@ -300,8 +305,8 @@ public class MainActivity extends AppCompatActivity{
             list=new ArrayList<>();
             list.add("账号资料");
             list.add("维修记录");
-            list.add("发表记录");
             list.add("聊天列表");
+            list.add("关于我们");
         }
 
 
@@ -331,6 +336,19 @@ public class MainActivity extends AppCompatActivity{
             }else{
                 viewHolder=(ViewHolder)view.getTag();
             }
+
+            Drawable drawable=null;
+            if(i==0){
+                drawable=getResources().getDrawable(R.drawable.personn16);
+            }else if(i==1){
+                drawable=getResources().getDrawable(R.drawable.repair16);
+            }else if(i==2){
+                drawable=getResources().getDrawable(R.drawable.chatlist16);
+            }else if(i==3){
+                drawable=getResources().getDrawable(R.drawable.aboutus16 );
+            }
+            drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+            viewHolder.textView.setCompoundDrawables(drawable,null,null,null);
             viewHolder.textView.setText((String)getItem(i));
             return view;
         }

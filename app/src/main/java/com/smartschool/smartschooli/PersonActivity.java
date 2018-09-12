@@ -75,18 +75,12 @@ public class PersonActivity extends AppCompatActivity {
 
         list=NetworkLoader.getInstance().getPersonMessage();
 
-        relativelayout1.setOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(PersonActivity.this,PhotoSelector.class);
-                intent.putExtra("isOne",true);
-                startActivityForResult(intent,6);
+                finish();
             }
         });
-
-
-        toolbar.setTitle("个人信息");
-
         textView_id.setText(list.get(0));
 
         textView_nick.setText(list.get(2));
@@ -96,16 +90,5 @@ public class PersonActivity extends AppCompatActivity {
         ImageLoader.getInstance().loadImage(list.get(1),imageView);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
-            case 6:
-                String address=data.getStringArrayListExtra("list").get(0);
-                ImageLoader.getInstance().loadImage(address,imageView);
-                //将内容在网络更新
-                NetworkLoader.getInstance().updateImage(address);
-                break;
-        }
-    }
+
 }

@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <View
-        android:background="@color/gray"
+        android:id="@+id/view"
+        android:background="#ececec"
         android:layout_width="match_parent"
-        android:layout_height="20dp"/>
+        android:layout_height="10dp"/>
+
+
     <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <!--个人头像-->
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:id="@+id/person_image"
             android:scaleType="centerCrop"
             android:src="@drawable/pictures_no"
@@ -25,6 +31,7 @@
             android:textSize="15sp"
             android:gravity="center"
             android:text="测试姓名"
+            android:textColor="@color/black"
             android:layout_marginLeft="10dp"
             android:id="@+id/person_name"
             android:layout_width="wrap_content"
@@ -43,6 +50,7 @@
 
     <!--说说内容,中英文混杂出问题-->
     <TextView
+        android:layout_marginLeft="5dp"
         android:textAllCaps="false"
         android:text="ceshiwenziddddd"
         android:id="@+id/shuoshuo_content"
@@ -51,6 +59,8 @@
 
 
     <view.Shuoshuo_GridView
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:numColumns="3"
         android:id="@+id/shuoshuo_gridview"
         android:layout_width="match_parent"
@@ -59,12 +69,16 @@
 
 
     <view.Commit_ListView
+        android:layout_marginLeft="5dp"
         android:divider="@null"
         android:id="@+id/shuoshuo_commit_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <LinearLayout
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -72,14 +86,18 @@
         <EditText
             android:hint="评论"
             android:gravity="center_vertical"
+            android:background="@drawable/shuoshuo_evluate"
             android:id="@+id/shuoshuo_commit_edittext"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent" />
         <Button
+            android:minHeight="0dp"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/gray"
             android:text="发送"
             android:id="@+id/shuoshuo_commit_send"
-            android:background="@color/salmon"
+            android:background="@drawable/shuoshuo_evluate"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
     </LinearLayout>

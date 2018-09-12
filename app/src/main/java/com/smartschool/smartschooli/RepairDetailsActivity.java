@@ -53,7 +53,12 @@ public class RepairDetailsActivity extends AppCompatActivity {
             }
         });
 
-        toolbar.setTitle("我的维修");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
 

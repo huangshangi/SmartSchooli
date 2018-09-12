@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:padding="5dp"
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -26,7 +26,7 @@
                 android:text="1  6758"
                 android:textSize="15sp"
                 android:id="@+id/repair_details_text"
-                android:textColor="@color/blue"
+                android:textColor="@color/royalblue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -58,10 +58,15 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerCrop"
+                android:src="@drawable/machine6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
                 android:text="故障设备:"
                 android:textColor="@color/gray"
                 android:textSize="15sp"
@@ -70,7 +75,9 @@
 
 
             <TextView
+
                 android:layout_marginLeft="5dp"
+                android:layout_gravity="center_vertical"
                 android:text="空前"
                 android:id="@+id/repair_details_machine"
                 android:textColor="@color/black"
@@ -88,10 +95,15 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerCrop"
+                android:src="@drawable/type16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
                 android:text="故障类型:"
                 android:textColor="@color/gray"
                 android:textSize="15sp"
@@ -100,6 +112,7 @@
 
 
             <TextView
+                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="5dp"
                 android:text="故障类型1"
                 android:id="@+id/repair_details_type"
@@ -123,10 +136,15 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerCrop"
+                android:src="@drawable/address16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
                 android:text="故障地址: "
                 android:textColor="@color/gray"
                 android:textSize="15sp"
@@ -136,6 +154,7 @@
 
             <TextView
                 android:layout_marginLeft="5dp"
+                android:layout_gravity="center_vertical"
                 android:text="测试地址"
                 android:id="@+id/repair_details_address"
                 android:textColor="@color/black"
@@ -145,7 +164,7 @@
         </LinearLayout>
 
         <View
-
+            android:layout_marginTop="10dp"
             android:background="@color/gray"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
@@ -163,13 +182,15 @@
 
 
                 <ImageView
-                    android:src="@drawable/add"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/time16"
                     android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
 
                 <LinearLayout
+                    android:padding="5dp"
                     android:layout_marginLeft="5dp"
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
@@ -208,13 +229,16 @@
 
 
                 <ImageView
-                    android:src="@drawable/add"
+                    android:layout_marginLeft="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/status16"
                     android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
 
                 <LinearLayout
+                    android:padding="5dp"
                     android:layout_marginLeft="5dp"
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
@@ -253,13 +277,16 @@
 
 
                 <ImageView
-                    android:src="@drawable/add"
+                    android:layout_marginLeft="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/evaluate16"
                     android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
 
                 <LinearLayout
+                    android:padding="5dp"
                     android:layout_marginLeft="5dp"
                     android:orientation="vertical"
                     android:layout_width="wrap_content"

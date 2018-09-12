@@ -9,8 +9,9 @@
         android:text="测试"
         android:textColor="@color/black"
         android:id="@+id/navigationView_item_text"
-        android:textSize="15sp"
-
+        android:textSize="20sp"
+        android:drawableLeft="@drawable/personn16"
+        android:drawablePadding="10dp"
         android:gravity="center_vertical"
         android:paddingLeft="20dp"
         android:layout_width="wrap_content"

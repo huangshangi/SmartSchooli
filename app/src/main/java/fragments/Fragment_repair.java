@@ -39,7 +39,7 @@ public class Fragment_repair extends Fragment {
     ListView listView;
     List<Repair_Bean> list_ceshi;
     ActionBar actionBar;
-    Toolbar toolbar;
+
     SwipeRefreshLayout swipeRefreshLayout;
     FloatingActionButton floatingActionButton;
     boolean flag=true;//该adapter是否为第一次初始化
@@ -49,7 +49,7 @@ public class Fragment_repair extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.fragment_repair_layout,container,false);
         initViews();
-        initAction();
+
 
         initEvents();
         initListeners();
@@ -61,7 +61,6 @@ public class Fragment_repair extends Fragment {
 
     public void initViews(){
         listView=(ListView)view.findViewById(R.id.fragment_repair_listView);
-        toolbar=(Toolbar)view.findViewById(R.id.fragment_repair_toolbar);
         swipeRefreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.fragment_repair_refresh);
         floatingActionButton=(FloatingActionButton)view.findViewById(R.id.fragemnt_repair_floatButton);
     }
@@ -89,11 +88,7 @@ public class Fragment_repair extends Fragment {
     }
 
 
-    public void initAction(){
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        setHasOptionsMenu(true);
 
-    }
 
 
 

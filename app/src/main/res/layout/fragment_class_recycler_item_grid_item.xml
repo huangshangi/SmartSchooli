@@ -11,15 +11,15 @@
 
         <View
             android:id="@+id/fragment_class_view_gray"
-            android:background="@drawable/fragment_class_gray_dot"
-            android:layout_width="5dp"
-            android:layout_height="5dp"/>
+            android:background="@drawable/fragment_class_grey_dot"
+            android:layout_width="8dp"
+            android:layout_height="8dp"/>
 
         <View
             android:id="@+id/frag_class_view_yellow"
             android:background="@drawable/fragment_class_yello_dot"
-            android:layout_width="5dp"
-            android:layout_height="5dp"/>
+            android:layout_width="8dp"
+            android:layout_height="8dp"/>
 
 
     </FrameLayout>
