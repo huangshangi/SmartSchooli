@@ -161,6 +161,8 @@ public class NetworkLoader {
     private UpMessage_Listener upMessage_listener;
 
     private List<String>list_urls;
+    private static List<Integer> list_color;
+    private static HashMap<String,Integer>hashMap_color;
 
     public void setUpMessage_listener(UpMessage_Listener upMessage_listener) {
         this.upMessage_listener = upMessage_listener;
@@ -218,6 +220,9 @@ public class NetworkLoader {
         this.fragment_class_listener=fragment_class_listener;
     }
 
+    public HashMap<String,Integer> getHashMap_color(){
+        return hashMap_color;
+    }
     public static NetworkLoader getInstance(){
         if(networkLoader==null){
             synchronized (NetworkLoader.class){
@@ -236,6 +241,21 @@ public class NetworkLoader {
         int memory=(int)Runtime.getRuntime().maxMemory();
         int cachememory=memory/6;
 
+        list_color=new ArrayList();
+
+        list_color.add(R.drawable.fragment_classes_back1);
+        list_color.add(R.drawable.fragment_classes_back2);
+        list_color.add(R.drawable.fragment_classes_back3);
+        list_color.add(R.drawable.fragment_classes_back4);
+        list_color.add(R.drawable.fragment_classes_back5);
+        list_color.add(R.drawable.fragment_classes_back6);
+        list_color.add(R.drawable.fragment_classes_back7);
+        list_color.add(R.drawable.fragment_classes_back8);
+
+
+
+
+        hashMap_color=new HashMap<>();
 
         mThreadPool= Executors.newFixedThreadPool(THREAD_COUNT);
 
@@ -735,10 +755,27 @@ public class NetworkLoader {
             list_bean.add(bean);
         }
 
+        int count=8;
+        for(int i=0;i<list_bean.size();i++){
+
+
+            if(hashMap_color.containsKey(list_bean.get(i).getcNO()+list_bean.get(i).getCourseNumber())){
+
+            }else{
+                if(list_color==null||list_color.size()==0){
+                    hashMap_color.put(list_bean.get(i).getcNO()+list_bean.get(i).getCourseNumber(),R.drawable.fragment_classes_back9);
+                }else {
+                    int a = (int) (Math.random() * count);
+                    hashMap_color.put(list_bean.get(i).getcNO() + list_bean.get(i).getCourseNumber(), list_color.get(a));
+                    list_color.remove(a);
+                    count--;
+                }
+            }
+        }
         //将list<Class_Bean>组装成map<Integer,List<Class_bean>
-        Map<Integer,List<Class_Bean>> map=getClass_Map(list_bean);
+//        Map<Integer,List<Class_Bean>> map=getClass_Map(list_bean);
 
-
+        Log.d("hashmapzhixing3",hashMap_color.size()+"!"+list.size()+"!"+list_bean.size());
 
     }
     //将list<Class_Bean>组装成map<Integer,List<Class_bean>

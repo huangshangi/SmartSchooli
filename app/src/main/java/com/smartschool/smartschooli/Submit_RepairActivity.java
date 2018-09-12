@@ -85,6 +85,7 @@ public class Submit_RepairActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setContentView(R.layout.submit_repair_layout);
         initViews();
         initEvents();
@@ -115,6 +116,7 @@ public class Submit_RepairActivity extends AppCompatActivity {
        list_all.clear();
         list_all.add(R.drawable.add);
         refreshDatas(list_all);
+        textView_name.setText(NetworkLoader.getInstance().getPersonMessage().get(2));
         networkLoader.setUpRepairListener(new UpRepairListener() {
             @Override
             public void upDown() {

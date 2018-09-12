@@ -42,7 +42,6 @@
                         android:textSize="15sp"
                         android:paddingLeft="5dp"
                         android:textColor="@color/black"
-                        android:text="ceshiren"
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content" />
@@ -65,7 +64,6 @@
                         android:textSize="15sp"
                         android:paddingLeft="5dp"
                         android:textColor="@color/black"
-                        android:text="ceshiren"
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content" />
@@ -154,7 +152,7 @@
                     android:id="@+id/submit_repair_content"
                     android:paddingTop="3dp"
                     android:gravity="start"
-                    android:text="测试文字"
+                    android:hint="请输入故障详细描述..."
                     android:background="@null"
                     style="?android:attr/textViewStyle"
                     android:layout_width="match_parent"

@@ -37,7 +37,7 @@
         </provider>
 
         <activity
-            android:windowSoftInputMode="stateUnspecified"
+            android:windowSoftInputMode="stateHidden|adjustPan"
             android:name=".MainActivity"
             android:hardwareAccelerated="false" />
         <activity android:name=".LoginActivity" />

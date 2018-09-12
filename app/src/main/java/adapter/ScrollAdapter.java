@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.smartschool.smartschooli.R;
 
@@ -20,6 +21,7 @@ import java.util.Random;
 
 import bean.Class_Bean;
 import utils.MyApplication;
+import utils.NetworkLoader;
 import utils.Util;
 
 //用来摆放课程
@@ -127,7 +129,9 @@ public class ScrollAdapter {
         }else{
             textView.setText(name + "@" + address);
         }
-        textView.setBackgroundResource(R.drawable.fragment_class_back1);
+
+            textView.setBackgroundResource((int)NetworkLoader.getInstance().getHashMap_color().get(bean.getcNO() + bean.getCourseNumber()));
+
 
 
         //

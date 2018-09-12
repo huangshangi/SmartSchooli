@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 
+import com.smartschool.smartschooli.MainActivity;
 import com.smartschool.smartschooli.PublishActivity;
 import com.smartschool.smartschooli.R;
 
@@ -45,7 +47,9 @@ public class Fragment_hall extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
     boolean flag_init=true;//用来标记是否是第一次加载
 
-    ImageView imageView;//发表说说add按钮
+    ImageView imageView_menu;
+
+    ImageView imageView_add;//发表说说add按钮
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -67,7 +71,8 @@ public class Fragment_hall extends Fragment {
         recyclerView=(RecyclerView)view.findViewById(R.id.fragment_hall_recyclerView);
         toolbar=(Toolbar)view.findViewById(R.id.fragment_hall_toolbar);
         networkLoader=NetworkLoader.getInstance();
-        imageView=(ImageView)view.findViewById(R.id.image);
+        imageView_add=(ImageView)view.findViewById(R.id.fragment_hall_imageView_add);
+        imageView_menu=(ImageView)view.findViewById(R.id.fragment_hall_imageView_menu);
     }
 
 
@@ -96,11 +101,18 @@ public class Fragment_hall extends Fragment {
             }
         });
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+        imageView_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getActivity(), PublishActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        imageView_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).getDrawerLayout().openDrawer(Gravity.START);
             }
         });
     }

@@ -150,4 +150,15 @@
     <color name="crimson">#dc143c</color><!--暗深红色 -->
     <color name="plum">#dda0dd</color><!--洋李色 -->
     <color name="gainsboro">#dcdcdc</color><!--淡灰色 -->
+    <color name="class_color1">#38D3A9</color>
+    <color name="class_color2">#EF826E</color>
+    <color name="class_color3">#FF8B93</color>
+    <color name="class_color4">#A8D53C</color>
+    <color name="class_color5">#6F88E2</color>
+    <color name="class_color6">#FFAA40</color>
+    <color name="class_color7">#FFD440</color>
+    <color name="class_color8">#63BAFF</color>
+
+    <color name="fragment_class_listView_bg">#F8F8F8</color>
+    <color name="fragment_class_listView_text">#818181</color>
 </resources>

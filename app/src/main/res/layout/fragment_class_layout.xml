@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/fragment_class_menu" />
+            android:src="@drawable/menu1_white32" />
 
 
         <Button
@@ -43,23 +43,18 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:paddingRight="10dp"
-            android:src="@drawable/fragment_class_add" />
+            android:src="@drawable/add_white32" />
 
 
     </RelativeLayout>
 
-    <View
-        android:background="@color/black"
-        android:layout_width="match_parent"
 
-        android:layout_height="0.5dp"/>
 
     <!--隐藏布局-->
     <LinearLayout
         android:id="@+id/fragment_class_inVisbile_layout"
         android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:animateLayoutChanges="true"
         android:orientation="horizontal">
 
@@ -80,7 +75,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/black"
+            android:background="#E6E4E5"
             />
 
 
@@ -95,7 +90,11 @@
 
     </LinearLayout>
 
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E6E4E5"
+        />
     <!--滑动布局-->
     <LinearLayout
 
@@ -105,6 +104,7 @@
 
         <!--周1，周2...-->
         <LinearLayout
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -129,7 +129,7 @@
                 style="@style/Fragment_class_Linear_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/fragment_class_tv_bg">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -148,7 +148,7 @@
                 style="@style/Fragment_class_Linear_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/fragment_class_tv_bg">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -167,7 +167,7 @@
                 style="@style/Fragment_class_Linear_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/fragment_class_tv_bg">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -185,7 +185,7 @@
                 style="@style/Fragment_class_Linear_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/fragment_class_tv_bg">
+               >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -203,7 +203,7 @@
                 style="@style/Fragment_class_Linear_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/fragment_class_tv_bg">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -221,7 +221,7 @@
                 style="@style/Fragment_class_Linear_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/fragment_class_tv_bg">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -239,7 +239,8 @@
                 style="@style/Fragment_class_Linear_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/fragment_class_tv_bg">
+
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -256,9 +257,14 @@
 
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E6E4E5"
+            />
 
         <ScrollView
-
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"

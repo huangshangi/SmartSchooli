@@ -13,6 +13,15 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/AlertDialog.AppCompat.Light">
 
+        <ImageView
+            android:id="@+id/fragment_hall_imageView_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/menu1_white32" />
+
+
         <TextView
             android:layout_gravity="center_horizontal"
             android:textColor="@color/white"
@@ -22,11 +31,11 @@
             android:layout_height="wrap_content" />
 
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/fragment_hall_imageView_add"
             android:scaleType="centerCrop"
             android:layout_gravity="right|center_vertical"
             android:layout_marginRight="10dp"
-            android:src="@drawable/add_white"
+            android:src="@drawable/add_white32"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

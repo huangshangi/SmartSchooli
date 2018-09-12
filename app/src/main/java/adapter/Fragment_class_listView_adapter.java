@@ -57,7 +57,8 @@ public class Fragment_class_listView_adapter extends BaseAdapter {
         textView.setGravity(Gravity.CENTER);
 
         textView.setText(list.get(i));
-
+        textView.setBackgroundResource(R.color.fragment_class_listView_bg);
+        textView.setTextColor(context.getResources().getColor(R.color.fragment_class_listView_text));
         int width=getDismension()/8;
         textView.setWidth(width);
         textView.setHeight(width);
