@@ -73,6 +73,7 @@ import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 import listener.Fragment_class_Listener;
 import listener.Fragment_class_getQiandao_listener;
+import listener.GetEvluateListener;
 import listener.LoadingListener;
 import listener.LoadingOwnRepairListener;
 import listener.LoadingRepairListener;
@@ -80,6 +81,7 @@ import listener.Message_Down_Listener;
 import listener.Publish_Shuoshuo_Listener;
 import listener.UpMessage_Listener;
 import listener.UpRepairListener;
+import listener.UpdateEvluateListener;
 import listener.UpdateMessageListener;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
@@ -160,9 +162,29 @@ public class NetworkLoader {
 
     private UpMessage_Listener upMessage_listener;
 
+    private UpdateEvluateListener updateEvluateListener;
+
+    private GetEvluateListener getEvluateListener;
+
     private List<String>list_urls;
     private static List<Integer> list_color;
     private static HashMap<String,Integer>hashMap_color;
+
+    public void setGetEvluateListener(GetEvluateListener getEvluateListener) {
+        this.getEvluateListener = getEvluateListener;
+    }
+
+    public GetEvluateListener getGetEvluateListener() {
+        return getEvluateListener;
+    }
+
+    public void setUpdateEvluateListener(UpdateEvluateListener updateEvluateListener) {
+        this.updateEvluateListener = updateEvluateListener;
+    }
+
+    public UpdateEvluateListener getUpdateEvluateListener() {
+        return updateEvluateListener;
+    }
 
     public void setUpMessage_listener(UpMessage_Listener upMessage_listener) {
         this.upMessage_listener = upMessage_listener;
@@ -1637,6 +1659,56 @@ public class NetworkLoader {
     }
 
 
+    //更新评价内容
+    public void updateEvluate(final String bianhao, final String content, final Dialog dialog){
+        addTask(new Runnable() {
+            @Override
+            public void run() {
+                BmobQuery<Repair_Bean>bmobQuery=new BmobQuery<>();
+                bmobQuery.addWhereEqualTo("repair_bianhao",bianhao);
+                bmobQuery.findObjects(new FindListener<Repair_Bean>() {
+                    @Override
+                    public void done(List<Repair_Bean> list, BmobException e) {
+                        if(e==null&&list.size()!=0){
+                            Repair_Bean bean=list.get(0);
+                            bean.setEvluate_content(content);
+                            bean.setEvluate_status("是");
+                            bean.update(new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if(e==null){
+                                        if(updateEvluateListener!=null){
+                                            updateEvluateListener.upDown(dialog);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+                semaphore.release();
+            }
+        });
+    }
+
+    //得到评价内容
+    public void getEvluate(final String id){
+        addTask(new Runnable() {
+            @Override
+            public void run() {
+                BmobQuery<Repair_Bean>bmobQuery=new BmobQuery<>();
+                bmobQuery.addWhereEqualTo("repair_bianhao",id);
+                bmobQuery.findObjects(new FindListener<Repair_Bean>() {
+                    @Override
+                    public void done(List<Repair_Bean> list, BmobException e) {
+                        if(e==null&&list.size()!=0){
+                            getEvluateListener.getDown(list.get(0));
+                        }
+                    }
+                });
+            }
+        });
+    }
     class ImageHolder{
         Bitmap bitmap;
         String url;

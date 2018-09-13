@@ -28,6 +28,8 @@ public class Repair_Bean extends BmobObject implements Serializable{
 
     String evluate_content;//评价内容
 
+    boolean handle;//故障是否已处理
+
     public String getEvluate_content() {
         return evluate_content;
     }
@@ -114,5 +116,13 @@ public class Repair_Bean extends BmobObject implements Serializable{
 
     public void setRepairer_name(String repairer_name) {
         this.repairer_name = repairer_name;
+    }
+
+    public void setHandle(boolean handle) {
+        this.handle = handle;
+    }
+
+    public boolean getHandle() {
+        return handle;
     }
 }

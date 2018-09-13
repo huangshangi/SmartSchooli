@@ -239,9 +239,29 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    //为textView设置背景图片
+    private void  setBack(int id,Button view){
+        Drawable drawable = getResources().getDrawable(id);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());// 设置边界
+        // param 左上右下
+        view.setCompoundDrawables(null,drawable,null,null);
+    }
 
     //根据点击事件变换相应的fragment
     public void switchFragment(int position){
+        if(position==0){
+           setBack(R.drawable.hall_button_sele32,button_jiaoyi);
+           setBack(R.drawable.class_button_32,button_class);
+           setBack(R.drawable.repair_button32,button_repair);
+        }else if(position==1){
+            setBack(R.drawable.hall_button32,button_jiaoyi);
+            setBack(R.drawable.class_button_sele32,button_class);
+            setBack(R.drawable.repair_button32,button_repair);
+        }else if(position==2){
+            setBack(R.drawable.hall_button32,button_jiaoyi);
+            setBack(R.drawable.class_button_32,button_class);
+            setBack(R.drawable.repair_buttonsele32,button_repair);
+        }
         FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
         for (int i = 0; i < list.size(); i++) {
             if (i == position) {

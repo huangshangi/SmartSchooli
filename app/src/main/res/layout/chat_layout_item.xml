@@ -11,6 +11,7 @@
     <LinearLayout
         android:id="@+id/chat_left"
         android:layout_gravity="left"
+        android:layout_margin="5dp"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -20,7 +21,7 @@
             android:layout_margin="5dp"
             android:id="@+id/chat_item_Leftimage"
             android:src="@drawable/default_1"
-            android:layout_gravity="center_vertical"
+
 
             android:scaleType="centerCrop"
             android:layout_width="50dp"
@@ -37,25 +38,27 @@
 
 
         <FrameLayout
+            android:layout_margin="5dp"
             android:id="@+id/chat_left_frame"
-            android:background="@drawable/chat_left"
+            android:background="@drawable/left_message2"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="60dp">
+            android:layout_height="wrap_content">
 
             <View
                 android:id="@+id/chat_item_Leftcontimage"
                 android:paddingTop="5dp"
                 android:src="@drawable/adj_left"
-
                 android:layout_width="40dp"
-                android:layout_height="match_parent" />
+                android:layout_height="30dp" />
 
             <TextView
-                android:gravity="center_horizontal|center_vertical"
-
-                android:visibility="gone"
-                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginLeft="10dp"
+                android:maxLines="10"
+                android:maxWidth="250dp"
+                android:maxHeight="500dp"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical|center_horizontal|start"
                 android:id="@+id/chat_item_Lefttext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -77,28 +80,34 @@
 
         <FrameLayout
             android:id="@+id/chat_right_frame"
-            android:background="@drawable/chat_right"
+            android:background="@drawable/right_message2"
             android:layout_gravity="center_vertical|center_horizontal"
-
+            android:layout_margin="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="60dp">
+            android:layout_height="wrap_content">
 
 
             <TextView
-
-                android:text="ceeeeeeeeeeeeeeeeeeeeeeeeeshi"
-                android:gravity="center_horizontal|center_vertical"
-                android:layout_gravity="center_vertical|center_horizontal"
+                android:maxLines="10"
+                android:maxWidth="250dp"
+                android:maxHeight="500dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center_vertical|start"
+                android:layout_gravity="center_vertical|start"
                 android:id="@+id/chat_item_Righttext"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
-            <View
-                android:id="@+id/chat_item_Rightcontimage"
+                android:layout_height="wrap_content" />
+            <ImageView
                 android:visibility="gone"
-                android:paddingTop="5dp"
+                android:padding="0dp"
+                android:gravity="center_horizontal"
+                android:id="@+id/chat_item_Rightcontimage"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="5dp"
                 android:src="@drawable/adj_right"
+                android:scaleType="centerCrop"
                 android:layout_width="40dp"
-                android:layout_height="match_parent" />
+                android:layout_height="30dp" />
 
         </FrameLayout>
 
@@ -112,7 +121,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_marginRight="5dp"
-            android:layout_gravity="center_vertical"
+            android:layout_marginTop="5dp"
             android:id="@+id/chat_item_Rightimage"
             android:src="@drawable/default_1"
             android:scaleType="centerCrop"

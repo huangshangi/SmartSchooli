@@ -14,11 +14,14 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -247,6 +250,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnTouchListe
             }
         });
 
+        listView.smoothScrollToPosition(adapter.getCount()-1);
+
     }
 
     //添加点击事件
@@ -259,10 +264,38 @@ public class ChatActivity extends AppCompatActivity implements View.OnTouchListe
                     framelayout_edit.setVisibility(View.GONE);
                     framelayout_button.setVisibility(View.VISIBLE);
                     input_type=false;//语音输入
+
+                    imageView_talk.setBackgroundResource(R.drawable.jianpan);
+                    getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                 }else if(framelayout_button.getVisibility()==View.VISIBLE){
                     framelayout_edit.setVisibility(View.VISIBLE);
                     framelayout_button.setVisibility(View.GONE);
                     input_type=true;//文字输入
+                    imageView_talk.setBackgroundResource(R.drawable.voice_button);
+
+                }
+            }
+        });
+
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(editText.getText().toString()!=null&&!editText.getText().toString().equals("")){
+                    button_send.setBackgroundResource(R.drawable.chat_button_back_sele);
+                    button_send.setEnabled(true);
+                }else{
+                    button_send.setBackgroundResource(R.drawable.chat_button_back);
+                    button_send.setEnabled(false);
                 }
             }
         });
@@ -315,7 +348,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnTouchListe
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(ChatActivity.this,PhotoSelector.class);
-                intent.putExtra("isOne",true);
+                intent.putExtra("isOne","ChatActivity");
                 startActivityForResult(intent,1);
             }
         });
@@ -344,7 +377,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnTouchListe
         }
         Intent intent=new Intent("android.media.action.IMAGE_CAPTURE");
         intent.putExtra(MediaStore.EXTRA_OUTPUT,uri);
-        startActivityForResult(intent,0);
+        startActivityForResult(intent,0x119);
     }
 
     //消息的发送及listView的更新
@@ -491,9 +524,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
-            case 0:
+            case 0x119:
                 //从相机选择照片
-                updateMessage(file.getAbsolutePath(),"IMAGE");
+                if(resultCode==RESULT_OK) {
+                    updateMessage(file.getAbsolutePath(), "IMAGE");
+                }
                 break;
 
             case 1:

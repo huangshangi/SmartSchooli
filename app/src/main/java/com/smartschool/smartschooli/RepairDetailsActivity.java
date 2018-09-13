@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -98,6 +99,7 @@ public class RepairDetailsActivity extends AppCompatActivity {
                 viewHolder.textView_handle=(TextView)convertView.findViewById(R.id.repair_details_handle);
                 viewHolder.textView_machine=(TextView)convertView.findViewById(R.id.repair_details_machine);
                 viewHolder.textView_type=(TextView)convertView.findViewById(R.id.repair_details_type);
+                viewHolder.linearLayout=(LinearLayout)convertView .findViewById(R.id.repair_details_linearlayout);
                 convertView.setTag(viewHolder);
             }else{
                 viewHolder=(ViewHolder)convertView.getTag();
@@ -115,9 +117,25 @@ public class RepairDetailsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent=new Intent(RepairDetailsActivity.this,RepairDetailActivity.class);
-                    intent.putExtra("repairMessage",bean);
+                    intent.putExtra("repairMessage",bean);//传入报修编号
                     startActivity(intent);
 
+                }
+            });
+            //点击评价控件
+            viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //已评价
+                    if(bean.getEvluate_status().equals("是")){
+                        Intent intent=new Intent(RepairDetailsActivity.this,ReadEvluateActivity.class);
+                        intent.putExtra("id",bean.getRepair_bianhao());
+                        startActivity(intent);
+                    }else{
+                        Intent intent=new Intent(RepairDetailsActivity.this,EvluateActivity.class);
+                        intent.putExtra("id",bean.getRepair_bianhao());
+                        startActivity(intent);
+                    }
                 }
             });
             return convertView;
@@ -141,6 +159,8 @@ public class RepairDetailsActivity extends AppCompatActivity {
             TextView textView_handle;
 
             TextView textView_evaluate;
+
+            LinearLayout linearLayout;//评价控件
 
         }
     }

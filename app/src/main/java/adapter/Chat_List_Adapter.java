@@ -104,6 +104,7 @@ public class Chat_List_Adapter extends BaseAdapter implements View.OnClickListen
 
                 viewHolder.View_right_cont.setBackgroundResource(R.drawable.adj_right);
                 viewHolder.textView_right.setVisibility(View.GONE);
+
                 viewHolder.View_right_cont.setTag(bean.getContent());
                 viewHolder.View_right_cont.setOnClickListener(new View.OnClickListener() {
                     @Override

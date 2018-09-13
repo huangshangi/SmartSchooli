@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/evluate_layout_toolbar"
+        android:background="@color/royalblue"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="发表评价"
+        app:navigationIcon="@drawable/back_white"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_gravity="right"
+            android:button="@null"
+            android:background="@null"
+            android:textSize="18sp"
+            android:layout_marginRight="5dp"
+            android:text="发布"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="5dp"
+        android:layout_height="40dp">
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:text="处理结果"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RatingBar
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/ratingResult"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="1"
+            android:rating="0"
+            android:isIndicator="false"
+            android:layout_marginLeft="5dp"
+            style="@style/yogaCourseRatingBar"/>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:textSize="15sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_height="1dp"
+        android:layout_width="match_parent"
+        android:background="#E7E7E7"
+        />
+
+    <EditText
+        android:id="@+id/edittext"
+        android:padding="5dp"
+        android:gravity="start"
+        android:background="@null"
+        android:hint="处理结果满足你的期待吗?说说你的心得,分享给你的朋友们吧"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+    <View
+        android:layout_height="15dp"
+        android:layout_width="match_parent"
+        android:background="#E7E7E7"
+        />
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:text="处理速度"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RatingBar
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/ratingSpeed"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="1"
+            android:rating="0"
+            android:isIndicator="false"
+            android:layout_marginLeft="5dp"
+            style="@style/yogaCourseRatingBar"/>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:textSize="15sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:text="服务态度"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RatingBar
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/ratingEvaluate"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="1"
+            android:rating="0"
+            android:isIndicator="false"
+            android:layout_marginLeft="5dp"
+            style="@style/yogaCourseRatingBar"/>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:textSize="15sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

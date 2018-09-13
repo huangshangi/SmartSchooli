@@ -26,14 +26,14 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#4000"/>
+            android:background="#E9EDEE"/>
         <RadioGroup
 
             android:id="@+id/radioGroup"
             android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:orientation="horizontal"
-            android:layout_height="50dp">
+            android:layout_height="70dp">
 
             <RadioButton
                 android:gravity="center_horizontal|center_vertical"
@@ -41,14 +41,21 @@
                 android:id="@+id/button_jiaoyi"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:textColor="#818392"
+                android:textSize="12sp"
                 android:layout_weight="1"
+                android:drawableTop="@drawable/hall_button32"
                 android:text="交易" />
 
 
             <RadioButton
                 android:gravity="center_horizontal|center_vertical"
-                android:textColor="#000"
+                android:textColor="#818392"
+                android:drawablePadding="5dp"
                 android:button="@null"
+                android:drawableTop="@drawable/class_button_32"
+                android:textSize="12sp"
                 android:id="@+id/button_class"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -57,12 +64,15 @@
 
 
             <RadioButton
-
+                android:drawablePadding="5dp"
+                android:drawableTop="@drawable/repair_button32"
                 android:gravity="center_horizontal|center_vertical"
                 android:id="@+id/button_repair"
                 android:button="@null"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textColor="#818392"
+                android:textSize="12sp"
                 android:layout_weight="1"
                 android:text="维修" />
 

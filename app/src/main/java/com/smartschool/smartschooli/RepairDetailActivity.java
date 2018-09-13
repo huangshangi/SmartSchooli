@@ -29,6 +29,10 @@ public class RepairDetailActivity extends AppCompatActivity {
 
     TextView textView_content;
 
+    TextView textView_handle;
+
+    TextView textView_evluate;
+
     Submit_repair_GridView gridView;
 
     Repair_Bean bean;
@@ -49,6 +53,8 @@ public class RepairDetailActivity extends AppCompatActivity {
         textView_machine=(TextView)findViewById(R.id.repair_detail_machine);
         textView_content=(TextView)findViewById(R.id.repair_detail_content);
         textView_type=(TextView)findViewById(R.id.repair_detail_type);
+        textView_evluate=(TextView)findViewById(R.id.repair_details_evaluate);
+        textView_handle=(TextView)findViewById(R.id.repair_details_handle);
         gridView=(Submit_repair_GridView)findViewById(R.id.gridview);
     }
 
@@ -58,6 +64,17 @@ public class RepairDetailActivity extends AppCompatActivity {
        textView_content.setText(bean.getRepair_content());
        textView_machine.setText(bean.getRepair_machine());
        textView_address.setText(bean.getRepair_adress());
+       if(bean.getEvluate_status().equals("否")) {
+           textView_evluate.setText("暂无评价");
+       }else{
+           textView_evluate.setText(bean.getEvluate_content());
+       }
+       if(bean.getHandle()){
+           textView_handle.setText("已处理");
+       }else{
+           textView_handle.setText("未处理");
+       }
+
        //将string转化为list
         List<String> list= Arrays.asList(bean.getRepair_urls().split("￥"));
        gridView.setAdapter(new Publish_gridview_adapter(this,list));

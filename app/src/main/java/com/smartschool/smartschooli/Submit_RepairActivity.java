@@ -224,9 +224,9 @@ public class Submit_RepairActivity extends AppCompatActivity {
         return false;
     }
 
-    //随机生成4位数
+    //随机生成8位数
     public int RandomFigure(){
-        return (int)(Math.random()*10000+1);
+        return (int)(Math.random()*100000000+1);
     }
 
     public void showPopWindow(){

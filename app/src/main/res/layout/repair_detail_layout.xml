@@ -222,6 +222,67 @@
 
             </LinearLayout>
 
+            <!--处理状态-->
+            <LinearLayout
+                android:orientation="horizontal"
+
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@drawable/repair16"
+                    android:text="处理状态:"
+                    android:textSize="15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/repair_details_handle"
+                    android:paddingLeft="5dp"
+                    android:gravity="start"
+                    android:textColor="@color/black"
+                    android:text="测试文字"
+                    android:background="@null"
+                    style="?android:attr/textViewStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@drawable/evaluate16"
+                    android:text="我的评价:"
+                    android:textSize="15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/repair_details_evaluate"
+                    android:paddingLeft="5dp"
+                    android:gravity="start"
+                    android:textColor="@color/black"
+                    android:text="测试文字"
+                    android:background="@null"
+                    style="?android:attr/textViewStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>
