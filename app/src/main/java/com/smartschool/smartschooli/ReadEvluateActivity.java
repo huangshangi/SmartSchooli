@@ -74,6 +74,7 @@ public class ReadEvluateActivity extends AppCompatActivity {
                 textView2.setText(array[fenshu2-1]);
                 ratingBar3.setRating(fenshu3);
                 textView3.setText(array[fenshu3-1]);
+                textView.setText(result.substring(index+1));
             }
         });
 

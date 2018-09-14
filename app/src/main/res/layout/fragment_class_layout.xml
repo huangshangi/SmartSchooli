@@ -36,14 +36,16 @@
             android:textSize="15sp" />
 
 
-        <ImageView
+        <TextView
             android:id="@+id/fragment_class_imageView_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:paddingRight="10dp"
-            android:src="@drawable/add_white32" />
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:text="签到" />
 
 
     </RelativeLayout>

@@ -9,12 +9,13 @@
         android:id="@+id/fragment_class_teacher_layout_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/royalblue"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <TextView
             android:textSize="20sp"
+            android:textColor="@color/white"
             android:text="签到界面"
             android:gravity="center"
             android:layout_gravity="center"

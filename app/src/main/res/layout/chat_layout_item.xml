@@ -45,10 +45,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <View
+            <ImageView
                 android:id="@+id/chat_item_Leftcontimage"
                 android:paddingTop="5dp"
-                android:src="@drawable/adj_left"
+                android:background="@drawable/adj_left"
                 android:layout_width="40dp"
                 android:layout_height="30dp" />
 
@@ -57,8 +57,8 @@
                 android:maxLines="10"
                 android:maxWidth="250dp"
                 android:maxHeight="500dp"
-                android:gravity="center_vertical"
-                android:layout_gravity="center_vertical|center_horizontal|start"
+                android:gravity="center_vertical|start"
+                android:layout_gravity="center_vertical|start"
                 android:id="@+id/chat_item_Lefttext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -91,9 +91,9 @@
                 android:maxLines="10"
                 android:maxWidth="250dp"
                 android:maxHeight="500dp"
-                android:layout_marginRight="10dp"
-                android:gravity="center_vertical|start"
-                android:layout_gravity="center_vertical|start"
+                android:paddingRight="15dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_gravity="center_vertical|start|center_horizontal"
                 android:id="@+id/chat_item_Righttext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -104,7 +104,7 @@
                 android:id="@+id/chat_item_Rightcontimage"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/adj_right"
+                android:background="@drawable/adj_right"
                 android:scaleType="centerCrop"
                 android:layout_width="40dp"
                 android:layout_height="30dp" />

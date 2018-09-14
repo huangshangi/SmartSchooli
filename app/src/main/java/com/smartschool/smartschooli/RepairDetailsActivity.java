@@ -99,6 +99,7 @@ public class RepairDetailsActivity extends AppCompatActivity {
                 viewHolder.textView_handle=(TextView)convertView.findViewById(R.id.repair_details_handle);
                 viewHolder.textView_machine=(TextView)convertView.findViewById(R.id.repair_details_machine);
                 viewHolder.textView_type=(TextView)convertView.findViewById(R.id.repair_details_type);
+                viewHolder.textView_time=(TextView)convertView.findViewById(R.id.repair_details_time);
                 viewHolder.linearLayout=(LinearLayout)convertView .findViewById(R.id.repair_details_linearlayout);
                 convertView.setTag(viewHolder);
             }else{
@@ -112,6 +113,7 @@ public class RepairDetailsActivity extends AppCompatActivity {
             viewHolder.textView_handle.setText(bean.getRepair_status());
             viewHolder.textView_machine.setText(bean.getRepair_machine());
             viewHolder.textView_type.setText(bean.getRepair_type());
+            viewHolder.textView_time.setText(bean.getCreatedAt().substring(5,10));
             //为点击详情设立点击事件
             viewHolder.textView_details.setOnClickListener(new View.OnClickListener() {
                 @Override

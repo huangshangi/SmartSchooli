@@ -46,7 +46,7 @@ public class Chat_List_Adapter extends BaseAdapter implements View.OnClickListen
 
     @Override
     public int getCount() {
-        Log.d("&&&&&&","共有"+list.size()+"条数据");
+
         return list.size();
     }
 

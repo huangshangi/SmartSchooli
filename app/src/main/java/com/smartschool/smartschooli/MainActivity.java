@@ -84,8 +84,6 @@ public class MainActivity extends AppCompatActivity{
     RadioButton button_class;
     RadioButton button_repair;
 
-    //退出登录按钮
-    Button button_unsign;
 
     //滑动界面
 
@@ -103,7 +101,7 @@ public class MainActivity extends AppCompatActivity{
         initViews();
         initEvents();
         addListener();//添加监听器
-        switchFragment(1);
+        switchFragment(0);
     }
 
 
@@ -112,15 +110,7 @@ public class MainActivity extends AppCompatActivity{
 
 
         //为退出登录按钮设立点击事件
-        button_unsign.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                BmobUser.logOut();
-                Intent intent=new Intent(MainActivity.this,LoginActivity.class);
-                startActivity(intent);
-                MainActivity.this.finish();
-            }
-        });
+
 
 
         //为radioGroup添加点击事件
@@ -172,6 +162,12 @@ public class MainActivity extends AppCompatActivity{
                        //点击了关于我们
 
                         break;
+                    case 5:
+                        //退出登录
+                        BmobUser.logOut();
+                        startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                        MainActivity.this.finish();
+                        break;
                 }
                 drawerLayout.closeDrawers();
             }
@@ -191,7 +187,6 @@ public class MainActivity extends AppCompatActivity{
         button_class=(RadioButton)findViewById(R.id.button_class);
         button_jiaoyi=(RadioButton)findViewById(R.id.button_jiaoyi);
         button_repair=(RadioButton)findViewById(R.id.button_repair);
-        button_unsign=(Button)findViewById(R.id.unsign_Button);
         drawerLayout=(DrawerLayout)findViewById(R.id.drawlayout);
         navigationView=(ListView) findViewById(R.id.navigationView);
 
@@ -327,6 +322,7 @@ public class MainActivity extends AppCompatActivity{
             list.add("维修记录");
             list.add("聊天列表");
             list.add("关于我们");
+            list.add("退出登录");
         }
 
 
@@ -366,7 +362,10 @@ public class MainActivity extends AppCompatActivity{
                 drawable=getResources().getDrawable(R.drawable.chatlist16);
             }else if(i==3){
                 drawable=getResources().getDrawable(R.drawable.aboutus16 );
+            }else if(i==4){
+                drawable=getResources().getDrawable(R.drawable.exit16);
             }
+
             drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
             viewHolder.textView.setCompoundDrawables(drawable,null,null,null);
             viewHolder.textView.setText((String)getItem(i));

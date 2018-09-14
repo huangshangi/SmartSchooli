@@ -191,6 +191,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnTouchListe
                     case 0x111:
                         new Thread(runnable).start();
                         break;
+
+                    case 0x222:
+                        listView.setSelection(msg.arg1);
                     default:
                         updateUI((Message_Bean) msg.obj);
 
@@ -245,12 +248,17 @@ public class ChatActivity extends AppCompatActivity implements View.OnTouchListe
 
                 adapter=new Chat_List_Adapter(ChatActivity.this,ChatActivity.this.list);
                 listView.setAdapter(adapter);
-
+                Message message=Message.obtain();
+                message.what=0x222;
+                message.arg1=adapter.getCount()-1;
+               handler.sendMessage(message);
+                Log.d("测试文字地址",listView.getCount()+"");
                 listView.hide_refresh();//隐藏下拉条
+
             }
         });
 
-        listView.smoothScrollToPosition(adapter.getCount()-1);
+
 
     }
 

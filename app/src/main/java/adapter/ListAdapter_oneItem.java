@@ -54,14 +54,14 @@ public class ListAdapter_oneItem extends BaseAdapter {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHolder viewHolder;
-        if(convertView==null) {
+//        if(convertView==null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.commit_item, parent, false);
             viewHolder=new ViewHolder();
             convertView.setTag(viewHolder);
             viewHolder.textView=(TextView)convertView.findViewById(R.id.shuoshuo_commit_content_item);
-        }else{
-            viewHolder=(ViewHolder)convertView.getTag();
-        }
+//        }else{
+//            viewHolder=(ViewHolder)convertView.getTag();
+//        }
         String commit=list.get(position).replace(NetworkLoader.getInstance().getPersonMessage().get(2)+"说:","我说:");
         viewHolder.textView.setText(commit);
         return convertView;

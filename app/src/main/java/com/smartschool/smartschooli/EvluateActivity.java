@@ -76,6 +76,13 @@ public class EvluateActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void initListeners(){
@@ -131,11 +138,22 @@ public class EvluateActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String content=editText.getText().toString();
-                String result=rat1+"￥"+rat2+"￥"+rat3+"￥"+content;
-                Dialog dialog=LoadingProgress.createDialog(EvluateActivity.this,"正在发布评价...");
-                NetworkLoader.getInstance().updateEvluate(id,result,dialog);
+                //进行评价检查
+                if(checkEvluate()) {
+                    String content = editText.getText().toString();
+                    String result = rat1 + "￥" + rat2 + "￥" + rat3 + "￥" + content;
+                    Dialog dialog = LoadingProgress.createDialog(EvluateActivity.this, "正在发布评价...");
+                    NetworkLoader.getInstance().updateEvluate(id, result, dialog);
+                }else{
+                    Toast.makeText(EvluateActivity.this,"请先填写评价",Toast.LENGTH_SHORT).show();
+                }
             }
         });
+    }
+    private boolean checkEvluate(){
+        if(ratingBar1.getRating()==0||ratingBar2.getRating()==0||ratingBar3.getRating()==0||editText.getText().toString()==null||editText.getText().toString().equals("")){
+            return false;
+        }
+        return true;
     }
 }

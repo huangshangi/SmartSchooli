@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,8 @@ import utils.ImageLoader;
 import utils.MyApplication;
 import utils.NetworkLoader;
 
+import static java.lang.Thread.sleep;
+
 //说说适配器
 public class RecyclerView_Adapter extends RecyclerView.Adapter {
     Context context;
@@ -40,7 +43,7 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter {
     static  CommitListener commitListener;
     boolean flag_commit=true;
 
-    ListAdapter_oneItem adapter_commit;
+
 
     List<String>list_commit;//记录评论内容的列表
     public void setCommitListener(CommitListener commitListener) {
@@ -126,12 +129,13 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter {
 
         //分别将urls commit转化成list
         viewHolder.gridView.setAdapter(new Publish_gridview_adapter(context,StringToList(bean.getPublished_urls())));
-        viewHolder.listView.setAdapter(new ListAdapter_oneItem(context,StringToList(bean.getPublished_commit())));
-        addListener(viewHolder,bean);
+        ListAdapter_oneItem listAdapter_oneItem=new ListAdapter_oneItem(context,StringToList(bean.getPublished_commit()));
+        viewHolder.listView.setAdapter(listAdapter_oneItem);
+        addListener(viewHolder,bean,listAdapter_oneItem);
     }
 
     //监听器
-    public void addListener(final ViewHolder viewHolder,final  Shuoshuo_Bean bean){
+    public void addListener(final ViewHolder viewHolder, final  Shuoshuo_Bean bean, final ListAdapter_oneItem listAdapter_oneItem){
 
 
 
@@ -183,24 +187,24 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter {
         viewHolder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftPan(viewHolder.editText);
+                try {
+                    sleep(200);
+                }catch (Exception e){
 
-                Toast.makeText(MyApplication.getContext(),bean.getPublished_commit(), Toast.LENGTH_SHORT).show();
+                }
                 if(!viewHolder.button.isEnabled()){
                     Toast.makeText(context,"评论内容不能为空",Toast.LENGTH_SHORT).show();
                 }else {
                     String commit=bean.getPublished_commit()+"￥"+NetworkLoader.getInstance().getPersonMessage().get(2)+"说:"+viewHolder.editText.getText().toString();
                     bean.setPublished_commit(commit);
                     list_commit=StringToList(bean.getPublished_commit());
-                    if(flag_commit){
-                        adapter_commit=new ListAdapter_oneItem(context,StringToList(bean.getPublished_commit()));
-                        viewHolder.listView.setAdapter(adapter_commit);
-                        flag_commit=false;
-                    }else{
-                        adapter_commit.setList(list_commit);
-                        adapter_commit.notifyDataSetChanged();
-                    }
+
+                    listAdapter_oneItem.setList(list_commit);
+                    listAdapter_oneItem.notifyDataSetChanged();
+
                     viewHolder.editText.setText("");
-                    hideSoftPan(viewHolder.editText);
+                    Log.d("当前评论内容",commit);
 
                     //将评论内容提交到服务器
                     networkLoader.addCommit(bean);

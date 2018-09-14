@@ -124,7 +124,7 @@ public class Fragment_class extends Fragment {
 
     TextView textView_Teacher_QR;
 
-    ImageView imageView_add;
+    TextView imageView_add;
 
     ImageView imageView_menu;
 
@@ -156,8 +156,10 @@ public class Fragment_class extends Fragment {
 
         wheelView.setPAGE_COUNT(5);
 
-        for(int i=0;i<allWeek;i++){
-            list_popup.add("第"+(i+1)+"周");
+        if(type.equals("学生")){
+            imageView_add.setText("签到");
+        }else if(type.equals("教师")){
+            imageView_add.setText("点名");
         }
         wheelView.setList(list_popup);
 
@@ -241,14 +243,14 @@ public class Fragment_class extends Fragment {
             @Override
             public void onClick(View v) {
                 if (type.equals("学生")) {
-                    if (!popupWindow_student.isShowing()) {
-                        showStudentPopupWindow();
-                    }
+                    getActivity().startActivityForResult(new Intent(getActivity(), CaptureActivity.class),CAPTURE_QR);
                 } else if(type.equals("教师")){
 
-                    if (!popupWindow_teacher.isShowing()) {
-                        showTeacherPopupWindow();
-                    }
+                    Intent intent=new Intent(getActivity(), FcTeacherActivity.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable("list",list);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }
             }
         });
@@ -515,7 +517,7 @@ public class Fragment_class extends Fragment {
 
         linearlayout=(LinearLayout)view.findViewById(R.id.fragment_class_inVisbile_layout);
 
-        imageView_add=(ImageView)view.findViewById(R.id.fragment_class_imageView_add);
+        imageView_add=(TextView)view.findViewById(R.id.fragment_class_imageView_add);
 
         imageView_menu=(ImageView)view.findViewById(R.id.fragment_class_imageView_menu);
 
