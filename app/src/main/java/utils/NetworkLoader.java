@@ -295,6 +295,15 @@ public class NetworkLoader {
 
         phone_id=setPhone_id();
 
+        mUiHandler=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                String message=(String) msg.obj;
+                Toast.makeText(MyApplication.getContext(),message,Toast.LENGTH_SHORT).show();
+            }
+        };
+
         thread=new Thread(){
 
             @Override
@@ -388,7 +397,7 @@ public class NetworkLoader {
                             editor.putString("nickname",person_bean.getNickname());
                             editor.putString("kind",person_bean.getKind());
                             editor.putString("pass",person_bean.getPass());
-                            Log.d("kind测试",person_bean.getKind());
+
                             editor.apply();
 
                             NetworkLoader.getInstance().getList();
@@ -441,7 +450,9 @@ public class NetworkLoader {
                                 //注册成功
                                 activity.finish();
                             }else{
-                                Toast.makeText(activity,"注册失败,"+s,Toast.LENGTH_SHORT).show();
+                                Message message=new Message();
+                                message.obj="注册失败,"+s;
+                                mUiHandler.sendMessage(message);
                             }
                         }
                     });
@@ -467,7 +478,7 @@ public class NetworkLoader {
                 Request request=new Request.Builder().post(requestBody).url("http://bkjws.sdu.edu.cn/b/ajaxLogin").build();
                 try {
                     Response response = client.newCall(request).execute();
-                    if(response.code()==200){
+                    if(!response.body().string().contains("用户名或密码输入有误")){
                         bean.signUp(new SaveListener<Person_Bean>() {
                             @Override
                             public void done(Person_Bean o, BmobException e) {
@@ -475,13 +486,18 @@ public class NetworkLoader {
                                     //注册成功
                                     activity.finish();
                                 }else{
-                                    Toast.makeText(activity,"注册失败,"+s,Toast.LENGTH_SHORT).show();
+
+                                    Message message=new Message();
+                                    message.obj="注册失败,"+s;
+                                    mUiHandler.sendMessage(message);
                                 }
                             }
                         });
                     }else{
                         //账号无效
-                        Toast.makeText(MyApplication.getContext(),"账号或密码无效",Toast.LENGTH_SHORT).show();
+                        Message message=new Message();
+                        message.obj="账号或密码无效";
+                        mUiHandler.sendMessage(message);
                     }
                 }catch (Exception e){
 
@@ -590,8 +606,12 @@ public class NetworkLoader {
                             bean.update(bean.getObjectId(), new UpdateListener() {
                                 @Override
                                 public void done(BmobException e) {
-                                    if(e!=null)
-                                        Toast.makeText(MyApplication.getContext(),"更新用户头像失败",Toast.LENGTH_SHORT).show();
+                                    if(e!=null) {
+                                        Message message = new Message();
+                                        message.obj="更新用户头像失败";
+                                        mUiHandler.sendMessage(message);
+
+                                    }
                                 }
                             });
                         }
@@ -623,7 +643,10 @@ public class NetworkLoader {
                             //回调方法
 
                         }else{
-                            Toast.makeText(MyApplication.getContext(),"签到信息获取失败"+s,Toast.LENGTH_SHORT).show();
+                            Message message=new Message();
+                            message.obj="签到信息获取失败";
+                            mUiHandler.sendMessage(message);
+
                         }
                     }
                 });
@@ -651,9 +674,15 @@ public class NetworkLoader {
                     @Override
                     public void done(String s, BmobException e) {
                         if(e==null){
-                            Toast.makeText(MyApplication.getContext(),"签到成功",Toast.LENGTH_SHORT).show();
+                            Message message=new Message();
+                            message.obj="签到成功";
+                            mUiHandler.sendMessage(message);
+
                         }else{
-                            Toast.makeText(MyApplication.getContext(),"签到失败"+s,Toast.LENGTH_SHORT).show();
+                            Message message=new Message();
+                            message.obj="签到失败";
+                            mUiHandler.sendMessage(message);
+
                         }
                     }
                 });
@@ -678,7 +707,8 @@ public class NetworkLoader {
                 String detail_url="http://bkjws.sdu.edu.cn/b/grxx/xs/xjxx/detail";//详细信息界面
                 String username=list.get(0);
                 String password=list.get(4);
-                if(list.get(3).equals("教师")){
+
+                if(list.get(3).equals("教师")&&list.get(0).equals("T1")){
                     username="201700301242";
                 }else if(list.get(3).equals("学生")&&list.get(0).equals("S1")){
                     username="201700301242";
@@ -937,13 +967,19 @@ public class NetworkLoader {
             @Override
             public void done(String s, BmobException e) {
                 if(e==null){
-                    Toast.makeText(context,"维修信息上传成功",Toast.LENGTH_LONG).show();
+                    Message message=new Message();
+                    message.obj="维修信息上传成功";
+                    mUiHandler.sendMessage(message);
+
                     if(upRepairListener!=null){
                         upRepairListener.upDown();
                     }
                     getRepairMessage();
                 }else{
-                    Toast.makeText(context,"维修上传失败,请稍后重试",Toast.LENGTH_LONG).show();
+                    Message message=new Message();
+                    message.obj="维修上传失败,请稍后重试";
+                    mUiHandler.sendMessage(message);
+
                 }
 
             }
@@ -1053,8 +1089,8 @@ public class NetworkLoader {
 
                         if(e==null){
                             //文件上传成功,将文件对应关系在数据库中更新
-                            Log.d("测试信息！！","文件上传成功");
-                            Toast.makeText(MyApplication.getContext(),"文件上传成功",Toast.LENGTH_SHORT).show();
+
+
                             list_urls.add(bmobFile.getFileUrl());
                             UpdateUrl(address,bmobFile.getFileUrl());
 
@@ -1065,8 +1101,7 @@ public class NetworkLoader {
                                 Log.d("semaphore_fileUp","文件上传时被释放");
                             }
                         }else{
-                            Log.d("测试信息！！","文件上传失败"+e.getMessage());
-                            Toast.makeText(MyApplication.getContext(),"文件上传失败，错误信息:"+e.getMessage(),Toast.LENGTH_SHORT).show();
+
                         }
                         semaphore.release();
                     }
@@ -1156,7 +1191,7 @@ public class NetworkLoader {
 
                         }else{
                             //该文件未被上传
-                            Toast.makeText(MyApplication.getContext(),"该文件未被上传",Toast.LENGTH_SHORT).show();
+
                             upFile(address,count_zong);
                         }
                         semaphore.release();
@@ -1180,10 +1215,9 @@ public class NetworkLoader {
                     public void done(List<Image_Bean> list, BmobException e) {
                         if(e==null){
                             list_urls.add(list.get(0).getImage_inet_url());
-                            Toast.makeText(MyApplication.getContext(),"路径"+list.get(0).getImage_inet_url(),Toast.LENGTH_SHORT).show();
+
                         }else{
 
-                            Toast.makeText(MyApplication.getContext(),"查询数据失败，失败原因："+e.getMessage(),Toast.LENGTH_SHORT).show();
                         }
                         if(++count==count_zong){
                             Log.d("semaphore_fileUp","从inet查询时被释放");
@@ -1277,7 +1311,7 @@ public class NetworkLoader {
                 if(e==null){
 
                 }else{
-                    Toast.makeText(MyApplication.getContext(), "更新Image数据失败", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
@@ -1301,7 +1335,7 @@ public class NetworkLoader {
                 try {
 
                     semaphore_fileUp.acquire();
-                    Toast.makeText(MyApplication.getContext(),"等待完成",Toast.LENGTH_SHORT).show();
+
                 } catch (Exception e) {
                     Log.d("errror occur", e.getMessage());
                 }
@@ -1337,7 +1371,9 @@ public class NetworkLoader {
                             }
                         } else {
 
-                            Toast.makeText(MyApplication.getContext(), "说说上传失败，错误原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Message message=new Message();
+                            message.obj="说说发表失败";
+                            mUiHandler.sendMessage(message);
                         }
                     }
                 });
@@ -1364,7 +1400,9 @@ public class NetworkLoader {
                         loadingListener.loadingDown(list);
                     }
                 }else{
-                    Toast.makeText(MyApplication.getContext(),"获取说说失败",Toast.LENGTH_SHORT).show();
+                    Message message=new Message();
+                    message.obj="数据获取失败";
+                    mUiHandler.sendMessage(message);
                 }
             }
         });
@@ -1379,7 +1417,9 @@ public class NetworkLoader {
                     @Override
                     public void done(BmobException e) {
                         if(e!=null){
-                            Toast.makeText(MyApplication.getContext(),"发表评论失败,"+"失败原因"+e.getMessage(),Toast.LENGTH_SHORT).show();
+                            Message message=new Message();
+                            message.obj="评论失败";
+                            mUiHandler.sendMessage(message);
                         }
                         semaphore.release();
                     }
@@ -1427,7 +1467,9 @@ public class NetworkLoader {
                                 message_down_listener.getMessageDown(list);
                             }
                         }else{
-                            Toast.makeText(MyApplication.getContext(),"服务器获取信息失败；"+e.getMessage(),Toast.LENGTH_SHORT).show();
+                            Message message=new Message();
+                            message.obj="获取信息失败";
+                            mUiHandler.sendMessage(message);
                         }
                     }
                 });
@@ -1490,7 +1532,9 @@ public class NetworkLoader {
                             if (e == null) {
                                 //发送成功
                             } else {
-                                Toast.makeText(MyApplication.getContext(), "发送信息失败:" + s, Toast.LENGTH_SHORT).show();
+                                Message message=new Message();
+                                message.obj="发送信息失败";
+                                mUiHandler.sendMessage(message);
                             }
 
                         }
@@ -1555,7 +1599,9 @@ public class NetworkLoader {
                                             @Override
                                             public void done(BmobException e) {
                                                 if(e!=null){
-                                                    Toast.makeText(MyApplication.getContext(),"更新失败，"+e.getMessage(),Toast.LENGTH_SHORT).show();
+                                                    Message message=new Message();
+                                                    message.obj="更新数据失败";
+                                                    mUiHandler.sendMessage(message);
 
                                                 }else{
 
@@ -1577,7 +1623,7 @@ public class NetworkLoader {
                                             @Override
                                             public void done(String s, BmobException e) {
                                                 if(e!=null){
-                                                    Toast.makeText(MyApplication.getContext(),"shangchuang失败，"+e.getMessage(),Toast.LENGTH_SHORT).show();
+
                                                 }else{
                                                     Log.d("执行该信息","异质该信息5");
                                                 }
@@ -1620,7 +1666,9 @@ public class NetworkLoader {
                     if (e == null) {
                         //发送成功
                     } else {
-                        Toast.makeText(MyApplication.getContext(), "发送信息失败:" + s, Toast.LENGTH_SHORT).show();
+                        Message message=new Message();
+                        message.obj="发送信息失败";
+                        mUiHandler.sendMessage(message);
                     }
                 }
             });
@@ -1643,7 +1691,9 @@ public class NetworkLoader {
                                         if (e == null) {
                                             //发送成功
                                         } else {
-                                            Toast.makeText(MyApplication.getContext(), "发送信息失败:" + s, Toast.LENGTH_SHORT).show();
+                                            Message message=new Message();
+                                            message.obj="发送信息失败";
+                                            mUiHandler.sendMessage(message);
                                         }
 
                                     }

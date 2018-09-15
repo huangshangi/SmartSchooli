@@ -19,6 +19,7 @@ import java.util.List;
 
 import utils.ImageLoader;
 import utils.NetworkLoader;
+import utils.Util;
 
 public class Publish_gridview_adapter extends BaseAdapter {
     Context context;
@@ -48,14 +49,13 @@ public class Publish_gridview_adapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
-        ViewHolder viewHolder = new ViewHolder();
-        if (view == null) {
+       final ViewHolder viewHolder = new ViewHolder();
+
+
             view = LayoutInflater.from(context).inflate(R.layout.publish_item_layout, viewGroup, false);
             viewHolder.imageView = (ImageView) view.findViewById(R.id.publish_imageview);
             view.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) view.getTag();
-        }
+
 
         if(list.get(i) instanceof String) {
             DisplayMetrics displayMetrics = viewHolder.imageView.getResources().getDisplayMetrics();
@@ -68,6 +68,7 @@ public class Publish_gridview_adapter extends BaseAdapter {
             viewHolder.imageView.setImageResource((int)list.get(0));
         }else if(list.get(i) instanceof Bitmap){ viewHolder.imageView.setImageBitmap((Bitmap) list.get(i));
         }
+
 
         return view;
     }

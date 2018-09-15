@@ -77,4 +77,9 @@
         <item name="android:maxHeight">40dip</item>
     </style>
 
+    <style name="MyEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">#E5E8ED</item>
+        <item name="colorControlActivated">#E5E8ED</item>
+    </style>
+
 </resources>

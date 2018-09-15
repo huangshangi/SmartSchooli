@@ -3,6 +3,8 @@ package com.smartschool.smartschooli;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -31,6 +33,11 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //去掉标题栏
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //设置全屏
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.register_layout);
         initViews();
         initListeners();
@@ -38,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     private void initViews(){
+
         text_id=(EditText)findViewById(R.id.register_id);
 
         text_nickname=(EditText)findViewById(R.id.register_nickname);
@@ -89,7 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
                     type="学生";
             }
         });
-           ;
+
 
 
 

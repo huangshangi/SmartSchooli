@@ -192,35 +192,7 @@
             </LinearLayout>
 
 
-            <!--上传图片-->
-            <LinearLayout
-                android:orientation="vertical"
 
-                android:layout_marginLeft="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:drawablePadding="5dp"
-                    android:drawableLeft="@drawable/pic16"
-                    android:text="上传的图片:"
-
-                    android:textSize="15sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <View
-                    android:background="@color/black"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
-
-                <view.Submit_repair_GridView
-                    android:id="@+id/gridview"
-                    android:numColumns="3"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"/>
-
-            </LinearLayout>
 
             <!--处理状态-->
             <LinearLayout
@@ -280,6 +252,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
+
+            </LinearLayout>
+
+            <!--上传图片-->
+            <LinearLayout
+                android:orientation="vertical"
+
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:drawablePadding="5dp"
+                    android:drawableLeft="@drawable/pic16"
+                    android:text="上传的图片:"
+
+                    android:textSize="15sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+
+                <view.Submit_repair_GridView
+                    android:id="@+id/gridview"
+                    android:horizontalSpacing="5dp"
+                    android:numColumns="3"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"/>
 
             </LinearLayout>
 
