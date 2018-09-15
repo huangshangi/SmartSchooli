@@ -20,6 +20,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -50,7 +51,7 @@ public class Submit_RepairActivity extends AppCompatActivity {
 
     EditText editText_address;//报修地址,setTag(报修编号)
 
-    EditText editText_machine;//故障设备
+    Button editText_machine;//故障设备
 
 
     EditText editText_content;//报修内容
@@ -73,9 +74,11 @@ public class Submit_RepairActivity extends AppCompatActivity {
 
     Uri uri;
 
+    String array[];//储存故障类型
 
+    int machine;//故障设备
 
-    String type;//故障类型
+    int type;//故障类型
 
 
     final int FROM_ALUBM=1;
@@ -86,6 +89,13 @@ public class Submit_RepairActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        Window window = getWindow();
+        //如果系统5.0以上
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.royalblue));
+        }
         setContentView(R.layout.submit_repair_layout);
         initViews();
         initEvents();
@@ -97,7 +107,7 @@ public class Submit_RepairActivity extends AppCompatActivity {
     public void initViews(){
         textView_name=(TextView)findViewById(R.id.submit_repair_name);
         editText_address=(EditText)findViewById(R.id.submit_repair_address);
-        editText_machine=(EditText)findViewById(R.id.submit_repair_machine);
+        editText_machine=(Button)findViewById(R.id.submit_repair_machine);
         editText_content=(EditText)findViewById(R.id.submit_repair_content);
         gridView=(Submit_repair_GridView)findViewById(R.id.submit_repair_gridview);
         button_submit=(Button)findViewById(R.id.submit_repair_button);
@@ -167,19 +177,67 @@ public class Submit_RepairActivity extends AppCompatActivity {
         button_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String []array=new String[]{"故障类型1", "故障类型2", "故障类型3", "故障类型4"};
-                type=array[0];
+                if (editText_machine.getText().toString().equals("请选择故障设备")) {
+                    Toast.makeText(Submit_RepairActivity.this, "请先选择故障设备", Toast.LENGTH_SHORT).show();
+                } else {
+                   String flag=editText_machine.getText().toString();
+
+                    if(flag.equals("电脑")){
+                        array=new String[]{"软件故障","硬件故障","其他"};
+                    }else if(flag.equals("桌椅")){
+                        array=new String[]{"桌椅变形","磨损严重","其他"};
+                    }else if(flag.equals("投影仪")){
+                        array=new String[]{"图像失真","投影无画面","异常关机","其他"};
+
+                    }else if(flag.equals("空调")){
+                        array=new String[]{"遥控器故障","制热,制冷效果差","强制关机","其他"};
+                    }
+
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(Submit_RepairActivity.this).setTitle("故障类型").setIcon(R.drawable.add)
+                            .setSingleChoiceItems(array, type, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    type=i;
+                                }
+                            });
+
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            button_select.setText(array[type]);
+                        }
+                    });
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    builder.create().show();
+                }
+            }
+        });
+
+
+        //选择故障设备
+        editText_machine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final String []array=new String[]{"电脑", "桌椅", "空调", "投影仪"};
+
                 final AlertDialog.Builder builder=new AlertDialog.Builder(Submit_RepairActivity.this).setTitle("故障类型").setIcon(R.drawable.add)
-                        .setSingleChoiceItems(array, 0, new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(array, machine, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                type=array[i];
+                                machine=i;
                             }
                         });
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        button_select.setText(type);
+                        editText_machine.setText(array[machine]);
                     }
                 });
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {

@@ -56,7 +56,8 @@
         <activity
             android:name=".FcTeacherActivity"
             android:label="签到界面" />
-        <activity android:name=".Submit_RepairActivity" />
+        <activity android:name=".Submit_RepairActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity android:name=".PublishActivity" />
         <activity android:name=".Chat_List_Activity" />
         <activity android:name=".PersonActivity" />
