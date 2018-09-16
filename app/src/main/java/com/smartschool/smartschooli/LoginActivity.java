@@ -144,6 +144,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                 //询问是否可登陆
                 NetworkLoader.getInstance().login(id,password,LoginActivity.this);
 
