@@ -56,8 +56,9 @@
         <activity
             android:name=".FcTeacherActivity"
             android:label="签到界面" />
-        <activity android:name=".Submit_RepairActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity
+            android:name=".Submit_RepairActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".PublishActivity" />
         <activity android:name=".Chat_List_Activity" />
         <activity android:name=".PersonActivity" />
@@ -65,7 +66,9 @@
         <activity android:name=".RepairDetailActivity" />
         <activity android:name=".ChatActivity" />
         <activity android:name=".EvluateActivity" />
-        <activity android:name=".ReadEvluateActivity"></activity>
+        <activity android:name=".ReadEvluateActivity" />
+        <activity android:name=".Z_detailActivity" />
+        <activity android:name=".Z_GuZhangActivity"></activity>
     </application>
 
 </manifest>

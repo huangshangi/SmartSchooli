@@ -23,20 +23,26 @@ public class SplashActivity extends AppCompatActivity {
             //未登录
             startActivity(new Intent(this,LoginActivity.class));
             finish();
-        }else{
+        }else {
             //进入主界面
-            Log.d("jinrule","名字"+bmobUser+"喵喵"+BmobUser.getCurrentUser().getUsername());
-            NetworkLoader.getInstance().getList();
-            try {
-                NetworkLoader.getInstance().getSemaphore_getList().acquire();
-            }catch (Exception e){
-                Log.d("error",e.getMessage());
+            if (bmobUser.getEmailVerified()) {
+                Intent intent = new Intent(this, Z_MainActivity.class);
+
+                startActivity(intent);
+                finish();
+            } else {
+                NetworkLoader.getInstance().getList();
+                try {
+                    NetworkLoader.getInstance().getSemaphore_getList().acquire();
+                } catch (Exception e) {
+                    Log.d("error", e.getMessage());
+                }
+
+                Intent intent = new Intent(this, MainActivity.class);
+
+                startActivity(intent);
+                finish();
             }
-
-            Intent intent=new Intent(this,MainActivity.class);
-
-            startActivity(intent);
-            finish();
         }
 
     }

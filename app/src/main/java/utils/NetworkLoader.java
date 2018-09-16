@@ -28,6 +28,7 @@ import com.smartschool.smartschooli.MainActivity;
 import com.smartschool.smartschooli.PublishActivity;
 import com.smartschool.smartschooli.R;
 import com.smartschool.smartschooli.Submit_RepairActivity;
+import com.smartschool.smartschooli.Z_MainActivity;
 
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -83,6 +84,7 @@ import listener.UpMessage_Listener;
 import listener.UpRepairListener;
 import listener.UpdateEvluateListener;
 import listener.UpdateMessageListener;
+import listener.Z_getReapirMessageListener;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.FormBody;
@@ -166,9 +168,13 @@ public class NetworkLoader {
 
     private GetEvluateListener getEvluateListener;
 
+
+
     private List<String>list_urls;
     private static List<Integer> list_color;
     private static HashMap<String,Integer>hashMap_color;
+
+
 
     public void setGetEvluateListener(GetEvluateListener getEvluateListener) {
         this.getEvluateListener = getEvluateListener;
@@ -400,18 +406,24 @@ public class NetworkLoader {
 
                             editor.apply();
 
-                            NetworkLoader.getInstance().getList();
-                            try {
-                                NetworkLoader.getInstance().getSemaphore_getList().acquire();
-                            }catch (Exception e1){
-                                Log.d("error",e1.getMessage());
+                            //主管段
+                            if(person_bean.getKind().equals("主管")){
+                                Intent intent=new Intent(activity, Z_MainActivity.class);
+                                activity.startActivity(intent);
+                                activity.finish();
+                            }else {
+                                NetworkLoader.getInstance().getList();
+                                try {
+                                    NetworkLoader.getInstance().getSemaphore_getList().acquire();
+                                } catch (Exception e1) {
+                                    Log.d("error", e1.getMessage());
+                                }
+
+                                //登陆成功，进入主界面
+                                Intent intent = new Intent(activity, MainActivity.class);
+                                activity.startActivity(intent);
+                                activity.finish();
                             }
-
-                            //登陆成功，进入主界面
-                           Intent intent=new Intent(activity, MainActivity.class);
-                           activity.startActivity(intent);
-                            activity.finish();
-
 
                         }else{
                             Log.d("33333333333","登陆失败"+e.getMessage());
@@ -440,6 +452,9 @@ public class NetworkLoader {
                 bean.setPassword(pass);
                 bean.setKind(type);
                 bean.setPass(Util.getMD5Str(pass));
+                if(type.equals("主管")){
+                    bean.setEmailVerified(true);
+                }
 
                 //进行注册账号检查
                 if(type.equals("主管")){
@@ -1001,6 +1016,7 @@ public class NetworkLoader {
                             if(loadingRepairListener!=null){
                                 loadingRepairListener.loadingDown(list);
                             }
+
                         }
                     }
                 });
