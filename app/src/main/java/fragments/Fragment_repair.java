@@ -17,12 +17,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 
 import com.smartschool.smartschooli.R;
+import com.smartschool.smartschooli.RepairDetailActivity;
 import com.smartschool.smartschooli.Submit_RepairActivity;
+import com.smartschool.smartschooli.Z_MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +42,7 @@ public class Fragment_repair extends Fragment {
     ListView listView;
     List<Repair_Bean> list_ceshi;
     ActionBar actionBar;
-
+    List<Repair_Bean>thing_list;
     SwipeRefreshLayout swipeRefreshLayout;
     FloatingActionButton floatingActionButton;
     boolean flag=true;//该adapter是否为第一次初始化
@@ -72,7 +75,7 @@ public class Fragment_repair extends Fragment {
             @Override
             public void loadingDown(List<Repair_Bean> list) {
 
-
+                thing_list=list;
                 if(flag){
                     adapter=new FragRepair_listview_adapter(getActivity(),list);
                     listView.setAdapter(adapter);
@@ -94,6 +97,16 @@ public class Fragment_repair extends Fragment {
 
 
     public void initListeners(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Repair_Bean things = thing_list.get(position);
+                Intent intent = new Intent(getActivity(),RepairDetailActivity.class);
+                intent. putExtra("repairMessage", things);
+                intent.putExtra("type","非主管");
+                startActivity(intent);
+            }
+        });
         //解决listView与swipeFresh冲突问题
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override

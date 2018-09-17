@@ -210,6 +210,16 @@ public class MainActivity extends AppCompatActivity{
     }
 
     @Override
+    public void onBackPressed() {
+        if(drawerLayout.isDrawerOpen(navigationView)){
+            drawerLayout.closeDrawers();}
+        else {
+            super.onBackPressed();
+        }
+    }
+
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 

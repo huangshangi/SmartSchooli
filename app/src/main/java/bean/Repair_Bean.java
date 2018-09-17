@@ -12,7 +12,7 @@ public class Repair_Bean extends BmobObject implements Serializable{
 
     String repair_machine;//报修设备
 
-    String repair_status;//报修状态
+    String repair_status;//维修者名称
 
     int repair_bianhao;//报修编号
 

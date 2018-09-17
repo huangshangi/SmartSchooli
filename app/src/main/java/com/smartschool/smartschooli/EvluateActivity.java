@@ -27,7 +27,7 @@ public class EvluateActivity extends AppCompatActivity {
 
     int rat3;
 
-    String  id;//报修编号
+    int  id;//报修编号
 
     Toolbar toolbar;
 
@@ -58,7 +58,7 @@ public class EvluateActivity extends AppCompatActivity {
             window.setStatusBarColor(getResources().getColor(R.color.royalblue));
         }
         setContentView(R.layout.evluate_layout);
-        id=getIntent().getStringExtra("id");
+        id=getIntent().getIntExtra("id",0);
         initViews();
         initEvents();
         initListeners();

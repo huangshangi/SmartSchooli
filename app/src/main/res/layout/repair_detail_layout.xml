@@ -11,7 +11,6 @@
         android:background="@color/royalblue"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-
         app:navigationIcon="@drawable/back_white"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
@@ -246,7 +245,7 @@
                     android:paddingLeft="5dp"
                     android:gravity="start"
                     android:textColor="@color/black"
-                    android:text="测试文字"
+                    android:text="测试文字:"
                     android:background="@null"
                     style="?android:attr/textViewStyle"
                     android:layout_width="match_parent"
@@ -280,6 +279,33 @@
                     android:numColumns="3"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/visible"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/button_handle"
+                    android:background="@color/gray"
+                    android:layout_weight="1"
+                    android:text="未解决"
+                    android:layout_marginRight="5dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/button_concat"
+                    android:layout_marginLeft="5dp"
+                    android:background="@color/royalblue"
+                    android:layout_weight="1"
+                    android:text="与他联系"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 

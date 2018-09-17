@@ -68,7 +68,8 @@
         <activity android:name=".EvluateActivity" />
         <activity android:name=".ReadEvluateActivity" />
         <activity android:name=".Z_detailActivity" />
-        <activity android:name=".Z_GuZhangActivity"></activity>
+        <activity android:name=".Z_GuZhangActivity" />
+        <activity android:name=".Z_EvluatesActivity"></activity>
     </application>
 
 </manifest>

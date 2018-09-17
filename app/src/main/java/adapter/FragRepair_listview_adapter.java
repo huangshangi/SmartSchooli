@@ -59,7 +59,11 @@ public class FragRepair_listview_adapter extends BaseAdapter {
         viewHolder.textView_name.setText(obj.getRepairer_name());
         viewHolder.textView_machine_name.setText(obj.getRepair_machine());
         viewHolder.textView_time.setText(obj.getCreatedAt().substring(0,10));
-        viewHolder.textView_status.setText(obj.getRepair_status());
+        if(obj.getHandle()){
+            viewHolder.textView_status.setText("已处理");
+        }else{
+            viewHolder.textView_status.setText("未处理");
+        }
 
         String elses=obj.getRepairer_id()+"$"+obj.getRepair_type()+"$"+obj.getRepair_type()+"$"+obj.getRepair_adress()+"$"+obj.getRepair_content()+"$"+
                 obj.getRepair_urls()+"$"+obj.getRepair_bianhao();

@@ -3,23 +3,64 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/fragment_repair_listview_bg"
     android:id="@+id/z_mainlayout_drawer"
     tools:context=".MainActivity">
 
-    <FrameLayout
-        android:id="@+id/main"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ListView
-            android:id="@+id/list_view"
+        <LinearLayout
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:id="@+id/main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#cbc5c5">
+            android:layout_height="match_parent">
 
-        </ListView>
-    </FrameLayout>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/royalblue"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/AlertDialog.AppCompat.Light">
+
+                <ImageView
+                    android:id="@+id/menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/menu1_white32" />
+
+
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:text="维修大厅"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+
+            </android.support.v7.widget.Toolbar>
+
+            <ListView
+                android:id="@+id/list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#cbc5c5">
+
+            </ListView>
+        </LinearLayout>
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
     <RelativeLayout
         android:layout_gravity="start"

@@ -170,7 +170,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnTouchListe
                 while(flag_prepare){
                     try {
                         Thread.sleep(100);
-                        Log.d("音量大熊啊","ddd");
+
                         time+=0.1;
                         handler.sendEmptyMessage(0x110);
                     }catch (Exception e){

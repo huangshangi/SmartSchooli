@@ -2,6 +2,7 @@ package com.smartschool.smartschooli;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import java.util.List;
 
 import utils.NetworkLoader;
 import utils.Util;
+import view.LoadingProgress;
 
 //登录界面
 public class LoginActivity extends AppCompatActivity {
@@ -146,7 +148,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                 //询问是否可登陆
-                NetworkLoader.getInstance().login(id,password,LoginActivity.this);
+                Dialog dialog= LoadingProgress.createDialog(LoginActivity.this,"正在登录...");
+                NetworkLoader.getInstance().login(id,password,dialog,LoginActivity.this);
 
             }
         });
