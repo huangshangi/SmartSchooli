@@ -38,6 +38,7 @@
                 android:listSelector="@android:color/transparent"
                 android:id="@+id/fragment_repair_listView"
                 android:divider="#b3b4b4"
+                android:cacheColorHint="#00000000"
                 android:dividerHeight="1dp"
                 android:background="@drawable/fragment_repair_listview_bg"
                 android:layout_width="match_parent"

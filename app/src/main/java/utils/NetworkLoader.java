@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 
+import com.smartschool.smartschooli.LoginActivity;
 import com.smartschool.smartschooli.MainActivity;
 import com.smartschool.smartschooli.PublishActivity;
 import com.smartschool.smartschooli.R;
@@ -271,7 +272,7 @@ public class NetworkLoader {
     private NetworkLoader(){
 
         //初始化缓冲池
-        int memory=(int)Runtime.getRuntime().maxMemory();
+        final int memory=(int)Runtime.getRuntime().maxMemory();
         int cachememory=memory/6;
 
         list_color=new ArrayList();
@@ -310,8 +311,13 @@ public class NetworkLoader {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                String message=(String) msg.obj;
-                Toast.makeText(MyApplication.getContext(),message,Toast.LENGTH_SHORT).show();
+                if(msg.what==0x666){
+                    Dialog dialog=(Dialog) msg.obj;
+                    LoadingProgress.closeDialog(dialog);
+                }else {
+                    String message = (String) msg.obj;
+                    Toast.makeText(MyApplication.getContext(), message, Toast.LENGTH_SHORT).show();
+                }
             }
         };
 
@@ -421,9 +427,8 @@ public class NetworkLoader {
                                 try {
                                     NetworkLoader.getInstance().getSemaphore_getList().acquire();
                                 } catch (Exception e1) {
-                                    Log.d("error", e1.getMessage());
-                                }
 
+                                }
                                 //登陆成功，进入主界面
                                 Intent intent = new Intent(activity, MainActivity.class);
                                 activity.startActivity(intent);
@@ -431,14 +436,17 @@ public class NetworkLoader {
                             }
 
                         }else{
-                            Log.d("33333333333","登陆失败"+e.getMessage());
+                            Message message=new Message();
+                            message.obj="账号或密码有误,请检查后重试";
+                            mUiHandler.sendMessage(message);
                         }
                     }
                 });
-
-                //释放资源
-                dialog.dismiss();
                 semaphore.release();
+                Message message=new Message();
+                message.obj=dialog;
+                message.what=0x666;
+                mUiHandler.sendMessage(message);
             }
         });
 
@@ -459,9 +467,9 @@ public class NetworkLoader {
                 bean.setPassword(pass);
                 bean.setKind(type);
                 bean.setPass(Util.getMD5Str(pass));
-                if(type.equals("主管")){
-                    bean.setEmailVerified(true);
-                }
+
+                    bean.setEmailVerified(false);
+
 
                 //进行注册账号检查
                 if(type.equals("主管")){

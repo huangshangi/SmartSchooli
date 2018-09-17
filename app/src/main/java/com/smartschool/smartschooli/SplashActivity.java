@@ -27,7 +27,6 @@ public class SplashActivity extends AppCompatActivity {
             //进入主界面
             if (bmobUser.getEmailVerified()) {
                 Intent intent = new Intent(this, Z_MainActivity.class);
-
                 startActivity(intent);
                 finish();
             } else {

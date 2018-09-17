@@ -61,7 +61,7 @@ public class ImageLoader {
                 handler_main=new Handler(){
                     @Override
                     public void handleMessage(Message msg) {
-                        mThreadpool.execute(getTask());
+                            mThreadpool.execute(getTask());
                         try {
                             threadPoolSemaphore.acquire();
                         }catch (Exception e){
@@ -92,6 +92,13 @@ public class ImageLoader {
     }
 
     private  Runnable getTask(){
+        if(list.size()==0)
+            return new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            };
         return list.removeLast();
     }
 

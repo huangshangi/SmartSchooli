@@ -30,6 +30,9 @@ public class Chat_List_Activity extends AppCompatActivity {
     Handler handler;
 
     ListView listView;
+
+    TextView textView_visible;
+
     boolean flag=true;//判断适配器是否为第一次初始化
 
     @Override
@@ -49,6 +52,7 @@ public class Chat_List_Activity extends AppCompatActivity {
 
     public void initViews(){
         listView=(ListView)findViewById(R.id.fragment_chat_listView);
+        textView_visible=(TextView)findViewById(R.id.visible);
         NetworkLoader.getInstance().getUpdateMessage();
         handler=new Handler(){
             @Override
@@ -71,13 +75,18 @@ public class Chat_List_Activity extends AppCompatActivity {
         NetworkLoader.getInstance().setUpdateMessageListener(new UpdateMessageListener() {
             @Override
             public void getUpdateMessage(List<UpdateMessage_Bean> list) {
-                if(flag){
-                    adapter=new FragChat_list_Adapter(list,Chat_List_Activity.this);
-                    handler.sendEmptyMessage(0);
-                    flag=false;
-                }else{
-                    adapter.setList(list);
-                    adapter.notifyDataSetChanged();
+                if(list==null||list.size()==0){
+                    textView_visible.setVisibility(View.VISIBLE);
+                }else {
+                    textView_visible.setVisibility(View.GONE);
+                    if (flag) {
+                        adapter = new FragChat_list_Adapter(list, Chat_List_Activity.this);
+                        handler.sendEmptyMessage(0);
+                        flag = false;
+                    } else {
+                        adapter.setList(list);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
             }
 

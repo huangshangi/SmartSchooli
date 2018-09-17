@@ -31,12 +31,15 @@ public class Z_EvluatesActivity extends AppCompatActivity {
 
     NetworkLoader networkLoader;
 
+    TextView textView_visible;
+
     Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.z_evluatelayout);
         listView=(ListView)findViewById(R.id.listView);
+        textView_visible=(TextView)findViewById(R.id.visibleText);
         handler=new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -49,8 +52,13 @@ public class Z_EvluatesActivity extends AppCompatActivity {
         networkLoader.setZ_getEvluateListener(new Z_getEvluateListener() {
             @Override
             public void loadingDown(List<Repair_Bean> list) {
-                list_adapter=new List_Adapter(list);
-                handler.sendEmptyMessage(0x1);
+                if(list==null||list.size()==0){
+                    textView_visible.setVisibility(View.VISIBLE);
+                }else {
+                    textView_visible.setVisibility(View.GONE);
+                    list_adapter = new List_Adapter(list);
+                    handler.sendEmptyMessage(0x1);
+                }
             }
         });
 

@@ -2,6 +2,8 @@ package com.smartschool.smartschooli;
 
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +30,10 @@ public class RepairDetailsActivity extends AppCompatActivity {
 
     ListView listView;
 
+    TextView textView_visible;
+
+    Handler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +45,6 @@ public class RepairDetailsActivity extends AppCompatActivity {
             window.setStatusBarColor(getResources().getColor(R.color.royalblue));
         }
         setContentView(R.layout.repair_details_layout);
-
         initViews();
         initEvents();
     }
@@ -50,6 +55,16 @@ public class RepairDetailsActivity extends AppCompatActivity {
 
         listView=(ListView)findViewById(R.id.repair_details_layout_listView);
 
+        textView_visible=(TextView)findViewById(R.id.visible);
+
+        handler=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                List<Repair_Bean>list=(List<Repair_Bean>) msg.obj;
+                listView.setAdapter(new Listadapter(list));
+            }
+        };
     }
 
     private void initEvents(){
@@ -60,7 +75,14 @@ public class RepairDetailsActivity extends AppCompatActivity {
         NetworkLoader.getInstance().setLoadingOwnRepairListener(new LoadingOwnRepairListener() {
             @Override
             public void loadingDown(List<Repair_Bean> list) {
-                listView.setAdapter(new Listadapter(list));
+                if(list==null||list.size()==0){
+                    textView_visible.setVisibility(View.VISIBLE);
+                }else {
+                    textView_visible.setVisibility(View.GONE);
+                    Message message = new Message();
+                    message.obj = list;
+                    handler.sendMessage(message);
+                }
             }
         });
 
@@ -141,7 +163,8 @@ public class RepairDetailsActivity extends AppCompatActivity {
                     //已评价
                     if(bean.getEvluate_status().equals("是")){
                         Intent intent=new Intent(RepairDetailsActivity.this,ReadEvluateActivity.class);
-                        intent.putExtra("id",bean.getRepair_bianhao());
+                        intent.putExtra("bean",bean);
+                        intent.putExtra("flag",true);
                         startActivity(intent);
                     }else{
                         Intent intent=new Intent(RepairDetailsActivity.this,EvluateActivity.class);

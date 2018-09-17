@@ -142,10 +142,18 @@ public class Fragment_class extends Fragment {
         initViews();
 
         initListeners();
+        initList();
         initEvents();
         refreshData(week);
 
         return view;
+    }
+
+
+    private void initList(){
+        for(int i=1;i<=allWeek;i++){
+            list_popup.add("第"+i+"周");
+        }
     }
 
     private void initEvents(){
@@ -273,7 +281,6 @@ public class Fragment_class extends Fragment {
             @Override
             public void onClick(View v) {
                 getActivity().startActivityForResult(new Intent(getActivity(), CaptureActivity.class),CAPTURE_QR);
-                Log.d("student","scan方法执行");
                 if(popupWindow_student.isShowing()){
                     popupWindow_student.dismiss();
                 }
@@ -334,7 +341,6 @@ public class Fragment_class extends Fragment {
 
                 synchronized (this) {
                     showAlertDialog();
-
                     showPopupWindow();
                 }
                 Util.getInstance().lightOff(getActivity());
@@ -404,7 +410,6 @@ public class Fragment_class extends Fragment {
     //隐藏布局的动画  start end 分别代表隐藏布局动画结束前后高度
     private void linearlayoutAnim(int start, final int end){
         final ViewGroup.LayoutParams params=linearlayout.getLayoutParams();
-
         ValueAnimator valueAnimator=ValueAnimator.ofInt(start,end);
         valueAnimator.setDuration(300);
         valueAnimator.start();
@@ -435,6 +440,7 @@ public class Fragment_class extends Fragment {
         list= Util.getInstance().getRealList(NetworkLoader.getInstance().getList(),week);
         updateDate(week);
         new ScrollAdapter(list,view);
+
     }
 
     @Override

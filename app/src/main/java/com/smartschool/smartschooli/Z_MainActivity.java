@@ -110,14 +110,7 @@ public class Z_MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    @Override
-    public void onBackPressed() {
-        if(mDrawerLayout.isDrawerOpen(navigationView)){
-             mDrawerLayout.closeDrawers();}
-        else {
-            super.onBackPressed();
-        }
-    }
+
 
     private void initEvents(){
         listView.setSelection(position);
@@ -214,10 +207,10 @@ public class Z_MainActivity extends AppCompatActivity {
                         break;
                     case 3:
                         //故障分析
-
+                        startActivity(new Intent(Z_MainActivity.this,Z_GuZhangActivity.class));
                         break;
                     case 4:
-
+                        //收到的评价
                         startActivity(new Intent(Z_MainActivity.this,Z_EvluatesActivity.class));
                         break;
                     case 5:
@@ -302,7 +295,7 @@ public class Z_MainActivity extends AppCompatActivity {
             }else if(i==2){
                 drawable=getResources().getDrawable(R.drawable.repair16 );
             }else if(i==3){
-                drawable=getResources().getDrawable(R.drawable.evaluate16);
+                drawable=getResources().getDrawable(R.drawable.evluate116);
             }else if(i==4){
                 drawable=getResources().getDrawable(R.drawable.exit16);
             }

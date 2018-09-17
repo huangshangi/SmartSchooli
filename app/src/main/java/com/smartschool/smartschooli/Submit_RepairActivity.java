@@ -382,8 +382,6 @@ public class Submit_RepairActivity extends AppCompatActivity {
                             list_all.add(0,R.drawable.add);
                     refreshDatas(list_all);
 
-
-                        Log.d("Tagtag!!",""+list_all.size()+(list_all.get(0) instanceof Integer)+"@");
                 }
 
                 break;
