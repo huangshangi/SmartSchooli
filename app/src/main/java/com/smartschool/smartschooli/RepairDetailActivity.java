@@ -133,11 +133,6 @@ public class RepairDetailActivity extends AppCompatActivity {
        }else{
             linearLayout_name.setVisibility(View.GONE);
        }
-       if(bean.getRepair_urls()==null||bean.getRepair_urls().equals("")){
-            linearLayout_pic_visvile.setVisibility(View.GONE);
-       }else{
-            linearLayout_pic_visvile.setVisibility(View.VISIBLE);
-       }
 
        textView_name.setText(bean.getRepairer_name());
        textView_type.setText(bean.getRepair_type());

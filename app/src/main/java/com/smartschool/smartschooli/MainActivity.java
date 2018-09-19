@@ -32,8 +32,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -168,7 +166,7 @@ public class MainActivity extends AppCompatActivity{
                         break;
                     case 4:
                        //点击了关于我们
-
+                        startActivity(new Intent(MainActivity.this, LocationActivity.class));
                         break;
                     case 5:
                         //退出登录

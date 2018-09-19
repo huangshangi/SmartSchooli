@@ -44,6 +44,7 @@ import listener.UpMessage_Listener;
 import utils.AudioManager;
 import utils.NetworkLoader;
 import utils.AudioDialogManager;
+import utils.Util;
 import view.Chat_ListView;
 
 /*
@@ -397,7 +398,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnTouchListe
     public void updateUI(Message_Bean bean){
 
         if(bean==null){
-            Toast.makeText(ChatActivity.this,"为空",Toast.LENGTH_SHORT).show();
+
             return;
         }
         list.add(bean);
@@ -444,9 +445,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnTouchListe
             return true;
         }
         //y方向涉及单位换算，暂未处理
-//        if(y<displayMetrics.heightPixels-50-button_talk.getHeight()){
-//            return true;
-//        }
+
 
         return false;
     }
@@ -525,7 +524,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnTouchListe
         audioDialogManger.initRecordingDialog();
         flag_long=true;
         //长点击事件被触发，开始录音
-        Toast.makeText(ChatActivity.this,"长按时间被",Toast.LENGTH_SHORT).show();
+
         return false;
     }
 

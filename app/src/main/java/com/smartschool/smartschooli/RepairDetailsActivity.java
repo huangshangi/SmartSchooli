@@ -152,6 +152,7 @@ public class RepairDetailsActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent intent=new Intent(RepairDetailsActivity.this,RepairDetailActivity.class);
                     intent.putExtra("repairMessage",bean);//传入报修编号
+                    intent.putExtra("type",NetworkLoader.getInstance().getPersonMessage().get(3));
                     startActivity(intent);
 
                 }

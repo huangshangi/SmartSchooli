@@ -70,6 +70,7 @@
         <activity android:name=".Z_detailActivity" />
         <activity android:name=".Z_GuZhangActivity" />
         <activity android:name=".Z_EvluatesActivity"></activity>
+        <activity android:name=".LocationActivity"/>
     </application>
 
 </manifest>

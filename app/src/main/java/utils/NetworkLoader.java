@@ -76,6 +76,7 @@ import cn.bmob.v3.listener.UploadFileListener;
 import listener.Fragment_class_Listener;
 import listener.Fragment_class_getQiandao_listener;
 import listener.GetEvluateListener;
+import listener.GetIpListener;
 import listener.LoadingListener;
 import listener.LoadingOwnRepairListener;
 import listener.LoadingRepairListener;
@@ -172,11 +173,15 @@ public class NetworkLoader {
 
     private Z_getEvluateListener z_getEvluateListener;
 
+    private GetIpListener getIpListener;
 
     private List<String>list_urls;
     private static List<Integer> list_color;
     private static HashMap<String,Integer>hashMap_color;
 
+    public void setGetIpListener(GetIpListener getIpListener){
+        this.getIpListener=getIpListener;
+    }
 
     public void setZ_getEvluateListener(Z_getEvluateListener z_getEvluateListener) {
         this.z_getEvluateListener = z_getEvluateListener;
@@ -671,7 +676,9 @@ public class NetworkLoader {
                     public void done(List<Qiandao_Bean> list, BmobException e) {
                         if(e==null){
                             //回调方法
-
+                            if(fragment_class_getQiandao_listener!=null){
+                                fragment_class_getQiandao_listener.getDown(list);
+                            }
                         }else{
                             Message message=new Message();
                             message.obj="签到信息获取失败";
@@ -803,6 +810,29 @@ public class NetworkLoader {
 
     }
 
+    //爬取ip及地址
+    public void getIp(){
+        addTask(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String url = "https://ip.cn/";
+                    Document document=Jsoup.connect(url).get();
+                    Elements elements=document.select("div.well").select("p");
+                    String result="";
+                    for(int i=0;i<elements.size();i++){
+                        result+=elements.get(i).select("code").text()+"!";
+                    }
+                    if(getIpListener!=null){
+                        getIpListener.getIP(result);
+                    }
+                    semaphore.release();
+                }catch (Exception e){
+                    semaphore.release();
+                }
+            }
+        });
+    }
 
     //返回一个hashmap<String,List<Class_Bean>> String代表周几，list内部储存当天课程信息
     private  void parseHtml(String html){

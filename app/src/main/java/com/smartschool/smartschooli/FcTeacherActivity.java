@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -115,10 +116,16 @@ public class FcTeacherActivity extends AppCompatActivity {
 
         NetworkLoader.getInstance().setFragment_class_getQiandao_listener(new Fragment_class_getQiandao_listener() {
             @Override
-            public void getDown(List<Qiandao_Bean> list) {
+            public void getDown(final List<Qiandao_Bean> list) {
                 bean=checkFlag();
                 if(bean!=null) {
-                    updateAdapter(list);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateAdapter(list);
+                        }
+                    });
+
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -231,6 +238,7 @@ public class FcTeacherActivity extends AppCompatActivity {
             ViewHolder viewHolder;
             if(convertView==null){
                 viewHolder=new ViewHolder();
+                convertView= LayoutInflater.from(FcTeacherActivity.this).inflate(R.layout.fragment_class_teacher_listview_item,parent,false);
                 viewHolder.textView1=(TextView)convertView.findViewById(R.id.fragment_class_listView_text1);
                 viewHolder.textView2=(TextView)convertView.findViewById(R.id.fragment_class_listView_text2);
                 viewHolder.textView3=(TextView)convertView.findViewById(R.id.fragment_class_listView_text3);
@@ -244,7 +252,7 @@ public class FcTeacherActivity extends AppCompatActivity {
             viewHolder.textView1.setText(position+1+"");
             viewHolder.textView2.setText(bean.getXuehao());
             viewHolder.textView3.setText(bean.getName());
-            viewHolder.textView4.setText(bean.getCreatedAt());
+            viewHolder.textView4.setText(bean.getCreatedAt().substring(11));
 
             return convertView;
         }

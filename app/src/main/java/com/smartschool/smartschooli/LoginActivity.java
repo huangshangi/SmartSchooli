@@ -72,9 +72,10 @@ public class LoginActivity extends AppCompatActivity {
         list_permission.add(Manifest.permission.READ_PHONE_STATE);
         list_permission.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         list_permission.add(Manifest.permission.CAMERA);
+        list_permission.add(Manifest.permission.ACCESS_FINE_LOCATION);
         Util.getInstance().requestPremissions(this,list_permission,1);
         Util.getInstance().requestPremission(this, Manifest.permission.READ_PHONE_STATE,2);
-
+        Util.getInstance().requestPremission(this,Manifest.permission.ACCESS_FINE_LOCATION,5);
         Util.getInstance().requestPremission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE,3);
         Util.getInstance().requestPremission(this,Manifest.permission.CAMERA,4);
     }
