@@ -172,10 +172,14 @@ public class MainActivity extends AppCompatActivity{
                         startActivity(new Intent(MainActivity.this,Chat_List_Activity.class));
                         break;
                     case 4:
-                       //点击了关于我们
+                       //点击了系统信息
                         startActivity(new Intent(MainActivity.this, LocationActivity.class));
                         break;
                     case 5:
+                        //关于我们
+                        startActivity(new Intent(MainActivity.this,AboutUsActivity.class));
+                        break;
+                    case 6:
                         //退出登录
                         BmobUser.logOut();
                         startActivity(new Intent(MainActivity.this,LoginActivity.class));
@@ -347,6 +351,7 @@ public class MainActivity extends AppCompatActivity{
             list.add("账号资料");
             list.add("维修记录");
             list.add("聊天列表");
+            list.add("系统信息");
             list.add("关于我们");
             list.add("退出登录");
         }
@@ -387,8 +392,11 @@ public class MainActivity extends AppCompatActivity{
             }else if(i==2){
                 drawable=getResources().getDrawable(R.drawable.chatlist16);
             }else if(i==3){
-                drawable=getResources().getDrawable(R.drawable.aboutus16 );
+                drawable=getResources().getDrawable(R.drawable.setting);
             }else if(i==4){
+                drawable=getResources().getDrawable(R.drawable.aboutus16 );
+
+            }else if(i==5){
                 drawable=getResources().getDrawable(R.drawable.exit16);
             }
 

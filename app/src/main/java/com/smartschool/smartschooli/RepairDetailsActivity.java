@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,11 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -32,7 +35,11 @@ public class RepairDetailsActivity extends AppCompatActivity {
 
     TextView textView_visible;
 
+    SwipeRefreshLayout swipeRefreshLayout;
+
     Handler handler;
+
+    int xuhao;//被点击的序号
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +54,51 @@ public class RepairDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.repair_details_layout);
         initViews();
         initEvents();
+        initListeners();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NetworkLoader.getInstance().getOwnRepairMessage();
+
+    }
+
+    private void initListeners(){
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initEvents();;
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        //解决listView与swipeFresh冲突问题
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                boolean enable = false;
+                if (listView != null && listView.getChildCount() > 0) {
+                    boolean firstItemVisible = listView.getFirstVisiblePosition() == 0;
+                    boolean topOfFirstItemVisible = listView.getChildAt(0).getTop() == 0;
+                    enable = firstItemVisible && topOfFirstItemVisible;
+                }
+                swipeRefreshLayout.setEnabled(enable);
+            }
+        });
+    }
 
     private void initViews(){
         toolbar=(Toolbar)findViewById(R.id.repair_details_layout_toolbar);
@@ -56,6 +106,8 @@ public class RepairDetailsActivity extends AppCompatActivity {
         listView=(ListView)findViewById(R.id.repair_details_layout_listView);
 
         textView_visible=(TextView)findViewById(R.id.visible);
+
+        swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swipeRefreshLayout);
 
         handler=new Handler(){
             @Override
@@ -86,12 +138,7 @@ public class RepairDetailsActivity extends AppCompatActivity {
             }
         });
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+
     }
 
 
@@ -118,7 +165,7 @@ public class RepairDetailsActivity extends AppCompatActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
             if(convertView==null){
                 viewHolder=new ViewHolder();
@@ -142,7 +189,12 @@ public class RepairDetailsActivity extends AppCompatActivity {
             viewHolder.textView_bianhao.setText(position+1+"  "+bean.getRepair_bianhao());
             viewHolder.textView_evaluate.setText(bean.getEvluate_status());
             viewHolder.textView_address.setText(bean.getRepair_adress());
-            viewHolder.textView_handle.setText(bean.getRepair_status());
+            if(bean.getHandle()){
+                viewHolder.textView_handle.setText("已处理");
+            }else{
+                viewHolder.textView_handle.setText("未处理");
+            }
+
             viewHolder.textView_machine.setText(bean.getRepair_machine());
             viewHolder.textView_type.setText(bean.getRepair_type());
             viewHolder.textView_time.setText(bean.getCreatedAt().substring(5,10));
@@ -150,6 +202,7 @@ public class RepairDetailsActivity extends AppCompatActivity {
             viewHolder.textView_details.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    xuhao=position;
                     Intent intent=new Intent(RepairDetailsActivity.this,RepairDetailActivity.class);
                     intent.putExtra("repairMessage",bean);//传入报修编号
                     intent.putExtra("type",NetworkLoader.getInstance().getPersonMessage().get(3));
@@ -161,6 +214,7 @@ public class RepairDetailsActivity extends AppCompatActivity {
             viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    xuhao=position;
                     //已评价
                     if(bean.getEvluate_status().equals("是")){
                         Intent intent=new Intent(RepairDetailsActivity.this,ReadEvluateActivity.class);
@@ -168,9 +222,13 @@ public class RepairDetailsActivity extends AppCompatActivity {
                         intent.putExtra("flag",true);
                         startActivity(intent);
                     }else{
-                        Intent intent=new Intent(RepairDetailsActivity.this,EvluateActivity.class);
-                        intent.putExtra("id",bean.getRepair_bianhao());
-                        startActivity(intent);
+                        if(bean.getHandle()) {
+                            Intent intent = new Intent(RepairDetailsActivity.this, EvluateActivity.class);
+                            intent.putExtra("id", bean.getRepair_bianhao());
+                            startActivity(intent);
+                        }else{
+                            Toast.makeText(RepairDetailsActivity.this,"该故障还未被处理",Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             });

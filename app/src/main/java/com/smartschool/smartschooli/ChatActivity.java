@@ -220,6 +220,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnTouchListe
         actionBar.setTitle("");
         toolbar_text.setText(target_name);
         networkLoader.getMessage(own_id,target_id,0);
+        networkLoader.getNewMessage(own_id,target_id);
         audioManager.setListener(new AudioPrepareListener() {
             @Override
             public void wellPrepared() {

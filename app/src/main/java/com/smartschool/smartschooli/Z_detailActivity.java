@@ -16,6 +16,7 @@ import bean.Repair_Bean;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
+import utils.NetworkLoader;
 import view.MyImageView;
 import view.Submit_repair_GridView;
 
@@ -71,6 +72,7 @@ public class Z_detailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     things.setHandle(true);
+                    things.setRepair_person(NetworkLoader.getInstance().getPersonMessage().get(0));
                     things.update(things.getObjectId(), new UpdateListener() {
                         @Override
                         public void done(BmobException e) {

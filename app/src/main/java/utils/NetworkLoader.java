@@ -1013,7 +1013,7 @@ public class NetworkLoader {
                 bean.setRepair_urls(urls);
                 Log.d("测试信息！！",urls+"!");
                 bean.setRepair_content(content);
-                bean.setRepair_status("未处理");
+                bean.setHandle(false);
                 bean.setRepair_bianhao(bianhao);
                 upRepairMessage(bean,context);
 
@@ -1787,7 +1787,7 @@ public class NetworkLoader {
                         if(e==null){
                             Repair_Bean bean=(Repair_Bean)list.get(0);
                             bean.setHandle(true);
-                            bean.setRepair_status(""+getPersonMessage().get(0));
+                            bean.setRepair_person(""+getPersonMessage().get(0));
                             bean.save(new SaveListener<String>() {
                                 @Override
                                 public void done(String s, BmobException e) {
@@ -1834,6 +1834,33 @@ public class NetworkLoader {
         });
     }
 
+    //实时监测是否有新消息
+    public void getNewMessage(final String senderId, final String receiverId){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(true){
+                    BmobQuery<UpdateMessage_Bean>bmobQuery=new BmobQuery<>();
+                    bmobQuery.addWhereEqualTo("update_senderId",receiverId);
+                    bmobQuery.addWhereEqualTo("update_receiverId",senderId);
+                    bmobQuery.findObjects(new FindListener<UpdateMessage_Bean>() {
+                        @Override
+                        public void done(List<UpdateMessage_Bean> list, BmobException e) {
+                                     if(e==null&&list.size()!=0&&!list.get(0).getHasread()){
+                                         getMessage(senderId,receiverId,0);
+                                     }
+                        }
+                    });
+                    try {
+                        Thread.sleep(3 * 1000);
+                    }catch (Exception e){
+
+                    }
+                }
+            }
+        }).start();
+    }
+
     //得到评价内容
     public void getEvluate(final String id){
         addTask(new Runnable() {
@@ -1860,7 +1887,7 @@ public class NetworkLoader {
             @Override
             public void run() {
                 BmobQuery<Repair_Bean>bmobQuery=new BmobQuery<>();
-                bmobQuery.addWhereEqualTo("repair_status",id);
+                bmobQuery.addWhereEqualTo("repair_person",id);
                 bmobQuery.findObjects(new FindListener<Repair_Bean>() {
                     @Override
                     public void done(List<Repair_Bean> list, BmobException e) {
@@ -1908,6 +1935,10 @@ public class NetworkLoader {
             }
         });
     }
+
+
+
+
     class ImageHolder{
         Bitmap bitmap;
         String url;

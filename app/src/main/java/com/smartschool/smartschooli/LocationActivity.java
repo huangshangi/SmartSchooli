@@ -3,6 +3,8 @@ package com.smartschool.smartschooli;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 
 
@@ -27,6 +29,8 @@ public class LocationActivity extends AppCompatActivity {
 
     TextView textView_schoolNet;
 
+    Toolbar toolbar;
+
     SwipeRefreshLayout swipeRefreshLayout;
 
     String array[]=new String[]{"无网络","wifi","流量"};
@@ -47,9 +51,14 @@ public class LocationActivity extends AppCompatActivity {
         textView_network=(TextView)findViewById(R.id.network_name);
         textView_state=(TextView)findViewById(R.id.state);
         textView_schoolNet=(TextView)findViewById(R.id.school_net);
-
+        toolbar=(Toolbar)findViewById(R.id.toolbar);
         swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swipeRefreshLayout);
-
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         NetworkLoader.getInstance().setGetIpListener(new GetIpListener() {
             @Override
             public void getIP(final String ipAddress) {

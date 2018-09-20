@@ -12,7 +12,7 @@ public class Repair_Bean extends BmobObject implements Serializable{
 
     String repair_machine;//报修设备
 
-    String repair_status;//维修者名称
+    String repair_person;//维修者编号
 
     int repair_bianhao;//报修编号
 
@@ -42,6 +42,10 @@ public class Repair_Bean extends BmobObject implements Serializable{
         this.evluate_content = evluate_content;
     }
 
+    public void setRepair_person(String repair_person) {
+        this.repair_person = repair_person;
+    }
+
     public void setEvluate_status(String evluate_status) {
         this.evluate_status = evluate_status;
     }
@@ -66,9 +70,6 @@ public class Repair_Bean extends BmobObject implements Serializable{
         return repair_bianhao;
     }
 
-    public String getRepair_status() {
-        return repair_status;
-    }
 
     public String getRepair_content() {
         return repair_content;
@@ -102,8 +103,8 @@ public class Repair_Bean extends BmobObject implements Serializable{
         this.repair_machine = repair_machine;
     }
 
-    public void setRepair_status(String repair_status) {
-        this.repair_status = repair_status;
+    public String getRepair_person() {
+        return repair_person;
     }
 
     public void setRepair_urls(String repair_urls) {

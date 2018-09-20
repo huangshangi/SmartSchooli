@@ -21,6 +21,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -83,6 +85,13 @@ public class Z_MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Window window = getWindow();
+        //如果系统5.0以上
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.royalblue));
+        }
         setContentView(R.layout.z_main_layout);
 
         initViews();
@@ -160,7 +169,7 @@ public class Z_MainActivity extends AppCompatActivity {
                     Notification notification = null;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         NotificationChannel mChannel = new NotificationChannel(id, name, NotificationManager.IMPORTANCE_LOW);
-                        Toast.makeText(Z_MainActivity.this, mChannel.toString(), Toast.LENGTH_SHORT).show();
+
 
                         notificationManager.createNotificationChannel(mChannel);
                         notification = new Notification.Builder(Z_MainActivity.this)

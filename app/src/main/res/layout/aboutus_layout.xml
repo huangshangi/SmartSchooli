@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/royalblue"
+        app:navigationIcon="@drawable/back_white"
+        app:title="关于我们"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/AlertDialog.AppCompat.Light">
+
+
+
+    </android.support.v7.widget.Toolbar>
+
+    <ImageView
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/icon"
+        android:scaleType="centerCrop"
+        android:layout_width="80dp"
+        android:layout_height="80dp" />
+    <TextView
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="10dp"
+        android:text="智慧校园"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:textColor="#3A3A3A"
+        android:lineSpacingExtra="3dp"
+        android:textSize="15sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="         当前高校校园信息化服务管理大多数是通过PC端来实现的,随着智能移动终端的普及,高校使用移动终端方式进行校园信息化服务管理将会成为一种发展的趋势。为了响应这种趋势，我们小组开发了一款集交友，学习，生活为一体的基于智能移动端的校园服务平台。"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:textColor="#3A3A3A"
+        android:lineSpacingExtra="3dp"
+        android:textSize="15sp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="         App基本覆盖全校人员。在学生端，学生可以使用查看课表，进行交流，上报校内故障设施，上课签到以及发说说等功能，教师则可以通过此平台进行上课点名，减少口头点名的时间，维修人员则可以在平台上收到校内各处故障设施的信息并进行及时维修，三者可以通过聊天界面互相交流，形成一个以学生为中心的覆盖全校的信息网络。"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="联系我们:"
+        android:textColor="#3A3A3A"
+        android:lineSpacingExtra="3dp"
+        android:textSize="15sp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:textColor="#3A3A3A"
+        android:lineSpacingExtra="3dp"
+        android:textSize="15sp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="邮箱：169712054725@qq.com"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:textColor="#8E8E8E"
+        android:paddingBottom="10dp"
+        android:gravity="bottom"
+        android:layout_gravity="center_horizontal|bottom"
+        android:text="null团队 @ 版权所有"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+</LinearLayout>

@@ -142,7 +142,7 @@ public class RepairDetailActivity extends AppCompatActivity {
        if(bean.getEvluate_status().equals("否")) {
            textView_evluate.setText("暂无评价");
        }else{
-           textView_evluate.setText(bean.getEvluate_content());
+           textView_evluate.setText(bean.getEvluate_content().substring(6));
        }
        if(bean.getHandle()){
            textView_handle.setText("已处理");

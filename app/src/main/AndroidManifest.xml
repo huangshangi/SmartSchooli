@@ -69,8 +69,9 @@
         <activity android:name=".ReadEvluateActivity" />
         <activity android:name=".Z_detailActivity" />
         <activity android:name=".Z_GuZhangActivity" />
-        <activity android:name=".Z_EvluatesActivity"></activity>
-        <activity android:name=".LocationActivity"/>
+        <activity android:name=".Z_EvluatesActivity" />
+        <activity android:name=".LocationActivity" />
+        <activity android:name=".AboutUsActivity"></activity>
     </application>
 
 </manifest>
