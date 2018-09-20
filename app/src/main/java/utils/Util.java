@@ -2,13 +2,17 @@ package utils;
 
 import android.app.ActionBar;
 import android.app.Activity;
+
+import android.app.Notification;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
@@ -217,6 +221,11 @@ public class Util {
     }
 
 
+    public Notification getNotification(){
+        Notification notification=new NotificationCompat.Builder(MyApplication.getContext()).setContentTitle("校园网故障").setContentText("小管网发生故障")
+        .setWhen(System.currentTimeMillis()).setSmallIcon(R.mipmap.icon).setLargeIcon(BitmapFactory.decodeResource(MyApplication.getContext().getResources(),R.mipmap.icon)).build();
+        return notification;
+    }
     /*得到当前处于第几节课
     *   假设上课时间
     *   1-2  08:00-09:50

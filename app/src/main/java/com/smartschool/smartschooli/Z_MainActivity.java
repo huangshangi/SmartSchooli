@@ -1,10 +1,16 @@
 package com.smartschool.smartschooli;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -24,12 +30,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import adapter.FragRepair_listview_adapter;
+import bean.NetWork;
 import bean.Repair_Bean;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
@@ -38,6 +46,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 import listener.LoadingRepairListener;
+import listener.NetworkGuZhang_Listener;
 import utils.ImageLoader;
 import utils.NetworkLoader;
 
@@ -113,6 +122,7 @@ public class Z_MainActivity extends AppCompatActivity {
 
 
     private void initEvents(){
+        NetworkLoader.getInstance().getNetworkGuZhang();
         listView.setSelection(position);
         listView.smoothScrollToPosition(position);
         NetworkLoader.getInstance().getRepairMessage();
@@ -138,6 +148,39 @@ public class Z_MainActivity extends AppCompatActivity {
 
         navigationView.addHeaderView(header);
 
+        NetworkLoader.getInstance().setNetworkGuZhang_listener(new NetworkGuZhang_Listener() {
+            @Override
+            public void getMessage(NetWork message) {
+                if(message.getGuZhang()){
+                    Intent intent=new Intent(Z_MainActivity.this,Z_MainActivity.class);
+                    PendingIntent pendingIntent=PendingIntent.getActivity(Z_MainActivity.this,0,intent,0);
+                    String id = "my_channel_01";
+                    String name="我是渠道名字";
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    Notification notification = null;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        NotificationChannel mChannel = new NotificationChannel(id, name, NotificationManager.IMPORTANCE_LOW);
+                        Toast.makeText(Z_MainActivity.this, mChannel.toString(), Toast.LENGTH_SHORT).show();
+
+                        notificationManager.createNotificationChannel(mChannel);
+                        notification = new Notification.Builder(Z_MainActivity.this)
+                                .setChannelId(id)
+                                .setContentTitle("通知信息")
+                                .setContentText("校园网发生故障")
+                                .setSmallIcon(R.mipmap.icon).setContentIntent(pendingIntent).build();
+                    } else {
+                        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(Z_MainActivity.this)
+                                .setContentTitle("通知信息")
+                                .setContentText("校园网发生故障")
+                                .setSmallIcon(R.mipmap.icon).setContentIntent(pendingIntent)
+                                .setOngoing(true);
+
+                        notification = notificationBuilder.build();
+                    }
+                    notificationManager.notify(111123, notification);
+                }
+            }
+        });
     }
 
     private void initListeners(){

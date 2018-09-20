@@ -24,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 
-import com.smartschool.smartschooli.LoginActivity;
 import com.smartschool.smartschooli.MainActivity;
 import com.smartschool.smartschooli.PublishActivity;
 import com.smartschool.smartschooli.R;
@@ -59,6 +58,7 @@ import java.util.concurrent.Semaphore;
 import bean.Class_Bean;
 import bean.Image_Bean;
 import bean.Message_Bean;
+import bean.NetWork;
 import bean.Person_Bean;
 import bean.Qiandao_Bean;
 import bean.Repair_Bean;
@@ -81,13 +81,13 @@ import listener.LoadingListener;
 import listener.LoadingOwnRepairListener;
 import listener.LoadingRepairListener;
 import listener.Message_Down_Listener;
+import listener.NetworkGuZhang_Listener;
 import listener.Publish_Shuoshuo_Listener;
 import listener.UpMessage_Listener;
 import listener.UpRepairListener;
 import listener.UpdateEvluateListener;
 import listener.UpdateMessageListener;
 import listener.Z_getEvluateListener;
-import listener.Z_getReapirMessageListener;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.FormBody;
@@ -118,7 +118,7 @@ public class NetworkLoader {
 
     private String phone_id;//手机唯一码
 
-    final static int THREAD_COUNT=3;//线程数
+    final static int THREAD_COUNT=5;//线程数
 
     static NetworkLoader networkLoader;
 
@@ -175,9 +175,15 @@ public class NetworkLoader {
 
     private GetIpListener getIpListener;
 
+    private NetworkGuZhang_Listener networkGuZhang_listener;
+
     private List<String>list_urls;
     private static List<Integer> list_color;
     private static HashMap<String,Integer>hashMap_color;
+
+    public void setNetworkGuZhang_listener(NetworkGuZhang_Listener networkGuZhang_listener) {
+        this.networkGuZhang_listener = networkGuZhang_listener;
+    }
 
     public void setGetIpListener(GetIpListener getIpListener){
         this.getIpListener=getIpListener;
@@ -1872,6 +1878,36 @@ public class NetworkLoader {
     }
 
 
+    //查询校园网故障
+    public void getNetworkGuZhang(){
+        addTask(new Runnable() {
+            @Override
+            public void run() {
+                while(true){
+                    BmobQuery<NetWork>bmobQuery=new BmobQuery<>();
+                    bmobQuery.order("createdAt");
+                    bmobQuery.findObjects(new FindListener<NetWork>() {
+                        @Override
+                        public void done(List<NetWork> list, BmobException e) {
+                            if(e==null&&list.size()!=0) {
+                                Log.d("执行了",list.get(list.size()-1).getCreatedAt());
+                                if (networkGuZhang_listener != null) {
+                                    networkGuZhang_listener.getMessage(list.get(list.size()-1));
+                                }else{
+                                }
+                            }
+                        }
+                    });
+                    try {
+                        Thread.sleep(10 * 1000*60);
+                    }catch (Exception e){
+
+                    }
+                }
+
+            }
+        });
+    }
     class ImageHolder{
         Bitmap bitmap;
         String url;

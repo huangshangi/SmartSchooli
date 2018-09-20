@@ -1,5 +1,10 @@
 package com.smartschool.smartschooli;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 
 import android.content.pm.PackageManager;
@@ -10,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import bean.NetWork;
 import cn.bmob.v3.BmobUser;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -43,10 +50,10 @@ import fragments.Fragment_class;
 import fragments.Fragment_hall;
 
 import fragments.Fragment_repair;
+import listener.NetworkGuZhang_Listener;
 import utils.ImageLoader;
-import utils.MyApplication;
 import utils.NetworkLoader;
-
+import utils.Util;
 
 
 //主界面，内部有三个碎片
@@ -242,10 +249,13 @@ public class MainActivity extends AppCompatActivity{
         person_list=NetworkLoader.getInstance().getPersonMessage();
 
 
+
+
         ImageLoader.getInstance().loadImage(person_list.get(1),header_image);
         textView_name.setText(person_list.get(2));
         navigationView.setAdapter(new NavigationView_Adapter());
         navigationView.addHeaderView(header);
+
 
 
     }
