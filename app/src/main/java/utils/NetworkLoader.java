@@ -399,6 +399,14 @@ public class NetworkLoader {
 
     //取出一个任务
     private Runnable getTask(){
+        if(linkedList.size()==0){
+            return new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            };
+        }
         return linkedList.removeFirst();
     }
 
@@ -1788,9 +1796,9 @@ public class NetworkLoader {
                             Repair_Bean bean=(Repair_Bean)list.get(0);
                             bean.setHandle(true);
                             bean.setRepair_person(""+getPersonMessage().get(0));
-                            bean.save(new SaveListener<String>() {
+                            bean.update(bean.getObjectId(), new UpdateListener() {
                                 @Override
-                                public void done(String s, BmobException e) {
+                                public void done(BmobException e) {
 
                                 }
                             });
@@ -1888,6 +1896,7 @@ public class NetworkLoader {
             public void run() {
                 BmobQuery<Repair_Bean>bmobQuery=new BmobQuery<>();
                 bmobQuery.addWhereEqualTo("repair_person",id);
+                bmobQuery.addWhereEqualTo("evluate_status","是");
                 bmobQuery.findObjects(new FindListener<Repair_Bean>() {
                     @Override
                     public void done(List<Repair_Bean> list, BmobException e) {

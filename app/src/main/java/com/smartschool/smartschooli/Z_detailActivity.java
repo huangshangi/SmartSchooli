@@ -4,6 +4,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -67,12 +68,16 @@ public class Z_detailActivity extends AppCompatActivity {
         repair = (Button) findViewById(R.id.submit_repair_button);
         if (things.getHandle()) {
             repair.setText("已维修");
-        } else {
+        }else{
+            repair.setText("未维修");
+        }
+
             repair.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     things.setHandle(true);
                     things.setRepair_person(NetworkLoader.getInstance().getPersonMessage().get(0));
+
                     things.update(things.getObjectId(), new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
@@ -87,7 +92,7 @@ public class Z_detailActivity extends AppCompatActivity {
                     });
                 }
             });
-        }
+
 
 
         if (things.getEvluate_status().equals("是")) {

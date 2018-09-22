@@ -142,7 +142,7 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter {
         viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MyApplication.getContext(),"您点击了"+bean.getPublisher_id()+"的说说",Toast.LENGTH_SHORT).show();
+
 
                 NetworkLoader.getInstance().messageHasRead(bean.getPublisher_id(),NetworkLoader.getInstance().getPersonMessage().get(0));
                 //开启聊天活动,传递地参数徐商讨

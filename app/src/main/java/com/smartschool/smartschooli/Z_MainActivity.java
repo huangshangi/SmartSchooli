@@ -140,7 +140,7 @@ public class Z_MainActivity extends AppCompatActivity {
             public void loadingDown(List<Repair_Bean> list) {
                 thing_list=list;
                 adapter=new FragRepair_listview_adapter(Z_MainActivity.this,list);
-                Log.d("Z_MainActivity!!","+lis"+list.size());
+
                 handler.sendEmptyMessage(0x111);
                 if(swipeRefreshLayout.isRefreshing()){
                     swipeRefreshLayout.setRefreshing(false);
