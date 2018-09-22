@@ -149,9 +149,10 @@ public class LoginActivity extends AppCompatActivity {
 
                 getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                 //询问是否可登陆
-                Dialog dialog= LoadingProgress.createDialog(LoginActivity.this,"正在登录...");
-                NetworkLoader.getInstance().login(id,password,dialog,LoginActivity.this);
-
+                if(checkLogin()) {
+                    Dialog dialog = LoadingProgress.createDialog(LoginActivity.this, "正在登录...");
+                    NetworkLoader.getInstance().login(id, password, dialog, LoginActivity.this);
+                }
             }
         });
 
@@ -165,6 +166,18 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    //判断登录条件
+    private boolean checkLogin(){
+        if(text_id.getText().toString()==null||text_id.getText().toString().equals("")){
+            Toast.makeText(this,"请输入您的账号",Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(text_pass.getText().toString()==null||text_pass.getText().toString().equals("")){
+            Toast.makeText(this,"请输入您的密码",Toast.LENGTH_SHORT).show();
+            return false;
+        } else{
+            return true;
+        }
+    }
 
     //判断登录按钮是否可点击
     private boolean isEnable(boolean flag_id,boolean flag_pass){

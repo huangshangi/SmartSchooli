@@ -161,4 +161,13 @@
 
     <color name="fragment_class_listView_bg">#F8F8F8</color>
     <color name="fragment_class_listView_text">#818181</color>
+
+    <!--launcherView need-->
+    <color name="load_red">#fa007a</color>
+    <color name="load_purple">#935fe7</color>
+    <color name="load_yellow">#f9b11f</color>
+    <color name="load_blue">#009cfa</color>
+
+    <color name="button_select">#429FFC</color>
+    <color name="button_unselect">#b1429FFC</color>
 </resources>

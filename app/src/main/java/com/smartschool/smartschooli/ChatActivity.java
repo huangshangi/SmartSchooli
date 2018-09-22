@@ -208,7 +208,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnTouchListe
     //初始化事件
     public void initEvents(){
         Intent intent=getIntent();
-
         button_talk.setLongClickable(true);
         target_id=intent.getStringExtra("target_id");
         own_id= intent.getStringExtra("own_id");
@@ -219,8 +218,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnTouchListe
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("");
         toolbar_text.setText(target_name);
+
         networkLoader.getMessage(own_id,target_id,0);
-        networkLoader.getNewMessage(own_id,target_id);
+
+
         audioManager.setListener(new AudioPrepareListener() {
             @Override
             public void wellPrepared() {
@@ -414,6 +415,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnTouchListe
         }
 
         listView.setSelection(adapter.getCount()-1);
+        listView.invalidate();
     }
 
 

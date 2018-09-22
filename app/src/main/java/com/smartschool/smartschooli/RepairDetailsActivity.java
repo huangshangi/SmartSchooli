@@ -214,21 +214,26 @@ public class RepairDetailsActivity extends AppCompatActivity {
             viewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    xuhao=position;
-                    //已评价
-                    if(bean.getEvluate_status().equals("是")){
-                        Intent intent=new Intent(RepairDetailsActivity.this,ReadEvluateActivity.class);
-                        intent.putExtra("bean",bean);
-                        intent.putExtra("flag",true);
-                        startActivity(intent);
-                    }else{
-                        if(bean.getHandle()) {
-                            Intent intent = new Intent(RepairDetailsActivity.this, EvluateActivity.class);
-                            intent.putExtra("id", bean.getRepair_bianhao());
+                    xuhao = position;
+                    if (bean.getHandle()) {
+                        //已评价
+                        if (bean.getEvluate_status().equals("是")) {
+                            Intent intent = new Intent(RepairDetailsActivity.this, ReadEvluateActivity.class);
+                            intent.putExtra("bean", bean);
+                            intent.putExtra("flag", true);
                             startActivity(intent);
-                        }else{
-                            Toast.makeText(RepairDetailsActivity.this,"该故障还未被处理",Toast.LENGTH_LONG).show();
+                        } else {
+                            if (bean.getHandle()) {
+                                Intent intent = new Intent(RepairDetailsActivity.this, EvluateActivity.class);
+                                intent.putExtra("id", bean.getRepair_bianhao());
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(RepairDetailsActivity.this, "该故障还未被处理", Toast.LENGTH_LONG).show();
+                            }
                         }
+
+                    } else {
+                        Toast.makeText(RepairDetailsActivity.this, "故障处理完毕后方可评价", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
